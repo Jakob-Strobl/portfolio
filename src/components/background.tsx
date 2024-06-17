@@ -8,8 +8,8 @@ const ClientOnlyBackgroundComponent = clientOnly(() => import("~/backgrounds/wav
  */
 export default function IsomorphicBackground() {
   return (
-    <div class="w-screen h-screen">
-      <ClientOnlyBackgroundComponent num_waves={4} window_width={2560} window_height={1440} />
+    <div class="w-screen h-screen fixed -z-10 inset-0">
+      <ClientOnlyBackgroundComponent num_waves={4} />
     </div>
   )
 }

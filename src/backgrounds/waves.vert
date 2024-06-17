@@ -48,6 +48,5 @@ vec3 sumOfSineWaves(vec3 position, float time) {
 
 void main() {
     vPos = gerstnerWaves(position, time);
-    //vPos = sumOfSineWaves(position, time);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
 }

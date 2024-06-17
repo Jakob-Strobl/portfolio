@@ -87,20 +87,21 @@ function createScene(waves: Wave[], width: number, height: number) {
 
 export interface WavesBackgroundProps {
   num_waves: number;
-  window_width: number;
-  window_height: number
 }
+
 
 export default function WavesBackground(props: WavesBackgroundProps) {
   const wind_direction = new Vector2().random().normalize();
   const base = new Vector2();
   const waves: Wave[] = [];
+  const window_width = window.innerWidth ?? 1920;
+  const window_height = window.innerHeight ?? 1080;
 
   for (let i = 0; i < props.num_waves; i++) {
     waves.push(createWave(base, wind_direction))
   }
 
-  const { renderer, wave_mesh, scene, camera } = createScene(waves, props.window_width, props.window_height);
+  const { renderer, wave_mesh, scene, camera } = createScene(waves, window_width, window_height);
 
   function renderCanvas(timestamp=0) {
     requestAnimationFrame( renderCanvas );
