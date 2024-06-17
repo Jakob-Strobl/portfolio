@@ -8,7 +8,7 @@ export default function App() {
       <IsomorphicBackground></IsomorphicBackground>
       <main>
         <h1 class="text-3xl font-bold underline">Hello world!</h1>
-        <p>
+        <p class="text-white">
           Visit{" "}
           <a href="https://start.solidjs.com" target="_blank">
             start.solidjs.com

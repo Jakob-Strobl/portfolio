@@ -7,8 +7,10 @@ const ClientOnlyBackgroundComponent = clientOnly(() => import("~/backgrounds/wav
  * @returns background compatible with client/server
  */
 export default function IsomorphicBackground() {
+
   return (
     <div class="w-screen h-screen fixed -z-10 inset-0">
+      {/* Number of waves should always match the number of waves defined in the shader */}
       <ClientOnlyBackgroundComponent num_waves={4} />
     </div>
   )
