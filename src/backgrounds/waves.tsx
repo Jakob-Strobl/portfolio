@@ -11,6 +11,7 @@ import {
 
 import vertex from "./waves.vert";
 import fragment from "./waves.frag";
+import { onCleanup, onMount } from "solid-js";
 
 interface Wave {
   direction: Vector2,
@@ -73,15 +74,6 @@ function createScene(waves: Wave[], width: number, height: number) {
   const wave_mesh = createWaveMesh(waves);
   scene.add(wave_mesh);
 
-  // Event Listeners
-  // TODO can I rewrite this to be more "solidJS"
-  // window.addEventListener("resize", () => {
-  //     camera.aspect = window.innerWidth / window.innerHeight;
-  //     camera.updateProjectionMatrix();
-
-  //     renderer.setSize( window.innerWidth, window.innerHeight );
-  // });
-
   return { renderer, wave_mesh, scene, camera }
 }
 
@@ -113,8 +105,18 @@ export default function WavesBackground(props: WavesBackgroundProps) {
     //@ts-ignore
     wave_mesh.material.uniforms["sineTime"].value = Math.sin(timestamp * 0.00005);
   }
-  
-  renderCanvas() // start the engine... brrrrr 
+
+  function resizeHandler() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+  }
+
+  onMount(() => window.addEventListener("resize", resizeHandler));
+  onCleanup(() => window.removeEventListener("resize", resizeHandler));
+
+  renderCanvas(); // start the engine... brrrrr 
   return (
     <>
       {renderer.domElement}
