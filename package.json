@@ -5,7 +5,9 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
-    "test": "vitest"
+    "test": "vitest",
+    "pretty-check": "bunx prettier . --check",
+    "prettify": "bunx prettier . --write"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",

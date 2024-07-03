@@ -4,9 +4,9 @@ import solid from "vite-plugin-solid";
 
 export default defineConfig({
   vite: {
-    plugins: [glsl(), solid({ssr: true})],
+    plugins: [glsl(), solid({ ssr: true })],
     resolve: {
-       conditions: ["development", "browser"],
+      conditions: ["development", "browser"],
     },
   },
 });

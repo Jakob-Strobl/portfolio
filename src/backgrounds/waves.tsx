@@ -62,7 +62,12 @@ function createWaveMesh(waves: Wave[]): Mesh {
   return mesh;
 }
 
-function createScene(waves: Wave[], width: number, height: number, canvas: HTMLCanvasElement) {
+function createScene(
+  waves: Wave[],
+  width: number,
+  height: number,
+  canvas: HTMLCanvasElement,
+) {
   const aspect_ratio = width / height;
   const camera = new PerspectiveCamera(90, aspect_ratio, 0.1, 100);
   camera.position.z = 10;
@@ -101,7 +106,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         waves,
         window_width,
         window_height,
-        canvas()!
+        canvas()!,
       );
 
       function renderCanvas(timestamp = 0) {
@@ -129,7 +134,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
       renderCanvas(); // start the engine... brrrrr
     }
-  }, null)
+  }, null);
 
   return <canvas ref={setCanvas}></canvas>;
 }

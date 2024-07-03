@@ -7,7 +7,9 @@ import App from "../src/app";
 
 test("smoke test", async () => {
   const result = render(() => <IsomorphicBackground />);
-  expect(result.baseElement.querySelector("div.w-screen.h-screen")).toBeVisible();
+  expect(
+    result.baseElement.querySelector("div.w-screen.h-screen"),
+  ).toBeVisible();
 });
 
 test("app smoke test", async () => {
