@@ -1,0 +1,4 @@
+# Ignore list
+public
+**/*.vert
+**/*.frag

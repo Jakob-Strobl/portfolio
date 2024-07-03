@@ -4,23 +4,36 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "test": "vitest"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/start": "^1.0.1",
+    "@solidjs/router": "^0.13.6",
+    "@solidjs/start": "^1.0.2",
     "@types/three": "^0.165.0",
-    "solid-js": "^1.8.17",
+    "solid-js": "^1.8.18",
     "three": "^0.165.0",
-    "vinxi": "^0.3.11"
+    "vinxi": "^0.3.12"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
+    "@solidjs/testing-library": "^0.8.8",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/user-event": "^14.5.2",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
+    "happy-dom": "^14.12.3",
+    "jsdom": "^24.1.0",
+    "postcss": "^8.4.39",
+    "prettier": "^3.3.2",
+    "solid-start": "^0.3.11",
     "tailwindcss": "^3.4.4",
-    "vite-plugin-glsl": "^1.3.0"
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2",
+    "vite-plugin-glsl": "^1.3.0",
+    "vite-plugin-solid": "^2.10.2",
+    "vitest": "^1.6.0"
   }
 }

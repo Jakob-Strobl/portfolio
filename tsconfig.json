@@ -11,9 +11,11 @@
     "strict": true,
     "noEmit": true,
     "types": [
-      "vinxi/types/client", 
-      "three", 
-      "vite-plugin-glsl/ext"
+      "vite/client",
+      "vinxi/types/client",
+      "three",
+      "vite-plugin-glsl/ext",
+      "@testing-library/jest-dom"
     ],
     "isolatedModules": true,
     "paths": {
