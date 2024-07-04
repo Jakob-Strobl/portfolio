@@ -5,9 +5,11 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
-    "test": "vitest",
+    "test": "vitest run",
+    "test-watch": "vitest",
     "pretty-check": "bunx prettier . --check",
-    "prettify": "bunx prettier . --write"
+    "prettify": "bunx prettier . --write",
+    "prepare": "husky"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
@@ -22,11 +24,14 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^14.12.3",
     "@solidjs/testing-library": "^0.8.8",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/user-event": "^14.5.2",
     "autoprefixer": "^10.4.19",
+    "git-format-staged": "^3.1.1",
     "happy-dom": "^14.12.3",
+    "husky": "^9.0.11",
     "jsdom": "^24.1.0",
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
