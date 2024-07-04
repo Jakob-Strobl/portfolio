@@ -9,4 +9,10 @@ export default defineConfig({
       conditions: ["development", "browser"],
     },
   },
+  server: {
+    preset: "cloudflare-pages",
+    rollupConfig: {
+      external: ["node:async_hooks"]
+    }
+  }
 });
