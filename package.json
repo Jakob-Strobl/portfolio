@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
+    "cloudflare-step-deploy": "vitest run && vinxi build",
     "start": "vinxi start",
     "test": "vitest run",
     "test-watch": "vitest",
