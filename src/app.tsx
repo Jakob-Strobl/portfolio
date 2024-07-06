@@ -1,24 +1,26 @@
+import { Suspense } from "solid-js";
 import "./app.css";
 import IsomorphicBackground from "./components/background";
+import { Route, Router, RouteSectionProps } from "@solidjs/router";
+import { FileRoutes } from "@solidjs/start/router";
+import Menu from "./components/menu";
+
+const BaseLayout = (props: RouteSectionProps) => {
+  const showMenu = props.location.pathname == "/";
+  console.log(`showMenu = ${showMenu}`);
+  return (
+    <Suspense>
+      <IsomorphicBackground></IsomorphicBackground>
+      {props.children}
+    </Suspense>
+  );
+};
 
 export default function App() {
   return (
-    <div>
-      <IsomorphicBackground></IsomorphicBackground>
-      <main>
-        <h1 class="text-3xl font-bold underline">Hello world!</h1>
-        <p class="text-white">
-          Visit
-          <a
-            href="https://start.solidjs.com"
-            target="_blank"
-            data-testid="link"
-          >
-            start.solidjs.com
-          </a>
-          to learn how to build SolidStart apps.
-        </p>
-      </main>
-    </div>
+    <Router root={BaseLayout}>
+      <FileRoutes />
+      {/* <Route path="404" component={<div><h1>404 Whoops</h1></div>}></Route> */}
+    </Router>
   );
 }
