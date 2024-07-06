@@ -3,7 +3,6 @@ import "./app.css";
 import IsomorphicBackground from "./components/background";
 import { Route, Router, RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import Menu from "./components/menu";
 
 const BaseLayout = (props: RouteSectionProps) => {
   const showMenu = props.location.pathname == "/";
