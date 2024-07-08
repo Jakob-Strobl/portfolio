@@ -4,11 +4,26 @@
 
 @font-face {
   font-family: "Raleway";
-  src:
+  /* prettier-ignore */
+  src: 
+    /* load from client's local if possible */
+    local("Raleway-Regular"),
+    /* try base raleway if possible for 'regular' */
     local("Raleway"),
-    /* load from client's local if possible */ url("/fonts/Raleway-Regular.ttf")
-      format("truetype-variations");
+    url("/fonts/Raleway-Regular.ttf");
   font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Raleway";
+  /* prettier-ignore */
+  src:
+    /* load from client's local if possible */
+    local("Raleway-Medium"),
+    url("/fonts/Raleway-Medium.ttf");
+  font-style: normal;
+  font-weight: 500;
 }
 
 @layer base {
