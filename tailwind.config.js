@@ -20,7 +20,8 @@ export default {
         400: "#B172E9",
         300: "#CA9CF2",
         200: "#DDBFF8",
-        100: "#FDFBFE",
+        100: "#FDFBFE", // TODO find a shade inbetween
+        white: "$FDFBFE",
       },
     },
     extend: {},
