@@ -24,7 +24,11 @@ export default {
         white: "$FDFBFE",
       },
     },
-    extend: {},
+    extend: {
+      opacity: {
+        88: "0.88",
+      },
+    },
   },
   plugins: [],
 };
