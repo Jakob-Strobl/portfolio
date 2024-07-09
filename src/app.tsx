@@ -10,7 +10,9 @@ const BaseLayout = (props: RouteSectionProps) => {
   return (
     <Suspense>
       <IsomorphicBackground></IsomorphicBackground>
-      {props.children}
+      <main class="flex flex-row h-screen w-screen items-center justify-center">
+        {props.children}
+      </main>
     </Suspense>
   );
 };
