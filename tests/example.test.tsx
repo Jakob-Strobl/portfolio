@@ -1,5 +1,6 @@
 import { test, expect } from "vitest";
 import { render } from "@solidjs/testing-library";
+import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
 
@@ -18,4 +19,13 @@ test("app smoke test", async () => {
   expect(links.length).toEqual(2);
   expect(links[0]).toHaveTextContent("Experience");
   expect(links[1]).toHaveTextContent("Contact");
+});
+
+test("version number from package.json renders in page", async () => {
+  const page = render(() => <Home></Home>);
+
+  const versionNumber = page.getByText(
+    (_, element) => element?.textContent == `v${version}`,
+  );
+  expect(versionNumber).toBeVisible();
 });
