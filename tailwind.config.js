@@ -1,5 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-const colors = require("tailwindcss/colors");
+import plugin from "tailwindcss/plugin";
+import colors from "tailwindcss/colors";
+
+const customUtilities = plugin(({ addUtilities }) => {
+  addUtilities({
+    ".text-sub": {
+      "font-variant-position": "sub",
+    },
+    ".test-super": {
+      "font-variant-position": "super",
+    },
+  });
+});
 
 export default {
   content: ["./src/**/*.{html,tsx,css}"],
@@ -30,5 +42,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [customUtilities],
 };
