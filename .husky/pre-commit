@@ -1,2 +1,1 @@
-bun run build
 git-format-staged --verbose --formatter 'bunx prettier --stdin-filepath "{}"' '*.tsx' '*.js' '*.ts' '*.css'

@@ -2,15 +2,29 @@
 import plugin from "tailwindcss/plugin";
 import colors from "tailwindcss/colors";
 
-const customUtilities = plugin(({ addUtilities }) => {
+const customUtilities = plugin(({ addUtilities, matchUtilities, theme }) => {
   addUtilities({
     ".text-sub": {
       "font-variant-position": "sub",
     },
-    ".test-super": {
+    ".text-super": {
       "font-variant-position": "super",
     },
+    ".transition-text": {
+      "transition-property": "text-shadow",
+      "transition-timing-function": "cubic-bezier(.56,.25,.58,.71)",
+    },
   });
+  matchUtilities(
+    {
+      "text-stroke": (value) => ({
+        "text-shadow": value,
+      }),
+    },
+    {
+      values: theme("textStrokes"),
+    },
+  );
 });
 
 export default {
@@ -35,6 +49,12 @@ export default {
         100: "#FDFBFE", // TODO: find a shade inbetween
         white: "$FDFBFE",
       },
+    },
+    textStrokes: {
+      //          color , h-offset, v-offset blur"
+      sm: "#CA9CF2 0 0 0.25rem",
+      md: "#CA9CF2 0 0 0.45rem",
+      lg: "#CA9CF2  0 0 0.7rem",
     },
     extend: {
       opacity: {
