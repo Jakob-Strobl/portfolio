@@ -51,10 +51,10 @@ export default {
       },
     },
     textStrokes: {
-      //          color , h-offset, v-offset blur"
+      // HINT color, h-offset, v-offset, blur
       sm: "#CA9CF2 0 0 0.25rem",
       md: "#CA9CF2 0 0 0.45rem",
-      lg: "#CA9CF2  0 0 0.7rem",
+      lg: "#CA9CF2 0 0 0.7rem",
     },
     extend: {
       opacity: {
