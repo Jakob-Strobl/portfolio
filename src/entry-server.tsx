@@ -17,7 +17,14 @@ export default createHandler(() => (
           ></script>
           {assets}
         </head>
-        <body>
+        <body
+          style={{
+            // NOTE(style):
+            //    To avoid flashbanging the user on refresh, we set inline style
+            //    because we can't guarantee the tailwind styles will be loaded in time
+            "background-color": "black",
+          }}
+        >
           <div id="app">{children}</div>
           {scripts}
         </body>
