@@ -8,12 +8,12 @@ const BaseLayout = (props: RouteSectionProps) => {
   const showMenu = props.location.pathname == "/";
   console.log(`showMenu = ${showMenu}`);
   return (
-    <Suspense>
+    <>
       <IsomorphicBackground></IsomorphicBackground>
       <main class="flex flex-row h-screen w-screen items-center justify-center">
-        {props.children}
+        <Suspense>{props.children}</Suspense>
       </main>
-    </Suspense>
+    </>
   );
 };
 
