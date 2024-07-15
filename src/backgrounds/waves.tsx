@@ -95,6 +95,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const window_width = window.innerWidth ?? 1920;
   const window_height = window.innerHeight ?? 1080;
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
+  const [isReady, setReady] = createSignal(false);
 
   for (let i = 0; i < props.num_waves; i++) {
     waves.push(createWave(base, wind_direction));
@@ -129,12 +130,23 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
-      onMount(() => window.addEventListener("resize", resizeHandler));
+      onMount(() => {
+        window.addEventListener("resize", resizeHandler);
+        setTimeout(() => setReady(true), 1);
+      });
       onCleanup(() => window.removeEventListener("resize", resizeHandler));
 
       renderCanvas(); // start the engine... brrrrr
     }
   }, null);
 
-  return <canvas ref={setCanvas}></canvas>;
+  return (
+    <canvas
+      ref={setCanvas}
+      class="transition-opacity ease-out duration-700"
+      classList={{
+        "opacity-0": !isReady(),
+      }}
+    ></canvas>
+  );
 }
