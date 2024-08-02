@@ -32,3 +32,13 @@
     font-family: Raleway, sans-serif;
   }
 }
+
+@layer components {
+  /** 
+    * Opacity fade-in component
+    * @default duration is 500ms
+    */
+  .fade-in {
+    @apply transition-opacity ease-out duration-500;
+  }
+}
