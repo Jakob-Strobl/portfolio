@@ -143,7 +143,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   return (
     <canvas
       ref={setCanvas}
-      class="transition-opacity ease-out duration-700"
+      class="fade-in duration-700"
       classList={{
         "opacity-0": !isReady(),
       }}
