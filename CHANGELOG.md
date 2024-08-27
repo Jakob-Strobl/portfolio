@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.0...v0.2.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* improve broken unit test due to fade-in transition ([80467fe](https://github.com/Jakob-Strobl/portfolio/commit/80467feff2e7247e5eb346c02332ad4c9a76261b))
+
 ## [0.2.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.14.0...v0.2.0) (2024-08-27)
 
 
