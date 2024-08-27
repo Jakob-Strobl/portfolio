@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { render } from "@solidjs/testing-library";
+import { render, waitFor } from "@solidjs/testing-library";
 import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
@@ -27,5 +27,13 @@ test("version number from package.json renders in page", async () => {
   const versionNumber = page.getByText(
     (_, element) => element?.textContent == `v${version}`,
   );
+  // not visible due to inline style
+  expect(versionNumber).toBeDefined();
+  expect(versionNumber).not.toBeVisible();
+
+  // wait for transition
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  expect(versionNumber).toBeDefined();
   expect(versionNumber).toBeVisible();
 });
