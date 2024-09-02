@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.1...v0.2.2) (2024-09-02)
+
+
+### Bug Fixes
+
+* center menu on mobile device ([963aa81](https://github.com/Jakob-Strobl/portfolio/commit/963aa818861b094c914317f99cf876a6778410e7))
+* unwatch main branch for release please ([7e87472](https://github.com/Jakob-Strobl/portfolio/commit/7e8747261089319a3d3857453f1fc663a2bcefbb))
+
 ## [0.2.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.0...v0.2.1) (2024-08-27)
 
 
