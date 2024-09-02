@@ -60,6 +60,10 @@ export default {
       opacity: {
         88: "0.88",
       },
+      screens: {
+        // Visually this lines up so the menu doesn't visually "jump" on the threshold value for the 1/5th column
+        xs: "480px",
+      },
     },
   },
   plugins: [customUtilities],

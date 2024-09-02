@@ -1,7 +1,7 @@
 import { Suspense } from "solid-js";
 import "./app.css";
 import IsomorphicBackground from "./components/background";
-import { Route, Router, RouteSectionProps } from "@solidjs/router";
+import { Router, RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 
 const BaseLayout = (props: RouteSectionProps) => {

@@ -9,8 +9,8 @@ export default function Home() {
 
   return (
     <>
-      <div class="w-1/5"></div>
-      <div class="w-4/5">
+      <div class="xs:w-1/5"></div>
+      <div class="xs:w-4/5">
         <div
           class="w-72 flex flex-col items-center gap-1.5 fade-in"
           style={{
