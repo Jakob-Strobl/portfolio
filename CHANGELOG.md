@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-07)
+
+
+### Features
+
+* release and tag on main | create prs on feature branches ([2dc6e81](https://github.com/Jakob-Strobl/portfolio/commit/2dc6e8128a331aa7bdd85d0bda0ed913ab5dd5f1))
+
+
+### Bug Fixes
+
+* ignore release-please branches duh ([af6f3ad](https://github.com/Jakob-Strobl/portfolio/commit/af6f3ada07380ddb17979213995882cba5ec6f6a))
+* match everything even forward slashes for workflow ([91f1a57](https://github.com/Jakob-Strobl/portfolio/commit/91f1a57206eb2b31c77072b8c31bc729d8044301))
+
 ## [0.2.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.1...v0.2.2) (2024-09-02)
 
 
