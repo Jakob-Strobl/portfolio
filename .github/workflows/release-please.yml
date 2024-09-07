@@ -24,18 +24,13 @@ jobs:
           # (PAT) and configured it as a GitHub action secret named
           # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          target-branch: ${{ github.ref_name }}
+          target-branch: ${{ 'main' }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
           release-type: node
-          # Skip creating a release post on GitHub when it's a feature branch
-          skip-github-release: ${{ env.BRANCH_NAME != 'main' }}
-          # Create the tags when merging into to main since that's the real release after a rebase / squash
-          # Skip creating another PR for a new release since the release was just merged into main
-          skip-github-pull-request: ${{ env.BRANCH_NAME == 'main' }}
       - uses: actions/checkout@v4
       - name: tag major and minor versions
-        if: ${{ steps.release.outputs.release_created || env.BRANCH_NAME == 'main' }}
+        if: ${{ steps.release.outputs.release_created }}
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
