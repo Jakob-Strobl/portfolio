@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - '**'
-      - '!release-please-*'
+      - '!release-please-**'
 
 permissions:
   contents: write
