@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-08)
+
+
+### Features
+
+* release and tag on main | create prs on feature branches ([e8d8375](https://github.com/Jakob-Strobl/portfolio/commit/e8d8375b2c8e785ea3b1fab3244334f33d66612b))
+
+
+### Bug Fixes
+
+* add missing id from workflow step ([88e34c9](https://github.com/Jakob-Strobl/portfolio/commit/88e34c919abf4d92bb9483e9b7fbe1d49fa2875d))
+* bring back what's broken ([4f50b65](https://github.com/Jakob-Strobl/portfolio/commit/4f50b6577b5c0f355bb3c5d483485f7db4b42068))
+* change to only make PR against main ([162894f](https://github.com/Jakob-Strobl/portfolio/commit/162894f53579b460c4339abe291d5a6f689e0103))
+* i forgot it again... filter out branches with slashes too ([4a38fc3](https://github.com/Jakob-Strobl/portfolio/commit/4a38fc326b9d573e1b09a624c4f71fbc7b58c13e))
+* ignore release-please branches duh ([a1adb2f](https://github.com/Jakob-Strobl/portfolio/commit/a1adb2fc4f288e7b57326b02c0ed14fb68776768))
+* match everything even forward slashes for workflow ([d009461](https://github.com/Jakob-Strobl/portfolio/commit/d0094613ac68681674d160b7eebe8bf3dacdcf0c))
+* modifying conditional so tagging doesn't get skipped ([30af6ff](https://github.com/Jakob-Strobl/portfolio/commit/30af6ff66ecc174d07a30ee6ced00d951a8b226e))
+
 ## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-07)
 
 
