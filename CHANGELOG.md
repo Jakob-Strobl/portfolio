@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.1...v0.3.2) (2024-09-09)
+
+
+### Bug Fixes
+
+* **cicd:** only perform checkout if we know we are making tags ([6e31ade](https://github.com/Jakob-Strobl/portfolio/commit/6e31aded23cbddd96bc196e27a8c4095eaede6dd))
+* **cicd:** remove redundant permissions ([f97b017](https://github.com/Jakob-Strobl/portfolio/commit/f97b017b8f3b95d77cdccf69b879f2130bf2bdd3))
+* **cicd:** set permissions when triggering workflow ([c3bb197](https://github.com/Jakob-Strobl/portfolio/commit/c3bb1976d82c4fa92026e29c2cb5459db07f830b))
+* **cicd:** trigger workflow as job not in steps ([0a83770](https://github.com/Jakob-Strobl/portfolio/commit/0a8377006ec44c2e51ba25ad81c4c247486d5bb7))
+
 ## [0.3.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.0...v0.3.1) (2024-09-09)
 
 
