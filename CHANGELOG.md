@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.4...v0.3.5) (2024-09-09)
+
+
+### Bug Fixes
+
+* actual skill issue. I blame being tired ([72e8f1d](https://github.com/Jakob-Strobl/portfolio/commit/72e8f1d69cd4473471d9639c0f7a537853ab5cf5))
+
 ## [0.3.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.3...v0.3.4) (2024-09-09)
 
 
