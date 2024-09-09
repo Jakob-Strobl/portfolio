@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   release-please:
+    name: Handle Release
     runs-on: ubuntu-latest
     outputs:
       isRelease: ${{ steps.release.outputs.release_created }}
@@ -23,7 +24,7 @@ jobs:
           # (PAT) and configured it as a GitHub action secret named
           # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          target-branch: ${{ github.ref_name }}
+          target-branch: ${{ github.ref_name }} # main
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
           release-type: node
@@ -53,7 +54,7 @@ jobs:
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
 
   trigger-deployment:
-    name: deploy release to prod page
+    name: Deploy Production Release to Page
     uses: ./.github/workflows/prod-page-deploy.yml
     needs: release-please
     permissions:
@@ -61,5 +62,5 @@ jobs:
       deployments: write
     if: needs.release-please.outputs.isRelease
     with:
-      branch: ${{ github.ref_name }}
+      branch: ${{ github.ref_name }} # main
       

@@ -1,4 +1,4 @@
-name: Prod Page Deploy 
+name: Page Deploy 
 
 on:
   workflow_dispatch:
