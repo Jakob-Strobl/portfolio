@@ -55,6 +55,9 @@ jobs:
     name: deploy release to prod page
     uses: ./.github/workflows/prod-page-deploy.yml
     needs: release-please
+    permissions:
+      contents: write
+      deployments: write
     if: needs.release-please.outputs.isRelease
     with:
       branch: ${{ github.ref_name }}
