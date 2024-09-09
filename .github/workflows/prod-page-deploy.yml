@@ -25,6 +25,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/iron # node LTS v20.XX
+
+      - name: Install Bun
+        run: npm install -g bun
+      
+      - name: Install Dependencies
+        run: bun install
+
       - name: Build
         run: bun run cloudflare-step-deploy
 
