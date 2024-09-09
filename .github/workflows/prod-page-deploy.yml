@@ -1,0 +1,26 @@
+on: 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: The branch to build
+        required: true
+
+jobs:
+  deploy: 
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        run: bun run cloudflare-step-deploy
+      - name: Publish
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ vars.PAGES_PROJECT_NAME }} # e.g. 'my-project'
+          directory: ${{ vars.OUTPUT_DIRECTORY }} # e.g. 'dist'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
