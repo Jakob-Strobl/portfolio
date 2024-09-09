@@ -47,3 +47,4 @@ jobs:
           branch: ${{ inputs.branch }}
           directory: ${{ vars.OUTPUT_DIRECTORY }} # e.g. 'dist'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: '3'
