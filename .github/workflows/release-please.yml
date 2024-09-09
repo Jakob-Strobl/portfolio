@@ -9,12 +9,11 @@ permissions:
 
 name: release-please
 
-env:
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      isRelease: ${{ steps.release.outputs.release_created }}
     steps:
       - name: run release-please
         uses: googleapis/release-please-action@v4
@@ -52,12 +51,11 @@ jobs:
           git push origin v${{ steps.release.outputs.major }}
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
 
-      - name: checkout repo
-        uses: actions/checkout@v4
-        
-      - name: deploy release to prod page
-        if: ${{ steps.release.outputs.release_created }}
-        uses: ./.github/workflows/prod-page-deploy.yml
-        with:
-          branch: ${{ env.BRANCH_NAME }}
+  trigger-deployment:
+    name: deploy release to prod page
+    uses: ./.github/workflows/prod-page-deploy.yml
+    needs: release-please
+    if: needs.release-please.outputs.isRelease
+    with:
+      branch: ${{ github.ref_name }}
       
