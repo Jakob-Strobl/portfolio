@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-09)
+
+
+### Features
+
+* deploye page to cloudflare as trigger on releases ([41e3c67](https://github.com/Jakob-Strobl/portfolio/commit/41e3c67b6e30f19b17802e431377d7fc213077aa))
+* release and tag on main | create prs on feature branches ([e8d8375](https://github.com/Jakob-Strobl/portfolio/commit/e8d8375b2c8e785ea3b1fab3244334f33d66612b))
+
+
+### Bug Fixes
+
+* add missing id from workflow step ([88e34c9](https://github.com/Jakob-Strobl/portfolio/commit/88e34c919abf4d92bb9483e9b7fbe1d49fa2875d))
+* bring back what's broken ([86f3a94](https://github.com/Jakob-Strobl/portfolio/commit/86f3a94e7d73f518063bfd14de9d2b66a446ad5c))
+* change to only make PR against main ([684f9eb](https://github.com/Jakob-Strobl/portfolio/commit/684f9eb6a4854bf95be5b8ffff22567d265d9aa9))
+* clean up step names and missing conditional to trigger page deploy ([06e5c03](https://github.com/Jakob-Strobl/portfolio/commit/06e5c0386f025d6b6079c6bc51e243d36de381c0))
+* i forgot it again... filter out branches with slashes too ([4a38fc3](https://github.com/Jakob-Strobl/portfolio/commit/4a38fc326b9d573e1b09a624c4f71fbc7b58c13e))
+* ignore release-please branches duh ([a1adb2f](https://github.com/Jakob-Strobl/portfolio/commit/a1adb2fc4f288e7b57326b02c0ed14fb68776768))
+* match everything even forward slashes for workflow ([d009461](https://github.com/Jakob-Strobl/portfolio/commit/d0094613ac68681674d160b7eebe8bf3dacdcf0c))
+* modifying conditional so tagging doesn't get skipped ([30af6ff](https://github.com/Jakob-Strobl/portfolio/commit/30af6ff66ecc174d07a30ee6ced00d951a8b226e))
+* set release please to only watch main branch ([f061bfe](https://github.com/Jakob-Strobl/portfolio/commit/f061bfe48ca32b63fa67b6ea402b0ea67c77064c))
+
 ## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-07)
 
 
