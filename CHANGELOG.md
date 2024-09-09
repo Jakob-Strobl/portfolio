@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.2...v0.3.3) (2024-09-09)
+
+
+### Bug Fixes
+
+* **cicd:** set branch on cloudflare action ([ee6b758](https://github.com/Jakob-Strobl/portfolio/commit/ee6b7583df1c1954b26184ff77207c9cee0845e9))
+* **cicd:** set cloudflare page action to use wrangler 3 ([9d43a79](https://github.com/Jakob-Strobl/portfolio/commit/9d43a798706f768bb79991874263e989e49db3d4))
+* **cicd:** setup bun on action ([37007ef](https://github.com/Jakob-Strobl/portfolio/commit/37007ef7c312c0b79633df38665c9f0ab06e7224))
+
 ## [0.3.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.1...v0.3.2) (2024-09-09)
 
 
