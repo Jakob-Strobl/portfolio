@@ -1,8 +1,7 @@
 on:
   push:
     branches:
-      - '**'
-      - '!release-please-**'
+      - 'main'
 
 permissions:
   contents: write
@@ -28,11 +27,10 @@ jobs:
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
           release-type: node
-          # Skip creating a release post on GitHub when it's a feature branch
-          skip-github-release: ${{ env.BRANCH_NAME != 'main' }}
-          # Create the tags when merging into to main since that's the real release after a rebase / squash
-          # Skip creating another PR for a new release since the release was just merged into main
-          skip-github-pull-request: ${{ env.BRANCH_NAME == 'main' }}
+          # Because of this open issue, https://github.com/googleapis/release-please-action/issues/937
+          # when we set skip-pull-request to true but skip-release to false, the action does not make a release
+          # From how I read the docs, this seems like a bug, but I'm not in the mood to go down that rabbit hole now
+          # So for now, we will only activate the action on Main and accept PRs into main for the release
       - uses: actions/checkout@v4
       - name: tag major and minor versions
         if: ${{ steps.release.outputs.release_created }}
@@ -49,3 +47,8 @@ jobs:
           git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}"
           git push origin v${{ steps.release.outputs.major }}
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+      - name: Deploy release to Production
+        uses: ./.github/workflows/prod-page-deploy.yml
+        with:
+          branch: ${{ env.BRANCH_NAME }}
+      
