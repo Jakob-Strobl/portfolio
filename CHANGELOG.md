@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.0...v0.3.1) (2024-09-09)
+
+
+### Bug Fixes
+
+* try checkout before trigger? ([f609ec9](https://github.com/Jakob-Strobl/portfolio/commit/f609ec97e8a7eee4aed5d3857e923be446068a37))
+
 ## [0.3.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.2.2...v0.3.0) (2024-09-09)
 
 
