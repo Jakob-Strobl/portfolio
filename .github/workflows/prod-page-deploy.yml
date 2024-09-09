@@ -14,9 +14,9 @@ on:
         description: The branch to build
         required: true
     secrets:
-      cloudflare_apiToken:
+      CLOUDFLARE_API_TOKEN:
         required: true
-      cloudflare_accountId:
+      CLOUDFLARE_ACCOUNT_ID:
         required: true
       
 permissions:
