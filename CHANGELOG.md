@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.3...v0.3.4) (2024-09-09)
+
+
+### Bug Fixes
+
+* **cicd:** forgot to pass secrets to reusable workflow ([c92650d](https://github.com/Jakob-Strobl/portfolio/commit/c92650db6bd1de334abe8bb224df7bbbfe0fa0fc))
+
 ## [0.3.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.2...v0.3.3) (2024-09-09)
 
 
