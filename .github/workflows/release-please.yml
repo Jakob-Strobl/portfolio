@@ -63,4 +63,7 @@ jobs:
     if: needs.release-please.outputs.isRelease
     with:
       branch: ${{ github.ref_name }} # main
+    secrets:
+      cloudflare_apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      cloudflare_accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       
