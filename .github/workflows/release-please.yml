@@ -33,7 +33,7 @@ jobs:
           # From how I read the docs, this seems like a bug, but I'm not in the mood to go down that rabbit hole now
           # So for now, we will only activate the action on Main and accept PRs into main for the release
 
-      - name: checkout
+      - name: checkout repo
         uses: actions/checkout@v4
 
       - name: tag major and minor versions
@@ -52,7 +52,10 @@ jobs:
           git push origin v${{ steps.release.outputs.major }}
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
 
-      - name: Deploy release to Production
+      - name: checkout repo
+        uses: actions/checkout@v4
+        
+      - name: deploy release to prod page
         if: ${{ steps.release.outputs.release_created }}
         uses: ./.github/workflows/prod-page-deploy.yml
         with:
