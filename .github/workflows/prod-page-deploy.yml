@@ -1,3 +1,5 @@
+name: Prod Page Deploy 
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,9 +13,13 @@ on:
         type: string
         description: The branch to build
         required: true
+      
+permissions:
+  contents: read
+  deployments: write
 
 jobs:
-  deploy: 
+  deploy-page: 
     runs-on: ubuntu-latest
     permissions:
       contents: read
