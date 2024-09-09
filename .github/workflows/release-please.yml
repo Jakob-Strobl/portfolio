@@ -16,7 +16,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: run release-please
+        uses: googleapis/release-please-action@v4
         id: release
         with:
           # this assumes that you have created a personal access token
@@ -31,7 +32,10 @@ jobs:
           # when we set skip-pull-request to true but skip-release to false, the action does not make a release
           # From how I read the docs, this seems like a bug, but I'm not in the mood to go down that rabbit hole now
           # So for now, we will only activate the action on Main and accept PRs into main for the release
-      - uses: actions/checkout@v4
+
+      - name: checkout
+        uses: actions/checkout@v4
+
       - name: tag major and minor versions
         if: ${{ steps.release.outputs.release_created }}
         run: |
@@ -47,7 +51,9 @@ jobs:
           git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}"
           git push origin v${{ steps.release.outputs.major }}
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+
       - name: Deploy release to Production
+        if: ${{ steps.release.outputs.release_created }}
         uses: ./.github/workflows/prod-page-deploy.yml
         with:
           branch: ${{ env.BRANCH_NAME }}
