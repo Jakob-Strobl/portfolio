@@ -33,6 +33,7 @@ jobs:
           # So for now, we will only activate the action on Main and accept PRs into main for the release
 
       - name: checkout repo
+        if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v4
 
       - name: tag major and minor versions
