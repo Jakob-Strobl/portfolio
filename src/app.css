@@ -41,4 +41,13 @@
   .fade-in {
     @apply transition-opacity ease-out duration-500;
   }
+
+  .fade-in-colors {
+    @apply transition-colors ease-out duration-500;
+  }
+
+  .fade-in-bg {
+    /* I like the -bg alias since plain css makes a background distinction */
+    @apply fade-in-colors;
+  }
 }
