@@ -5,8 +5,6 @@ import { Router, RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 
 const BaseLayout = (props: RouteSectionProps) => {
-  const showMenu = props.location.pathname == "/";
-  console.log(`showMenu = ${showMenu}`);
   return (
     <>
       <IsomorphicBackground></IsomorphicBackground>
