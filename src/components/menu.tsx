@@ -10,7 +10,7 @@ export default function Menu() {
   return (
     <Shadow>
       <nav>
-        <ul class="flex flex-col gap-6 opacity-88">
+        <ul class="flex flex-col gap-6 opacity-88 text-3xl text-white">
           <li
             class="fade-in delay-75"
             style={{
