@@ -64,6 +64,9 @@ export default {
         // Visually this lines up so the menu doesn't visually "jump" on the threshold value for the 1/5th column
         xs: "480px",
       },
+      transitionProperty: {
+        rect: "height, width, top, left",
+      },
     },
   },
   plugins: [customUtilities],
