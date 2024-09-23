@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store";
 
 interface UmbraState {
   shadows: Array<HTMLDivElement>;
-  shadow: () => Array<HTMLDivElement>;
+  shadow: Array<HTMLDivElement>;
 }
 
 export default function Umbra() {
@@ -20,6 +20,7 @@ export default function Umbra() {
 
   // TODO currently hardcoded for one shadow at a time
   // TODO make flexible with 1->N shadow transitions and N->K shadows
+  // TODO also set fade in on mount, fade-in doesn't work with new change
   return (
     <div
       class="
