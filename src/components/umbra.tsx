@@ -1,21 +1,40 @@
-import { children, createMemo, createUniqueId } from "solid-js";
+import { createMemo } from "solid-js";
 import type { JSX } from "solid-js";
 import { createStore } from "solid-js/store";
-
-interface UmbraProps {
-  children: JSX.Element | JSX.ArrayElement;
-}
 
 interface UmbraState {
   shadows: Array<HTMLDivElement>;
   shadow: () => Array<HTMLDivElement>;
 }
 
-export default function Umbra(props: UmbraProps) {
-  const resolved = children(() => props.children);
-  const shadowMemo = createMemo(() => state.shadow);
-  console.log(shadowMemo());
-  return resolved();
+export default function Umbra() {
+  const rect = createMemo(
+    () =>
+      state.shadow[0]?.getBoundingClientRect() ?? {
+        width: 10,
+        height: 10,
+        top: 0,
+        left: 0,
+      },
+  );
+
+  // TODO currently hardcoded for one shadow at a time
+  // TODO make flexible with 1->N shadow transitions and N->K shadows
+  return (
+    <div
+      class="
+        absolute -z-10 transition-rect rounded-lg
+        bg-opacity-50 bg-night-black 
+        fade-in-bg duration-1000 delay-75
+      "
+      style={{
+        width: `${rect().width}px`,
+        height: `${rect().height}px`,
+        top: `${rect().top}px`,
+        left: `${rect().left}px`,
+      }}
+    ></div>
+  );
 }
 
 const [state, setState] = createStore<UmbraState>({

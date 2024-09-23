@@ -3,12 +3,14 @@ import "./app.css";
 import IsomorphicBackground from "./components/background";
 import { Router, RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
+import Umbra from "./components/umbra";
 
 const BaseLayout = (props: RouteSectionProps) => {
   return (
     <>
       <IsomorphicBackground></IsomorphicBackground>
       <main class="flex flex-row h-screen w-screen items-center justify-center">
+        <Umbra></Umbra>
         <Suspense>{props.children}</Suspense>
       </main>
     </>
