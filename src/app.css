@@ -50,4 +50,53 @@
     /* I like the -bg alias since plain css makes a background distinction */
     @apply fade-in-colors;
   }
+
+  img.github-normalized-size {
+    @apply w-[116px] sm:w-[171.5px] xl:w-[257px];
+
+    /* 
+     * Shadow may miscalculate the height on first load and first render of contact page when navigating
+     *
+     * This is because the resulting height of the image is unknown until the asset is loaded
+     * We need to set the height in some fashion; using aspect so height is handled for any width values
+     * Avoids having to do this: `@apply h-[83px] md:h-[166.5px] lg:h-[250px];` and manually maintain
+     * 
+     * WARN(Hardcoding):
+     *   The ratio is the ratio of the image the browser will load so the correct height is used before image loads
+     *   If the image changes and the aspect ratio changes, then this will need to be updated
+     */
+    @apply aspect-[257/250];
+  }
+
+  img.linkedin-normalized-size {
+    /* These widths match the height of LinkedIn image to the github octocat image 
+     * Github Octacat Dimensions - 257x250
+     * LinkedIn Bug Dimensions - 733x540
+     *
+     * Width/Height := LinkedIn bug aspect ratio 
+     * Aspect Ratio * github image's height = Desired max height of LinkedIn Image
+     *
+     * Github: 257/250 = 1.028 (width/height)
+     * LinkedIn: 733/540 = 1.3574 (width/height)
+     * 
+     * xl-w: 
+     *     height of github image * LinkedIn ratio (width/height) = width
+     *     250px (height) * 1.3574 (width/height) ~= 339.35px (width)
+     *
+     * sm-w:
+     *     171.5pxx (width) / 1.028 (width/height) = 166.83px (height)
+     *     166.83px (height) * 1.3574 (width/height) ~= 226.45px (width)
+     * 
+     * w:
+     *     116px (width) / 1.028 (width/height) = 112.84px (height)
+     *     112.84px (height) * 1.3574 (width/height) ~= ~153.17px (width)
+     *
+     * TODO(refactor): change to rems or is it better if this is pure static pixels?
+     * NOTE: width defined used more significant digits than explanation above
+     */
+    @apply w-[153.17px] sm:w-[226.45px] xl:w-[339.35px];
+
+    /* Same reason as rule above */
+    @apply aspect-[733/540];
+  }
 }
