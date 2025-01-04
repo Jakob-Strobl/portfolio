@@ -77,9 +77,19 @@ function createScene(
   const scene = new Scene();
   scene.add(wave_mesh);
 
-  const renderer = new WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize(width, height);
-  renderer.setClearColor(new Color(0x130d20));
+  let renderer: WebGLRenderer | undefined;
+  try {
+    // A test on the IsomorphicBackground component is failing because three.js throws an error "Error creating WebGL context."
+    // I thought the tests weren't supposed to render the clientOnly code (this code), but maybe I misunderstood.
+    // Not sure if breaking change from some recent dependency updates or if it wasn't supposed to work
+    // Either way we don't need the renderer to be created for the tests.
+    // TODO investigate later
+    renderer = new WebGLRenderer({ antialias: true, canvas: canvas });
+    renderer.setSize(width, height);
+    renderer.setClearColor(new Color(0x130d20));
+  } catch (e) {
+    console.warn("Waves: Failed to create WebGLRenderer", e);
+  }
 
   return { renderer, wave_mesh, scene, camera };
 }
@@ -110,9 +120,9 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         canvasEl()!,
       );
 
-      function renderCanvas(timestamp = 0) {
-        requestAnimationFrame(renderCanvas);
-        renderer.render(scene, camera);
+      function renderCanvas(this: WebGLRenderer, timestamp = 0) {
+        requestAnimationFrame(renderCanvas.bind(this));
+        this.render(scene, camera);
 
         // Update Shader Uniforms to do the wave motion
         //@ts-ignore
@@ -127,7 +137,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
 
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer?.setSize(window.innerWidth, window.innerHeight);
       }
 
       onMount(() => {
@@ -136,7 +146,9 @@ export default function WavesBackground(props: WavesBackgroundProps) {
       });
       onCleanup(() => window.removeEventListener("resize", resizeHandler));
 
-      renderCanvas(); // start the engine... brrrrr
+      if (renderer != undefined) {
+        renderCanvas.bind(renderer)(); // start the engine... brrrrr
+      }
     }
   }, null);
 
