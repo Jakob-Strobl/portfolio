@@ -94,7 +94,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const waves: Wave[] = [];
   const window_width = window.innerWidth ?? 1920;
   const window_height = window.innerHeight ?? 1080;
-  const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
+  const [canvasEl, setCanvasEl] = createSignal<HTMLCanvasElement>();
   const [isReady, setReady] = createSignal(false);
 
   for (let i = 0; i < props.num_waves; i++) {
@@ -102,12 +102,12 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   }
 
   createEffect(() => {
-    if (canvas() != null && canvas()?.getContext != null) {
+    if (canvasEl() != null && canvasEl()?.getContext != null) {
       const { renderer, wave_mesh, scene, camera } = createScene(
         waves,
         window_width,
         window_height,
-        canvas()!,
+        canvasEl()!,
       );
 
       function renderCanvas(timestamp = 0) {
@@ -142,7 +142,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
   return (
     <canvas
-      ref={setCanvas}
+      ref={setCanvasEl}
       class="fade-in duration-700"
       classList={{
         "opacity-0": !isReady(),
