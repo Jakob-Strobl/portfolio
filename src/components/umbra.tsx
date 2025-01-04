@@ -1,5 +1,6 @@
 import { createMemo, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import { isTest } from "../actions/test-actions";
 
 interface UmbraState {
   shadows: Array<HTMLDivElement>;
@@ -10,6 +11,7 @@ export default function Umbra() {
   // const clientRect = createSignal(state.shadow[0]?.getBoundingClientRect())
   const clientRect = createMemo(() => {
     return (
+      // TODO is there a better way to initialize the position? You can see which direction it spawned from.
       state.shadow[0]?.getBoundingClientRect() ?? {
         width: 10,
         height: 10,
@@ -27,7 +29,7 @@ export default function Umbra() {
 
   // TODO currently hardcoded for one shadow at a time
   // TODO make flexible with 1->N shadow transitions and N->K shadows
-  // TODO also set fade in on mount, fade-in doesn't work with new change
+  // TODO also set fade in on mount, fade-indoesn't work with new changess
   return (
     <div
       class="
@@ -57,14 +59,18 @@ const [state, setState] = createStore<UmbraState>({
 });
 
 export const addShadow = (shadowEl: HTMLDivElement) => {
-  console.log("Adding shadow: ", shadowEl);
+  if (!isTest()) {
+    console.log("Adding shadow: ", shadowEl);
+  }
   setState((state) => {
     return { shadows: [...state.shadows, shadowEl] };
   });
 };
 
 export const removeShadow = (shadowToRemoveId: string) => {
-  console.log("Removing shadow by Id: ", shadowToRemoveId);
+  if (!isTest()) {
+    console.log("Removing shadow by Id: ", shadowToRemoveId);
+  }
   const filtered = state.shadows.filter(
     (shadow) => shadow.dataset["shadow"] !== shadowToRemoveId,
   );

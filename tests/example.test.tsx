@@ -3,6 +3,7 @@ import { render, waitFor } from "@solidjs/testing-library";
 import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
+import { isTest } from "../src/actions/test-actions";
 
 // @vitest-environment happy-dom
 
@@ -36,4 +37,9 @@ test("version number from package.json renders in page", async () => {
 
   expect(versionNumber).toBeDefined();
   expect(versionNumber).toBeVisible();
+});
+
+test("Test action: isTest returns true", () => {
+  const result = isTest();
+  expect(result).toBeTruthy();
 });
