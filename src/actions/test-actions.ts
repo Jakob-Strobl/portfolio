@@ -1,2 +1,2 @@
 export const isTest = (): boolean =>
-  process.env.NODE_ENV === "test" || process.env.VITEST !== undefined;
+  import.meta.env.NODE_ENV === "test" || import.meta.env.VITEST !== undefined;

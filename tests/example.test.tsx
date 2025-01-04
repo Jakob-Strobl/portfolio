@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { render, waitFor } from "@solidjs/testing-library";
+import { render } from "@solidjs/testing-library";
 import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
