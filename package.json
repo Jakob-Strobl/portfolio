@@ -10,6 +10,7 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "cloudflare-step-deploy": "vitest run && vinxi build",
+    "cloudflare-deploy-local": "vinxi build && wrangler pages deploy dist --project-name=portfolio",
     "start": "vinxi start",
     "test": "vitest run",
     "test-watch": "vitest",
