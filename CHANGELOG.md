@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.4.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.5...v0.4.0) (2025-01-05)
+
+
+### Features
+
+* add Shadow to contact and experience pages ([c613d60](https://github.com/Jakob-Strobl/portfolio/commit/c613d601a95091ec691478764567afc0c4949083))
+* add transition-rect to tailwind ([5d77f17](https://github.com/Jakob-Strobl/portfolio/commit/5d77f179396d2f24a58fa36f5d47992e176ab2f3))
+* add umbra and add shadow reference on creation ([7d5e727](https://github.com/Jakob-Strobl/portfolio/commit/7d5e727c3df4f17a5722e25f012d038ea1e8dab8))
+* compute client side bounding box on resize ([f3b135b](https://github.com/Jakob-Strobl/portfolio/commit/f3b135b24f51aa357c6763f4fc06b3801d1510e3))
+* **contact:** add linkedin and github links with matched logo dimensions ([13001e3](https://github.com/Jakob-Strobl/portfolio/commit/13001e3c35c8769efcfd44c9157fb8aa477a6762))
+* **contact:** add underline to email for discovery with hover transition ([1eaf67f](https://github.com/Jakob-Strobl/portfolio/commit/1eaf67f561a213670949a1779b217962bf3fa314))
+* extract menu background into Shadow component ([e12c918](https://github.com/Jakob-Strobl/portfolio/commit/e12c918d50fc41ce3bf8d62cc1741be3d5ae0171))
+* finish simple contact page and copy email to clipboard on click ([15c9af6](https://github.com/Jakob-Strobl/portfolio/commit/15c9af61583c17e19fef3c617ee74656bf6f795d))
+* **notify-bubble:** add tooltip to tell user email was copied to clipboard ([83ccbed](https://github.com/Jakob-Strobl/portfolio/commit/83ccbed9dbffd2c988ab156bf8e56d0330e44978))
+* the &lt;Umbra /&gt; component is alive! the transitions work! ([1923c46](https://github.com/Jakob-Strobl/portfolio/commit/1923c46b98798b350373c548766bf3d9460c5b08))
+
+
+### Bug Fixes
+
+* **cloudflare:** deployments broke use vite's import.meta instead of process ([4c86e1c](https://github.com/Jakob-Strobl/portfolio/commit/4c86e1c29f928fc81cc59b71a89f4a69ca5e8d53))
+* **dev|test:** vite-solidjs plugin rollback for tests and vite 6 for dev ([4937004](https://github.com/Jakob-Strobl/portfolio/commit/493700463a6fc2fd12921fdb1d26df132c8116b2))
+* store shape and add comments for fade-in ([005b0e5](https://github.com/Jakob-Strobl/portfolio/commit/005b0e5b592e6981dd1474886f70d43f5af2d770))
+* **tests|vite:** rollback since vite 6 + solid start causes tests to fail ([6f5573f](https://github.com/Jakob-Strobl/portfolio/commit/6f5573f45f74ae2d124a4202f408012b046f2220))
+* **tests:** after upgrade some things broke with clientOnly code and added isTest helper action ([94c0f56](https://github.com/Jakob-Strobl/portfolio/commit/94c0f56bf2de8c40b5a5b264a282d31217898e25))
+
 ## [0.3.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.4...v0.3.5) (2024-09-09)
 
 
