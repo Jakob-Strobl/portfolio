@@ -54,7 +54,12 @@ export default function Contact() {
           <p class="text-xl">
             Contact me directly:
             <span
-              class="pl-4 text-night-300 cursor-pointer select-none"
+              class="
+                ml-4 p-[0.2rem]
+                text-night-300 cursor-pointer select-none
+                border-b-2 border-gray-300/60 hover:border-night-300/90
+                transition-colors duration-300 ease-in-out
+              "
               onclick={clickEmailHandler}
               title="Click to copy email to clipboard"
               aria-label="Click to copy email to clipboard"
