@@ -1,38 +1,55 @@
+import { createSignal } from "solid-js";
+import { copyToClipboard } from "~/actions/clipboard-actions";
 import Shadow from "~/components/shadow";
 
 export default function Contact() {
+  const handle = "hey";
   return (
     <div>
       <Shadow>
         {/* padding's screem size breakpoints should match the image width's breakpoints */}
-        <div class="flex items-end p-6 sm:p-8 xl:p-12">
-          <div id="github">
-            <a
-              class="flex flex-col items-center gap-8"
-              href="https://github.com/Jakob-Strobl"
-              target="_blank"
-            >
-              <img
-                class="github-normalized-size"
-                src="./images/Github-octocat.png"
-              />
-              <p>GitHub</p>
-            </a>
+        <div class="flex flex-col p-6 sm:p-8 xl:p-12">
+          <div>
+            <p class="text-3xl">Connect with me:</p>
           </div>
-
-          <div id="linkedin">
-            <a
-              class="flex flex-col items-center gap-8"
-              href="https://www.linkedin.com/in/jakob-strobl"
-              target="_blank"
-            >
-              <img
-                class="linkedin-normalized-size"
-                src="./images/LinkedIn.png"
-              />
-              <p>LinkedIn</p>
-            </a>
+          <div class="flex gap-16 p-16">
+            <div id="github">
+              <a
+                class="flex flex-col items-center gap-8"
+                href="https://github.com/Jakob-Strobl"
+                target="_blank"
+              >
+                <img
+                  class="github-normalized-size"
+                  src="./images/Github-octocat.png"
+                />
+                <p>GitHub</p>
+              </a>
+            </div>
+            <div id="linkedin">
+              <a
+                class="flex flex-col items-center gap-8"
+                href="https://www.linkedin.com/in/jakob-strobl"
+                target="_blank"
+              >
+                <img
+                  class="linkedin-normalized-size select-none"
+                  src="./images/LinkedIn.png"
+                />
+                <p>LinkedIn</p>
+              </a>
+            </div>
           </div>
+          <p class="text-xl">
+            Contact me directly:
+            <span
+              class="pl-4 text-night-300 cursor-pointer select-none"
+              onclick={() => copyToClipboard(`${handle + "@"}jstrobl.com`)}
+            >
+              {handle}
+              <span class="text-white p-2"> at </span>jstrobl.com
+            </span>
+          </p>
         </div>
         <a href="/" class="hover:text-stroke-lg duration-300 transition-text">
           back

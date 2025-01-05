@@ -92,6 +92,7 @@
      *     112.84px (height) * 1.3574 (width/height) ~= ~153.17px (width)
      *
      * TODO(refactor): change to rems or is it better if this is pure static pixels?
+     * TODO(refactor): to use vars so I can update all by just changing one value. Why do the math by hand every single time lmao
      * NOTE: width defined used more significant digits than explanation above
      */
     @apply w-[153.17px] sm:w-[226.45px] xl:w-[339.35px];
