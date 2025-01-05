@@ -1,9 +1,20 @@
 import { createSignal } from "solid-js";
 import { copyToClipboard } from "~/actions/clipboard-actions";
+import NotifyBubble from "~/components/notify-bubble";
 import Shadow from "~/components/shadow";
 
 export default function Contact() {
   const handle = "hey";
+  const [showClipboardBubble, setBubbleVisible] = createSignal<MouseEvent>();
+
+  const clickEmailHandler = async (ev: MouseEvent) => {
+    const successful = await copyToClipboard(`${handle + "@"}jstrobl.com`);
+    if (successful) {
+      setBubbleVisible(ev);
+      setTimeout(() => setBubbleVisible(undefined), 2400);
+    }
+  };
+
   return (
     <div>
       <Shadow>
@@ -44,10 +55,20 @@ export default function Contact() {
             Contact me directly:
             <span
               class="pl-4 text-night-300 cursor-pointer select-none"
-              onclick={() => copyToClipboard(`${handle + "@"}jstrobl.com`)}
+              onclick={clickEmailHandler}
+              title="Click to copy email to clipboard"
+              aria-label="Click to copy email to clipboard"
             >
               {handle}
               <span class="text-white p-2"> at </span>jstrobl.com
+              {showClipboardBubble() != undefined && (
+                <NotifyBubble
+                  offset={{ x: 0, y: -8 }}
+                  originEvent={showClipboardBubble()}
+                >
+                  <p>Copied to clipboard!</p>
+                </NotifyBubble>
+              )}
             </span>
           </p>
         </div>
