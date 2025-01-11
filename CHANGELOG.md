@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.0...v0.4.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* **contact:** improve mobile view padding and alignment ([3837546](https://github.com/Jakob-Strobl/portfolio/commit/38375464496cd31369cc356e48a6bb5d0b0cc131))
+* **umbra:** accounts for scroll offset on navigation ([975e67e](https://github.com/Jakob-Strobl/portfolio/commit/975e67e74a3f228de103bf0b2393adb65cc84c14))
+
 ## [0.4.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.3.5...v0.4.0) (2025-01-05)
 
 
