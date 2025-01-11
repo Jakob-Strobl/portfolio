@@ -16,14 +16,14 @@ export default function Contact() {
   };
 
   return (
-    <div>
+    <div class="m-4">
       <Shadow>
         {/* padding's screem size breakpoints should match the image width's breakpoints */}
         <div class="flex flex-col p-6 sm:p-8 xl:p-12">
           <div>
             <p class="text-3xl">Connect with me:</p>
           </div>
-          <div class="flex gap-16 p-16">
+          <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
             <div id="github">
               <a
                 class="flex flex-col items-center gap-8"
@@ -53,31 +53,37 @@ export default function Contact() {
           </div>
           <p class="text-xl">
             Contact me directly:
-            <span
-              class="
-                ml-4 p-[0.2rem]
-                text-night-300 cursor-pointer select-none
-                border-b-2 border-gray-300/60 hover:border-night-300/90
-                transition-colors duration-300 ease-in-out
-              "
-              onclick={clickEmailHandler}
-              title="Click to copy email to clipboard"
-              aria-label="Click to copy email to clipboard"
-            >
-              {handle}
-              <span class="text-white p-2"> at </span>jstrobl.com
-              {showClipboardBubble() != undefined && (
-                <NotifyBubble
-                  offset={{ x: 0, y: -8 }}
-                  originEvent={showClipboardBubble()}
-                >
-                  <p>Copied to clipboard!</p>
-                </NotifyBubble>
-              )}
+            <span class="flex mt-4 sm:mt-0 sm:inline justify-center">
+              <span
+                class="
+                  sm:ml-4 inline-block                   
+                  text-night-300 text-center whitespace-nowrap break-normal
+                  cursor-pointer select-none
+                  border-b-2 border-gray-300/60 hover:border-night-300/90
+                  transition-colors duration-300 ease-in-out
+                "
+                onclick={clickEmailHandler}
+                title="Click to copy email to clipboard"
+                aria-label="Click to copy email to clipboard"
+              >
+                {handle}
+                <span class="text-white p-2"> at </span>jstrobl.com
+                {showClipboardBubble() != undefined && (
+                  <NotifyBubble
+                    offset={{ x: 0, y: -8 }}
+                    originEvent={showClipboardBubble()}
+                  >
+                    <p>Copied to clipboard!</p>
+                  </NotifyBubble>
+                )}
+              </span>
             </span>
           </p>
         </div>
-        <a href="/" class="hover:text-stroke-lg duration-300 transition-text">
+        <a
+          href="/"
+          class="inline-block mt-4 hover:text-stroke-lg duration-300 transition-text "
+        >
           back
         </a>
       </Shadow>
