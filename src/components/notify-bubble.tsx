@@ -3,10 +3,7 @@ import { Portal } from "solid-js/web";
 
 // TODO probably a better place to put this generic 2d vec type
 // TODO vec2.origin = { 0 , 0 }
-type Position = {
-  x: number;
-  y: number;
-};
+type Position = { x: number; y: number };
 
 interface NotifyBubbleProps {
   children: JSX.Element | JSX.ArrayElement;
@@ -30,17 +27,11 @@ export default function NotifyBubble(props: NotifyBubbleProps) {
   const [isReady, setReady] = createSignal(false);
 
   const [mousePosition, setMousePosition] = createSignal<Position>(
-    props.originEvent ?? {
-      x: 0,
-      y: 0,
-    },
+    props.originEvent ?? { x: 0, y: 0 },
   );
 
   const handleMouseMove = (event: MouseEvent) => {
-    setMousePosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
+    setMousePosition({ x: event.clientX, y: event.clientY });
   };
 
   onMount(() => {
@@ -62,7 +53,7 @@ export default function NotifyBubble(props: NotifyBubbleProps) {
       <div
         class="
           absolute p-2 rounded-lg
-          fade-in duration-150 bg-opacity-80 bg-night-black
+          fade-in duration-150 bg-night-black/80
           text-white
         "
         style={{

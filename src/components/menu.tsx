@@ -10,7 +10,7 @@ export default function Menu() {
   return (
     <Shadow>
       <nav>
-        <ul class="flex flex-col gap-6 opacity-88 text-3xl text-white">
+        <ul class="flex flex-col gap-6 text-3xl text-white/88">
           <li
             class="fade-in delay-75"
             style={{
@@ -29,9 +29,7 @@ export default function Menu() {
           </li>
           <li
             class="fade-in delay-150"
-            style={{
-              opacity: !isReady() ? "0" : "100",
-            }}
+            style={{ opacity: !isReady() ? "0" : "100" }}
           >
             <a
               href="/contact"

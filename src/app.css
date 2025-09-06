@@ -24,6 +24,35 @@
   font-weight: 500;
 }
 
+@theme {
+  --color-night-black: #0b0712;
+  --color-night-900: #13051f;
+  --color-night-800: #2d0d4a;
+  --color-night-700: #531787;
+  --color-night-600: #7821c4;
+  --color-night-500: #9743df;
+  --color-night-400: #b172e9;
+  --color-night-300: #ca9cf2;
+  --color-night-200: #ddbff8;
+  --color-night-100: #fdfbfe;
+  --color-night-white: #fdfbfe;
+
+  /* Custom transition properties */
+  --transition-property-rect: height, width, top, left;
+  --transition-property-text: text-shadow;
+
+  /* Custom text shadows */
+  --text-shadow-sm: #ca9cf2 0 0 0.25rem;
+  --text-shadow-md: #ca9cf2 0 0 0.45rem;
+  --text-shadow-lg: #ca9cf2 0 0 0.7rem;
+
+  /* Custom opacity */
+  --opacity-88: 0.88;
+
+  /* Custom screens */
+  --breakpoint-xs: 480px;
+}
+
 @layer base {
   html,
   body {
@@ -63,7 +92,7 @@
      *   The ratio is the ratio of the image the browser will load so the correct height is used before image loads
      *   If the image changes and the aspect ratio changes, then this will need to be updated
      */
-    @apply aspect-[257/250];
+    @apply aspect-257/250;
   }
 
   img.linkedin-normalized-size {
@@ -96,6 +125,6 @@
     @apply w-[153.17px] sm:w-[226.45px] xl:w-[339.35px];
 
     /* Same reason as rule above */
-    @apply aspect-[733/540];
+    @apply aspect-733/540;
   }
 }
