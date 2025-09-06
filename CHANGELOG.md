@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.1...v0.4.2) (2025-09-06)
+
+
+### Bug Fixes
+
+* **cloudflare:** add compatibility date from warning ([3308652](https://github.com/Jakob-Strobl/portfolio/commit/33086521514a34c546cd04608a02f144ce780b33))
+* **cloudflare:** update/match cicd to latest compatible date ([0e47cda](https://github.com/Jakob-Strobl/portfolio/commit/0e47cdae2d9b1d8afb43ae47f0b37e172bd5f4b1))
+* **dependencies:** update all dependencies to latest versions ([03c7bf7](https://github.com/Jakob-Strobl/portfolio/commit/03c7bf75d1319bcc97dc0ab89daad753b0bb6844))
+* **shadow:** finish tailwind upgrade to v4 and shadow style ([8397f01](https://github.com/Jakob-Strobl/portfolio/commit/8397f01f756ddf86accfca4e5f9b473efa32a4bc))
+
 ## [0.4.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.0...v0.4.1) (2025-01-11)
 
 
