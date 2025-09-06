@@ -26,7 +26,7 @@ export default function Contact() {
           <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
             <div id="github">
               <a
-                class="flex flex-col items-center gap-8"
+                class="group flex flex-col items-center gap-8"
                 href="https://github.com/Jakob-Strobl"
                 target="_blank"
               >
@@ -34,12 +34,14 @@ export default function Contact() {
                   class="github-normalized-size"
                   src="./images/Github-octocat.png"
                 />
-                <p>GitHub</p>
+                <p class="group-hover:text-shadow-lg duration-300 transition-text">
+                  GitHub
+                </p>
               </a>
             </div>
             <div id="linkedin">
               <a
-                class="flex flex-col items-center gap-8"
+                class="group flex flex-col items-center gap-8"
                 href="https://www.linkedin.com/in/jakob-strobl"
                 target="_blank"
               >
@@ -47,7 +49,9 @@ export default function Contact() {
                   class="linkedin-normalized-size select-none"
                   src="./images/LinkedIn.png"
                 />
-                <p>LinkedIn</p>
+                <p class="group-hover:text-shadow-lg duration-300 transition-text">
+                  LinkedIn
+                </p>
               </a>
             </div>
           </div>
