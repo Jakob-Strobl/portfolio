@@ -20,35 +20,37 @@
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.15.2",
-    "@solidjs/start": "^1.0.10",
-    "@types/three": "^0.171.0",
-    "solid-js": "^1.9.3",
-    "three": "^0.172.0",
-    "vinxi": "^0.5.1"
+    "@solidjs/router": "^0.15.3",
+    "@solidjs/start": "^1.1.7",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/three": "^0.180.0",
+    "solid-js": "^1.9.9",
+    "three": "^0.180.0",
+    "vinxi": "^0.5.8"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^16.3.0",
+    "@happy-dom/global-registrator": "^18.0.1",
     "@solidjs/testing-library": "^0.8.10",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/user-event": "^14.5.2",
-    "autoprefixer": "^10.4.20",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/user-event": "^14.6.1",
+    "autoprefixer": "^10.4.21",
     "git-format-staged": "^3.1.1",
-    "happy-dom": "^16.3.0",
+    "happy-dom": "^18.0.1",
     "husky": "^9.1.7",
-    "jsdom": "^25.0.1",
-    "postcss": "^8.4.49",
-    "prettier": "^3.4.2",
+    "jsdom": "^26.1.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
     "solid-start": "^0.3.11",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.7",
-    "vite-plugin-glsl": "^1.3.1",
-    "vite-plugin-solid": "2.10.2",
-    "vitest": "^2.1.8",
-    "wrangler": "^3.99.0"
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4",
+    "vite-plugin-glsl": "^1.5.1",
+    "vite-plugin-solid": "2.11.8",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.34.0"
   }
 }

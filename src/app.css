@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @font-face {
   font-family: "Raleway";
@@ -48,7 +46,7 @@
 
   .fade-in-bg {
     /* I like the -bg alias since plain css makes a background distinction */
-    @apply fade-in-colors;
+    @apply transition-colors ease-out duration-500;
   }
 
   img.github-normalized-size {
