@@ -19,10 +19,11 @@ interface UmbraState {
   lastAddShadowScrollY: number;
 }
 
-// This is evaluated on the server-context of SSR
-// DOMRect is not defined in the server context
-// We set the type (since typedef isn't evaluated) to keep type narrowing happy
-// We just fill in a bogus DOMRect to satisy constraints
+// NOTE(default-value):
+//   This is evaluated on the server-context of SSR
+//   DOMRect is not defined in the server context
+//   We set the type (since typedef isn't evaluated) to keep type narrowing happy
+//   We just fill in a bogus DOMRect to satisy constraints
 const zeroRect: DOMRect = {
   height: 0,
   width: 0,
@@ -38,13 +39,12 @@ const zeroRect: DOMRect = {
 };
 
 export default function Umbra() {
-  // const clientRect = createSignal(state.shadow[0]?.getBoundingClientRect())
   const [isColdStart, setIsColdStart] = createSignal(true);
   const shadowRect = createMemo<DOMRect>((prevRect) => {
     if (state.shadow.length == 0 || state.shadow[0] == null) {
       // AFAIK: ZeroRect will only be set on inital load
-      // When removed, the removed rect will stay until replaced by new
-      // Avoids anything disappearing inbetween values
+      // When a shadow is removed, the removed rect will stay until replaced
+      // Avoids shadow flickering/disappearing inbetween dom renders
       return prevRect ?? zeroRect;
     }
 
@@ -73,9 +73,14 @@ export default function Umbra() {
     });
   });
 
-  // TODO currently hardcoded for one shadow at a time
-  // TODO make flexible with 1->N shadow transitions and N->K shadows
-  // TODO also set fade in on mount, fade-indoesn't work with new changess
+  // TODO [X]: Find a better way to initialize the position
+  // TODO [X]: Avoid naive corner start
+  // TODO [X]: Scale up into size on first load
+  // TODO [X]: Scale up from center of content
+  // TODO [ ]: currently hardcoded for one shadow at a time
+  // TODO [ ]: make flexible with 1->N shadow transitions and N->K shadows
+  // TODO [ ]: also set fade in on mount, fade-indoesn't work with new changess
+
   return (
     // Only showing once no longer Default avoids hardcoded transition from corner on first initial
     <Show when={shadowRect() !== zeroRect}>
@@ -89,7 +94,7 @@ export default function Umbra() {
           height: `${shadowRect().height}px`,
           top: `${shadowRect().top + state.lastAddShadowScrollY}px`,
           left: `${shadowRect().left}px`,
-          // TODO avoid transition on resize
+          // TODO [ ]: avoid transition on resize - VALIDATE?
           // bottom and right are not transitioned
           // bottom: `${shadowRect().bottom}px`,
           // right: `${shadowRect().right}px`
