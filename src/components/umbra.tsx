@@ -46,7 +46,7 @@ export default function Umbra() {
     <div
       class="
         absolute -z-10 transition-rect rounded-lg
-        bg-opacity-50 bg-night-black 
+        bg-opacity/50 bg-night-50
         fade-in-bg duration-1000
       "
       style={{
