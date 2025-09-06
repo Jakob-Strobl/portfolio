@@ -1,4 +1,4 @@
-import { onMount, createSignal, createEffect } from "solid-js";
+import { onMount, createSignal } from "solid-js";
 import Shadow from "./shadow";
 
 export default function Menu() {

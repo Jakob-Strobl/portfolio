@@ -1,10 +1,4 @@
-import {
-  children,
-  createSignal,
-  createUniqueId,
-  onCleanup,
-  onMount,
-} from "solid-js";
+import { children, createUniqueId, onCleanup, onMount } from "solid-js";
 import type { JSX } from "solid-js";
 import { addShadow, removeShadow } from "./umbra";
 
