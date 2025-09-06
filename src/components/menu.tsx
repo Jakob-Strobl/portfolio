@@ -22,7 +22,7 @@ export default function Menu() {
           >
             <a
               href="/experience"
-              class="hover:text-stroke-lg duration-300 transition-text"
+              class="hover:text-shadow-lg duration-300 transition-text"
             >
               Experience
             </a>
@@ -33,7 +33,7 @@ export default function Menu() {
           >
             <a
               href="/contact"
-              class="hover:text-stroke-lg duration-300 transition-text"
+              class="hover:text-shadow-lg duration-300 transition-text"
             >
               Contact
             </a>
