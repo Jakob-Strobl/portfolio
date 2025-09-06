@@ -1,6 +1,7 @@
-import { createMemo, onMount } from "solid-js";
+import { createMemo, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { isTest } from "../actions/test-actions";
+import { isServer } from "solid-js/web";
 
 interface UmbraState {
   shadows: Array<HTMLDivElement>;
@@ -19,18 +20,35 @@ interface UmbraState {
   lastAddShadowScrollY: number;
 }
 
+// This is evaluated on the server-context of SSR
+// DOMRect is not defined in the server context
+// We set the type (since typedef isn't evaluated) to keep type narrowing happy
+// We just fill in a bogus DOMRect to satisy constraints
+const zeroRect: DOMRect = {
+  height: 0,
+  width: 0,
+  x: 0,
+  y: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  top: 0,
+  toJSON: function () {
+    return 0;
+  },
+};
+
 export default function Umbra() {
   // const clientRect = createSignal(state.shadow[0]?.getBoundingClientRect())
-  const shadowRect = createMemo(() => {
-    // TODO is there a better way to initialize the position? You can see which direction it spawned from.
-    return (
-      state.shadow[0]?.getBoundingClientRect() ?? {
-        width: 10,
-        height: 10,
-        top: 0,
-        left: 1920,
-      }
-    );
+  const shadowRect = createMemo<DOMRect>((prevRect) => {
+    if (state.shadow.length == 0 || state.shadow[0] == null) {
+      // AFAIK: ZeroRect will only be set on inital load
+      // When removed, the removed rect will stay until replaced by new
+      // Avoids anything disappearing inbetween values
+      return prevRect ?? zeroRect;
+    }
+
+    return state.shadow[0].getBoundingClientRect();
   });
 
   onMount(() => {
@@ -43,22 +61,25 @@ export default function Umbra() {
   // TODO make flexible with 1->N shadow transitions and N->K shadows
   // TODO also set fade in on mount, fade-indoesn't work with new changess
   return (
-    <div
-      class="
-        absolute -z-10 transition-rect rounded-lg
-        bg-night-black/50 fade-in-bg duration-1000
-      "
-      style={{
-        width: `${shadowRect().width}px`,
-        height: `${shadowRect().height}px`,
-        top: `${shadowRect().top + state.lastAddShadowScrollY}px`,
-        left: `${shadowRect().left}px`,
-        // TODO avoid transition on resize
-        // bottom and right are not transitioned
-        // bottom: `${clientRect().bottom}px`,
-        // right: `${clientRect().right}px`
-      }}
-    ></div>
+    // Only showing once no longer Default avoids hardcoded transition from corner on first initial
+    <Show when={shadowRect() !== zeroRect}>
+      <div
+        class="
+          absolute -z-10 transition-rect rounded-lg
+          bg-night-black/50 fade-in-bg duration-1000
+        "
+        style={{
+          width: `${shadowRect().width}px`,
+          height: `${shadowRect().height}px`,
+          top: `${shadowRect().top + state.lastAddShadowScrollY}px`,
+          left: `${shadowRect().left}px`,
+          // TODO avoid transition on resize
+          // bottom and right are not transitioned
+          // bottom: `${shadowRect().bottom}px`,
+          // right: `${shadowRect().right}px`
+        }}
+      ></div>
+    </Show>
   );
 }
 
@@ -71,9 +92,10 @@ const [state, setState] = createStore<UmbraState>({
 });
 
 export const addShadow = (shadowEl: HTMLDivElement) => {
-  // if (!isTest()) {
-  console.log("Adding shadow: ", shadowEl);
-  // }
+  if (!isTest()) {
+    console.log("Adding shadow: ", shadowEl);
+  }
+
   setState((state) => {
     return {
       shadows: [...state.shadows, shadowEl],
