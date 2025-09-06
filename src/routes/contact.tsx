@@ -86,7 +86,7 @@ export default function Contact() {
         </div>
         <a
           href="/"
-          class="inline-block mt-4 hover:text-stroke-lg duration-300 transition-text "
+          class="inline-block mt-4 hover:text-shadow-lg duration-300 transition-text "
         >
           back
         </a>
