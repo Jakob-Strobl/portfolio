@@ -46,8 +46,7 @@ export default function Umbra() {
     <div
       class="
         absolute -z-10 transition-rect rounded-lg
-        bg-opacity/50 bg-night-50
-        fade-in-bg duration-1000
+        bg-night-black/50 fade-in-bg duration-1000
       "
       style={{
         width: `${shadowRect().width}px`,
@@ -72,9 +71,9 @@ const [state, setState] = createStore<UmbraState>({
 });
 
 export const addShadow = (shadowEl: HTMLDivElement) => {
-  if (!isTest()) {
-    console.log("Adding shadow: ", shadowEl);
-  }
+  // if (!isTest()) {
+  console.log("Adding shadow: ", shadowEl);
+  // }
   setState((state) => {
     return {
       shadows: [...state.shadows, shadowEl],
