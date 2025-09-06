@@ -1,7 +1,6 @@
-import { createMemo, onMount, Show } from "solid-js";
+import { createMemo, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { isTest } from "../actions/test-actions";
-import { isServer } from "solid-js/web";
 
 interface UmbraState {
   shadows: Array<HTMLDivElement>;
@@ -40,6 +39,7 @@ const zeroRect: DOMRect = {
 
 export default function Umbra() {
   // const clientRect = createSignal(state.shadow[0]?.getBoundingClientRect())
+  const [isColdStart, setIsColdStart] = createSignal(true);
   const shadowRect = createMemo<DOMRect>((prevRect) => {
     if (state.shadow.length == 0 || state.shadow[0] == null) {
       // AFAIK: ZeroRect will only be set on inital load
@@ -48,7 +48,23 @@ export default function Umbra() {
       return prevRect ?? zeroRect;
     }
 
-    return state.shadow[0].getBoundingClientRect();
+    const clientRect = state.shadow[0].getBoundingClientRect();
+    if (!isColdStart()) {
+      return clientRect; // full size rect
+    }
+
+    // Queue to run memo again to setup scale up transition from cold start
+    queueMicrotask(() => setIsColdStart(false));
+    // Return scaled down version immediately to setup transition
+    return {
+      ...clientRect,
+      // Center scaled down version
+      top: clientRect.y + clientRect.height / 2,
+      left: clientRect.x + clientRect.width / 2,
+      // Scale it down
+      width: clientRect.width / 64,
+      height: clientRect.height / 64,
+    };
   });
 
   onMount(() => {
