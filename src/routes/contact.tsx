@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
-import { copyToClipboard } from "~/actions/clipboard-actions";
-import NotifyBubble from "~/components/notify-bubble";
-import Shadow from "~/components/shadow";
+import { copyToClipboard } from "../actions/clipboard-actions";
+import NotifyBubble from "../components/notify-bubble";
+import Shadow from "../components/shadow/shadow";
 
 export default function Contact() {
   const handle = "hey";

@@ -7,7 +7,7 @@ import {
   Show,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { isTest } from "../actions/test-actions";
+import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
 import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
 import { useLocation } from "@solidjs/router";

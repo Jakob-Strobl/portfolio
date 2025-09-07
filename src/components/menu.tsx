@@ -1,5 +1,5 @@
 import { onMount, createSignal } from "solid-js";
-import Shadow from "./shadow";
+import Shadow from "./shadow/shadow";
 
 export default function Menu() {
   const [isReady, setReady] = createSignal(false);
