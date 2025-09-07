@@ -78,16 +78,15 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
   }
 
   // Check any removed shadows to see if the removed shadows position can be used to start from
-  //   If we are adding a new first shadow, check if the first removed shadow can be reused
-  //   If we are adding a second shadow, check if the second removed shadow can be reused, etc
-  // This allows for reusing the position of the last removed shadow in order of the DOM
   // NOTE: Elements are unmounted from bottom up, and elements are mounted from top down
+  //   If we are adding a new first shadow, check if the "first" removed shadow can be reused
+  //   If we are adding a second shadow, check if the "second" removed shadow can be reused, etc
+  // This allows for reusing the position of the last removed shadow in order of the DOM
   const currentNumShadows = state.shadows.length;
   const currentNumOfRemovedShadows = state.removedShadows.length;
   const reusableRemovedShadowIdx =
     currentNumOfRemovedShadows - currentNumShadows - 1;
 
-  const reusedRemovedShadow = state.removedShadows[reusableRemovedShadowIdx];
   const [isCold, setIsCold] = createSignal(true);
   const clientRect = shadowedEl.getBoundingClientRect();
   const shadowRect: ShadowRect = {
@@ -98,7 +97,10 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
     shadowedEl,
     isCold,
     setIsCold,
-    prevRect: reusedRemovedShadow,
+    prevRect:
+      reusableRemovedShadowIdx < 0
+        ? undefined
+        : state.removedShadows[reusableRemovedShadowIdx],
   };
 
   setState((state) => {
