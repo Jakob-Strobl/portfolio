@@ -1,125 +1,109 @@
-import { createMemo, createSignal, onMount, Show } from "solid-js";
+import {
+  createEffect,
+  createRenderEffect,
+  createSignal,
+  Index,
+  onMount,
+  Show,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { isTest } from "../actions/test-actions";
-
-interface UmbraState {
-  shadows: Array<HTMLDivElement>;
-  shadow: Array<HTMLDivElement>;
-
-  // NOTE(edge-case):
-  // If the user scroll position is not 0 and then they navigate, this behavior is observed:
-  //   1. Shadow is removed and re-added when the destination route renders
-  //   2. When re-added, the new shadow's bounding client rect is computed and memoized
-  //   3. Then the scroll position is set to 0
-  //
-  // The top and bottom positions of the shadow's client rect are affected by the
-  // current scroll position. Since the scroll position resets to 0 after computing
-  // the client rect, this results in an incorrect offset of the shadow's vertical
-  // position due to the previous non-zero-based position.
-  lastAddShadowScrollY: number;
-}
-
-// NOTE(default-value):
-//   This is evaluated on the server-context of SSR
-//   DOMRect is not defined in the server context
-//   We set the type (since typedef isn't evaluated) to keep type narrowing happy
-//   We just fill in a bogus DOMRect to satisy constraints
-const zeroRect: DOMRect = {
-  height: 0,
-  width: 0,
-  x: 0,
-  y: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  top: 0,
-  toJSON: function () {
-    return 0;
-  },
-};
-
+import ShadowEl from "./shadow-el";
+import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
+import { useLocation } from "@solidjs/router";
+/**
+ * Umbra is the component that manages and renders all shadow elements for shadowed elements
+ */
 export default function Umbra() {
-  const [isColdStart, setIsColdStart] = createSignal(true);
-  const shadowRect = createMemo<DOMRect>((prevRect) => {
-    if (state.shadow.length == 0 || state.shadow[0] == null) {
-      // AFAIK: ZeroRect will only be set on inital load
-      // When a shadow is removed, the removed rect will stay until replaced
-      // Avoids shadow flickering/disappearing inbetween dom renders
-      return prevRect ?? zeroRect;
-    }
-
-    const clientRect = state.shadow[0].getBoundingClientRect();
-    if (!isColdStart()) {
-      return clientRect; // full size rect
-    }
-
-    // Queue to run memo again to setup scale up transition from cold start
-    queueMicrotask(() => setIsColdStart(false));
-    // Return scaled down version immediately to setup transition
-    return {
-      ...clientRect,
-      // Center scaled down version
-      top: clientRect.y + clientRect.height / 2,
-      left: clientRect.x + clientRect.width / 2,
-      // Scale it down
-      width: clientRect.width / 64,
-      height: clientRect.height / 64,
-    };
-  });
+  const location = useLocation();
 
   onMount(() => {
+    // TODO [ ]: Fix resize after breaking change - Fix when using transform and signal off of that
     window.addEventListener("resize", () => {
       setState({ shadows: [...state.shadows] });
     });
+  });
+
+  createRenderEffect(() => {
+    console.log("Location changed: ", location.pathname);
+    queueMicrotask(() => {
+      console.log("Clearing removed shadows after location change");
+      clearRemovedShadows();
+    });
+  });
+
+  createRenderEffect((prevShadows) => {
+    console.log("Umbra render effect - shadows: ", state.shadows, prevShadows);
+    return state.shadows;
   });
 
   // TODO [X]: Find a better way to initialize the position
   // TODO [X]: Avoid naive corner start
   // TODO [X]: Scale up into size on first load
   // TODO [X]: Scale up from center of content
-  // TODO [ ]: currently hardcoded for one shadow at a time
-  // TODO [ ]: make flexible with 1->N shadow transitions and N->K shadows
+  // TODO [X]: currently hardcoded for one shadow at a time
+  // TODO [.]: make flexible with 1->N shadow transitions and N->K shadows
   // TODO [ ]: also set fade in on mount, fade-indoesn't work with new changess
+  // TODO [ ]: PERFORMANCE: Use transform() instead of top/left/width/height
+  // TODO [ ]: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
+  //   TODO [ ]: REFACTOR codebase transitions with `solid-transition-group`
 
   return (
-    // Only showing once no longer Default avoids hardcoded transition from corner on first initial
-    <Show when={shadowRect() !== zeroRect}>
-      <div
-        class="
-          absolute -z-10 transition-rect rounded-lg
-          bg-night-black/50 fade-in-bg duration-1000
-        "
-        style={{
-          width: `${shadowRect().width}px`,
-          height: `${shadowRect().height}px`,
-          top: `${shadowRect().top + state.lastAddShadowScrollY}px`,
-          left: `${shadowRect().left}px`,
-          // TODO [ ]: avoid transition on resize - VALIDATE?
-          // bottom and right are not transitioned
-          // bottom: `${shadowRect().bottom}px`,
-          // right: `${shadowRect().right}px`
-        }}
-      ></div>
-    </Show>
+    <Index each={state.shadows}>
+      {(shadowRect) => {
+        console.log(shadowRect);
+        return (
+          // Only showing once no longer Default avoids hardcoded transition from corner on first initial
+          <Show when={shadowRect() !== ZERO_RECT}>
+            <ShadowEl
+              rect={shadowRect()}
+              lastAddShadowScrollY={state.lastAddShadowScrollY}
+            ></ShadowEl>
+          </Show>
+        );
+      }}
+    </Index>
   );
 }
 
 const [state, setState] = createStore<UmbraState>({
   lastAddShadowScrollY: 0,
   shadows: [],
-  get shadow() {
-    return this.shadows;
-  },
+  removedShadows: [],
 });
 
-export const addShadow = (shadowEl: HTMLDivElement) => {
+export const addShadow = (shadowedEl: HTMLDivElement) => {
   if (!isTest()) {
-    console.log("Adding shadow: ", shadowEl);
+    console.log("Adding shadow: ", shadowedEl);
   }
+
+  // Check any removed shadows to see if the removed shadows position can be used to start from
+  //   If we are adding a new first shadow, check if the first removed shadow can be reused
+  //   If we are adding a second shadow, check if the second removed shadow can be reused, etc
+  // This allows for reusing the position of the last removed shadow in order of the DOM
+  // NOTE: Elements are unmounted from bottom up, and elements are mounted from top down
+  const currentNumShadows = state.shadows.length;
+  const currentNumOfRemovedShadows = state.removedShadows.length;
+  const reusableRemovedShadowIdx =
+    currentNumOfRemovedShadows - currentNumShadows - 1;
+
+  const reusedRemovedShadow = state.removedShadows[reusableRemovedShadowIdx];
+  const [isCold, setIsCold] = createSignal(true);
+  const clientRect = shadowedEl.getBoundingClientRect();
+  const shadowRect: ShadowRect = {
+    top: clientRect.y,
+    left: clientRect.x,
+    width: clientRect.width,
+    height: clientRect.height,
+    shadowedEl,
+    isCold,
+    setIsCold,
+    prevRect: reusedRemovedShadow,
+  };
 
   setState((state) => {
     return {
-      shadows: [...state.shadows, shadowEl],
+      shadows: [...state.shadows, shadowRect],
       lastAddShadowScrollY: window.scrollY,
     };
   });
@@ -130,9 +114,52 @@ export const removeShadow = (shadowToRemoveId: string) => {
     console.log("Removing shadow by Id: ", shadowToRemoveId);
   }
 
-  const filtered = state.shadows.filter(
-    (shadow) => shadow.dataset["shadow"] !== shadowToRemoveId,
+  const removedShadow = state.shadows.find(
+    (shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId,
   );
 
-  setState({ shadows: [...filtered] });
+  if (removedShadow == undefined) {
+    console.warn(
+      "Tried to remove shadow that doesn't exist: ",
+      shadowToRemoveId,
+    );
+    return;
+  }
+
+  console.warn("Soft Removed Shadow Around: ", removedShadow.shadowedEl);
+
+  const filteredShadows = state.shadows.filter(
+    (shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId,
+  );
+
+  setState({
+    shadows: filteredShadows,
+    removedShadows: [...state.removedShadows, removedShadow],
+  });
+};
+
+export const hardRemoveShadow = (shadowToRemoveId: string | undefined) => {
+  if (!isTest()) {
+    console.log("Hard removing shadow by Id: ", shadowToRemoveId);
+    console.log("removedShadow length = ", state.removedShadows.length);
+  }
+
+  if (shadowToRemoveId == undefined) {
+    console.warn("Tried to hard remove shadow with undefined id");
+    return;
+  }
+
+  const filteredRemovedShadows = state.removedShadows.filter(
+    (shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId,
+  );
+
+  setState({ removedShadows: filteredRemovedShadows });
+};
+
+export const clearRemovedShadows = () => {
+  if (!isTest()) {
+    console.log(`Clearing removed shadows [${state.removedShadows.length}]`);
+  }
+
+  setState({ removedShadows: [] });
 };
