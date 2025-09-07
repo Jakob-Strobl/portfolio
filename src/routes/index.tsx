@@ -1,8 +1,10 @@
+import Shadow from "~/components/shadow";
 import Menu from "../components/menu";
 import { onMount, createSignal } from "solid-js";
 
 export default function Home() {
   const [isReady, setReady] = createSignal(false);
+  const [showShadow, setShowShadow] = createSignal(false);
   onMount(() => {
     setTimeout(() => setReady(true), 0);
   });
@@ -24,6 +26,35 @@ export default function Home() {
             {process.env.PROJECT_VERSION}
           </p>
         </div>
+        <div class="w-fit">
+          <Shadow>
+            <button
+              class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              onClick={() => {
+                setShowShadow(!showShadow());
+              }}
+            >
+              Toggle Third Shadow
+            </button>
+          </Shadow>
+        </div>
+        {showShadow() && (
+          // TODO [ ]: Handle when layout changes from dynamic content
+          <div>
+            <Shadow>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum
+            </Shadow>
+          </div>
+        )}
       </div>
     </>
   );

@@ -4,8 +4,14 @@ import { addShadow, removeShadow } from "./umbra";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
+  // TODO [ ]: Add optional title that goes above the shadow?
 }
 
+/**
+ * This component wraps any content that should have a shadow applied to it
+ * @param props
+ * @returns
+ */
 export default function Shadow(props: ShadowProps) {
   const resolved = children(() => props.children);
   // const [isReady, setReady] = createSignal(false);
