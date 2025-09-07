@@ -3,7 +3,7 @@ import "./app.css";
 import IsomorphicBackground from "./components/background";
 import { Router, RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import Umbra from "./components/umbra";
+import Umbra from "./components/shadow/umbra";
 
 const BaseLayout = (props: RouteSectionProps) => {
   return (

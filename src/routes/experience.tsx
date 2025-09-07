@@ -1,4 +1,4 @@
-import Shadow from "~/components/shadow";
+import Shadow from "../components/shadow/shadow";
 
 export default function Experience() {
   return (
