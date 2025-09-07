@@ -21,13 +21,7 @@ export default function Umbra() {
     // TODO [X]: Fix resize after breaking change - Fix when using transform and signal off of that
     window.addEventListener("resize", () => {
       console.log("Window resized, updating shadow positions");
-      state.shadows.forEach((shadow) => {
-        const clientRect = shadow.shadowedEl.getBoundingClientRect();
-        shadow.setPosition({ x: clientRect.x, y: clientRect.y });
-        shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
-      });
-
-      setState({ shadows: [...state.shadows] });
+      forceRecalculateShadowClientRects();
     });
   });
 
@@ -50,6 +44,8 @@ export default function Umbra() {
   // TODO [X]: Scale up from center of content
   // TODO [X]: currently hardcoded for one shadow at a time
   // TODO [X]: make flexible with 1->N shadow transitions and N->K shadows
+  // TODO [X]: Fix resize and works with multiple shadows
+  // TODO [X]: Handle when layout changes from dynamic content (Example POC in index.tsx)
   // TODO [ ]: also set fade in on mount, fade-indoesn't work with new changess
   // TODO [ ]: PERFORMANCE: Use transform() instead of top/left/width/height
   // TODO [ ]: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
@@ -184,4 +180,14 @@ export const clearRemovedShadows = () => {
   }
 
   setState({ removedShadows: [] });
+};
+
+export const forceRecalculateShadowClientRects = () => {
+  state.shadows.forEach((shadow) => {
+    const clientRect = shadow.shadowedEl.getBoundingClientRect();
+    shadow.setPosition({ x: clientRect.x, y: clientRect.y });
+    shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
+  });
+
+  setState({ shadows: [...state.shadows] });
 };
