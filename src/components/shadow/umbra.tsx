@@ -18,8 +18,15 @@ export default function Umbra() {
   const location = useLocation();
 
   onMount(() => {
-    // TODO [ ]: Fix resize after breaking change - Fix when using transform and signal off of that
+    // TODO [X]: Fix resize after breaking change - Fix when using transform and signal off of that
     window.addEventListener("resize", () => {
+      console.log("Window resized, updating shadow positions");
+      state.shadows.forEach((shadow) => {
+        const clientRect = shadow.shadowedEl.getBoundingClientRect();
+        shadow.setPosition({ x: clientRect.x, y: clientRect.y });
+        shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
+      });
+
       setState({ shadows: [...state.shadows] });
     });
   });
@@ -86,21 +93,34 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
   const currentNumOfRemovedShadows = state.removedShadows.length;
   const reusableRemovedShadowIdx =
     currentNumOfRemovedShadows - currentNumShadows - 1;
+  const reusableRemovedShadow = state.removedShadows[reusableRemovedShadowIdx];
 
-  const [isCold, setIsCold] = createSignal(true);
   const clientRect = shadowedEl.getBoundingClientRect();
+  const [isCold, setIsCold] = createSignal(true);
+  const [position, setPosition] = createSignal({
+    x: clientRect.x,
+    y: clientRect.y,
+  });
+  const [dimensions, setDimensions] = createSignal({
+    x: clientRect.width,
+    y: clientRect.height,
+  });
+
   const shadowRect: ShadowRect = {
-    top: clientRect.y,
-    left: clientRect.x,
-    width: clientRect.width,
-    height: clientRect.height,
     shadowedEl,
     isCold,
     setIsCold,
+    position,
+    setPosition,
+    dimensions,
+    setDimensions,
     prevRect:
       reusableRemovedShadowIdx < 0
         ? undefined
-        : state.removedShadows[reusableRemovedShadowIdx],
+        : {
+            position: reusableRemovedShadow.position(),
+            dimensions: reusableRemovedShadow.dimensions(),
+          },
   };
 
   setState((state) => {
