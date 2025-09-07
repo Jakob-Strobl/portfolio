@@ -1,18 +1,21 @@
-import { Accessor, Setter } from "solid-js";
+import { Accessor, Setter, Signal } from "solid-js";
+
+export type ShadowVec2 = {
+  x: number;
+  y: number;
+};
 
 export type ShadowRect = {
-  height: number;
-  width: number;
-  top: number;
-  left: number;
-  shadowedEl: HTMLDivElement;
   isCold: Accessor<boolean>;
   setIsCold: Setter<boolean>;
-  prevRect?: Partial<ShadowRect> & {
-    width: number;
-    height: number;
-    top: number;
-    left: number;
+  position: Accessor<ShadowVec2>;
+  setPosition: Setter<ShadowVec2>;
+  dimensions: Accessor<ShadowVec2>;
+  setDimensions: Setter<ShadowVec2>;
+  shadowedEl: HTMLDivElement;
+  prevRect?: {
+    position: ShadowVec2;
+    dimensions: ShadowVec2;
   };
 };
 
@@ -40,10 +43,10 @@ export interface UmbraState {
 //   We set the type (since typedef isn't evaluated) to keep type narrowing happy
 //   We just fill in a bogus DOMRect to satisy constraints
 export const ZERO_RECT: ShadowRect = {
-  height: 0,
-  width: 0,
-  left: 0,
-  top: 0,
+  position: () => ({ x: 0, y: 0 }),
+  setPosition: () => {},
+  dimensions: () => ({ x: 0, y: 0 }),
+  setDimensions: () => {},
   shadowedEl: null as unknown as HTMLDivElement,
   isCold: () => true,
   setIsCold: () => {},

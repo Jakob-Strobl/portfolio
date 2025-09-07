@@ -32,24 +32,27 @@ export default function ShadowEl({
     const scaledownSizeFactor = 10,
       scaledownPositionFactor = 2;
 
-    const scaledWidth = rect.width / scaledownSizeFactor;
-    const scaledHeight = rect.height / scaledownSizeFactor;
+    const scaledWidth = rect.dimensions().x / scaledownSizeFactor;
+    const scaledHeight = rect.dimensions().y / scaledownSizeFactor;
     const centeredLeft =
-      rect.left + (rect.width - scaledWidth) / scaledownPositionFactor;
+      rect.position().x +
+      (rect.dimensions().x - scaledWidth) / scaledownPositionFactor;
     const centeredTop =
-      rect.top + (rect.height - scaledHeight) / scaledownPositionFactor; // TODO [ ]: account for scrollY?
+      rect.position().y +
+      (rect.dimensions().y - scaledHeight) / scaledownPositionFactor; // TODO [ ]: account for scrollY?
 
     return {
-      top: centeredTop,
-      left: centeredLeft,
-      width: scaledWidth,
-      height: scaledHeight,
+      position: { x: centeredLeft, y: centeredTop },
+      dimensions: { x: scaledWidth, y: scaledHeight },
     };
   };
 
   const statefulRect = createMemo(() => {
     if (!rect.isCold()) {
-      return rect;
+      return {
+        position: rect.position(),
+        dimensions: rect.dimensions(),
+      };
     }
 
     if (rect.prevRect) {
@@ -67,10 +70,10 @@ export default function ShadowEl({
         bg-white/50 fade-in-bg duration-1000
       "
       style={{
-        width: `${statefulRect().width}px`,
-        height: `${statefulRect().height}px`,
-        top: `${statefulRect().top + lastAddShadowScrollY}px`,
-        left: `${statefulRect().left}px`,
+        width: `${statefulRect().dimensions.x}px`,
+        height: `${statefulRect().dimensions.y}px`,
+        top: `${statefulRect().position.y + lastAddShadowScrollY}px`,
+        left: `${statefulRect().position.x}px`,
         // TODO [ ]: avoid transition on resize (Immediate change instead of animated). Check if I want this
         // bottom and right are not transitioned
         // bottom: `${shadowRect().bottom}px`,
