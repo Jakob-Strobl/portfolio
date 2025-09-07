@@ -38,10 +38,9 @@ export interface UmbraState {
 }
 
 // NOTE(default-value):
-//   This is evaluated on the server-context of SSR
-//   DOMRect is not defined in the server context
-//   We set the type (since typedef isn't evaluated) to keep type narrowing happy
-//   We just fill in a bogus DOMRect to satisy constraints
+//   This ZERO_RECT is used to control behavior on cold starts of Shadow
+//   This allows us to scale up from center of content once the content is ready
+//   Avoids starting from hardcoded position, like default (0,0), center of screen, or any other corner position
 export const ZERO_RECT: ShadowRect = {
   position: () => ({ x: 0, y: 0 }),
   setPosition: () => {},

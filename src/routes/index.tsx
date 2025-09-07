@@ -1,12 +1,20 @@
 import Shadow from "../components/shadow/shadow";
 import Menu from "../components/menu";
-import { onMount, createSignal } from "solid-js";
+import { onMount, createSignal, createEffect } from "solid-js";
+import { forceRecalculateShadowClientRects } from "../components/shadow/umbra";
 
 export default function Home() {
   const [isReady, setReady] = createSignal(false);
   const [showShadow, setShowShadow] = createSignal(false);
+
   onMount(() => {
     setTimeout(() => setReady(true), 0);
+  });
+
+  createEffect(() => {
+    // Is there a better way to handle resize when dynamic content changes element positions?
+    showShadow();
+    queueMicrotask(() => forceRecalculateShadowClientRects());
   });
 
   return (
@@ -39,8 +47,8 @@ export default function Home() {
           </Shadow>
         </div>
         {showShadow() && (
-          // TODO [ ]: Handle when layout changes from dynamic content
-          <div>
+          // TODO [X]: Handle when layout changes from dynamic content
+          <div class="w-128">
             <Shadow>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
