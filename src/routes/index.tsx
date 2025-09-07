@@ -1,4 +1,4 @@
-import Shadow from "~/components/shadow";
+import Shadow from "../components/shadow";
 import Menu from "../components/menu";
 import { onMount, createSignal } from "solid-js";
 

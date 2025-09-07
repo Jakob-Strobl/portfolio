@@ -42,7 +42,7 @@ export default function Umbra() {
   // TODO [X]: Scale up into size on first load
   // TODO [X]: Scale up from center of content
   // TODO [X]: currently hardcoded for one shadow at a time
-  // TODO [.]: make flexible with 1->N shadow transitions and N->K shadows
+  // TODO [X]: make flexible with 1->N shadow transitions and N->K shadows
   // TODO [ ]: also set fade in on mount, fade-indoesn't work with new changess
   // TODO [ ]: PERFORMANCE: Use transform() instead of top/left/width/height
   // TODO [ ]: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
