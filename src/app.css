@@ -38,7 +38,6 @@
   --color-night-white: #fdfbfe;
 
   /* Custom transition properties */
-  --transition-property-rect: height, width, top, left;
   --transition-property-text: text-shadow;
 
   /* Custom text shadows */

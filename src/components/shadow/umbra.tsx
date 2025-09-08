@@ -42,9 +42,6 @@ export default function Umbra(props: UmbraProps) {
       console.log("Clearing removed shadows after location change");
       clearRemovedShadows();
     });
-    if (forceRefreshOnRenderEffect) {
-      queueMicrotask(() => forceRecalculateShadowClientRects());
-    }
   });
 
   createRenderEffect((prevShadows) => {
@@ -60,9 +57,11 @@ export default function Umbra(props: UmbraProps) {
   // TODO [X]: make flexible with 1->N shadow transitions and N->K shadows
   // TODO [X]: Fix resize and works with multiple shadows
   // TODO [X]: Handle when layout changes from dynamic content (Example POC in index.tsx)
-  // TODO [ ]: also set fade in on mount, fade-indoesn't work with new changess
-  // TODO [ ]: PERFORMANCE: Use transform() instead of top/left/width/height
-  // TODO [ ]: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
+  // TODO [X]: also set fade in on mount, fade-indoesn't work with new changess
+  // TODO [X]: PERFORMANCE: Use transform() instead of top/left/width/height
+  // TODO [DEFER: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
+  //   TODO [ ]: I think it might be better to keep this library out of shadow, but good for content transitions
+  //             in the user facing content instead of the ready signals
   //   TODO [ ]: REFACTOR codebase transitions with `solid-transition-group`
 
   return (
@@ -72,10 +71,7 @@ export default function Umbra(props: UmbraProps) {
         return (
           // Only showing once no longer Default avoids hardcoded transition from corner on first initial
           <Show when={shadowRect !== ZERO_RECT}>
-            <ShadowEl
-              rect={shadowRect}
-              lastAddShadowScrollY={state.lastAddShadowScrollY}
-            ></ShadowEl>
+            <ShadowEl rect={shadowRect}></ShadowEl>
           </Show>
         );
       }}
@@ -84,7 +80,6 @@ export default function Umbra(props: UmbraProps) {
 }
 
 const [state, setState] = createStore<UmbraState>({
-  lastAddShadowScrollY: 0,
   shadows: [],
   removedShadows: [],
 });
@@ -151,7 +146,6 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
   setState((state) => {
     return {
       shadows: [...state.shadows, shadowRect],
-      lastAddShadowScrollY: window.scrollY,
     };
   });
 };

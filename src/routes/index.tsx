@@ -1,7 +1,7 @@
 import Shadow from "../components/shadow/shadow";
 import Menu from "../components/menu";
 import { onMount, createSignal, createEffect } from "solid-js";
-import { useForceRecalculateShadowClientRects } from "~/components/shadow/hook";
+import { useForceRecalculateShadowClientRects } from "../components/shadow/hook";
 
 export default function Home() {
   const [isReady, setReady] = createSignal(false);

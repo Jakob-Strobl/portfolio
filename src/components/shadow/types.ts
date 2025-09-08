@@ -24,7 +24,10 @@ export type ShadowRect = {
  * @param shadowRect
  * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
  */
-export function scaleAndCenterRect(shadowRect: ShadowRect, scale = 1.0) {
+export function scaleAndCenterRect(
+  shadowRect: ShadowRect,
+  scale = 1.0,
+): { position: ShadowVec2; dimensions: ShadowVec2 } {
   const scaledWidth = shadowRect.dimensions().x * scale;
   const scaledHeight = shadowRect.dimensions().y * scale;
   const centeredLeft =
@@ -40,20 +43,8 @@ export function scaleAndCenterRect(shadowRect: ShadowRect, scale = 1.0) {
 
 export interface UmbraState {
   shadows: Array<ShadowRect>;
+  // Keep track of recently removed shadows so we can use their position and FLIP method transition
   removedShadows: Array<ShadowRect>;
-
-  /**  NOTE(edge-case):
-   * If the user scroll position is not 0 and then they navigate, this behavior is observed:
-   *   1. Shadow is removed and re-added when the destination route renders
-   *   2. When re-added, the new shadow's bounding client rect is computed and memoized
-   *   3. Then the scroll position is set to 0
-   *
-   * The top and bottom positions of the shadow's client rect are affected by the
-   * current scroll position. Since the scroll position resets to 0 after computing
-   * the client rect, this results in an incorrect offset of the shadow's vertical
-   * position due to the previous non-zero-based position.
-   */
-  lastAddShadowScrollY: number;
 }
 
 // NOTE(default-value):
