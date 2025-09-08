@@ -1,12 +1,6 @@
 import Shadow from "../components/shadow/shadow";
 import Menu from "../components/menu";
-import {
-  onMount,
-  createSignal,
-  createEffect,
-  createRenderEffect,
-} from "solid-js";
-import { forceRecalculateShadowClientRects } from "../components/shadow/umbra";
+import { onMount, createSignal, createEffect } from "solid-js";
 import { useForceRecalculateShadowClientRects } from "~/components/shadow/hook";
 
 export default function Home() {

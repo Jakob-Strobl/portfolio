@@ -19,6 +19,25 @@ export type ShadowRect = {
   };
 };
 
+/**
+ *
+ * @param shadowRect
+ * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
+ */
+export function scaleAndCenterRect(shadowRect: ShadowRect, scale = 1.0) {
+  const scaledWidth = shadowRect.dimensions().x * scale;
+  const scaledHeight = shadowRect.dimensions().y * scale;
+  const centeredLeft =
+    shadowRect.position().x + (shadowRect.dimensions().x - scaledWidth) / 2;
+  const centeredTop =
+    shadowRect.position().y + (shadowRect.dimensions().y - scaledHeight) / 2; // TODO [ ]: account for scrollY?
+
+  return {
+    position: { x: centeredLeft, y: centeredTop },
+    dimensions: { x: scaledWidth, y: scaledHeight },
+  };
+}
+
 export interface UmbraState {
   shadows: Array<ShadowRect>;
   removedShadows: Array<ShadowRect>;

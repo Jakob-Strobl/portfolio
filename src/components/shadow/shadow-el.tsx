@@ -1,6 +1,5 @@
 import { createMemo, createRenderEffect } from "solid-js";
-import { ShadowRect } from "./types";
-import { hardRemoveShadow } from "./umbra";
+import { scaleAndCenterRect, ShadowRect } from "./types";
 
 interface ShadowRectProps {
   rect: ShadowRect;
@@ -16,7 +15,6 @@ export default function ShadowEl({
   lastAddShadowScrollY,
 }: ShadowRectProps) {
   createRenderEffect((prev) => {
-    console.log("ShadowEl render effect - rect: ", rect.isCold(), rect, prev);
     // IDK why this needs to be here to trigger css transition
     // Hypothesis 1: reading the bounding client rect forces this on the client side instead of SSR (?)
     // Hypothesis 2: this forces a reflow which is needed to trigger the transition (?)
@@ -28,25 +26,6 @@ export default function ShadowEl({
     return clientRect;
   });
 
-  const scaledownRect = () => {
-    const scaledownSizeFactor = 10,
-      scaledownPositionFactor = 2;
-
-    const scaledWidth = rect.dimensions().x / scaledownSizeFactor;
-    const scaledHeight = rect.dimensions().y / scaledownSizeFactor;
-    const centeredLeft =
-      rect.position().x +
-      (rect.dimensions().x - scaledWidth) / scaledownPositionFactor;
-    const centeredTop =
-      rect.position().y +
-      (rect.dimensions().y - scaledHeight) / scaledownPositionFactor; // TODO [ ]: account for scrollY?
-
-    return {
-      position: { x: centeredLeft, y: centeredTop },
-      dimensions: { x: scaledWidth, y: scaledHeight },
-    };
-  };
-
   const statefulRect = createMemo(() => {
     if (!rect.isCold()) {
       return {
@@ -56,18 +35,17 @@ export default function ShadowEl({
     }
 
     if (rect.prevRect) {
-      // queueMicrotask(() => hardRemoveShadow(rect.prevRect?.shadowedEl?.dataset["shadow"]));
       return rect.prevRect;
     }
 
-    return scaledownRect();
+    return scaleAndCenterRect(rect, 0.1);
   });
 
   return (
     <div
       class="
         absolute -z-10 transition-rect rounded-lg
-        bg-white/50 fade-in-bg duration-1000
+        bg-night-900/66 fade-in-bg duration-1000
       "
       style={{
         width: `${statefulRect().dimensions.x}px`,

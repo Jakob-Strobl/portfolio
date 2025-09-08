@@ -10,7 +10,7 @@ import {
 import { createStore } from "solid-js/store";
 import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
-import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
+import { scaleAndCenterRect, ShadowRect, UmbraState, ZERO_RECT } from "./types";
 import { useLocation } from "@solidjs/router";
 
 export interface UmbraProps {
@@ -96,14 +96,32 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
 
   // Check any removed shadows to see if the removed shadows position can be used to start from
   // NOTE: Elements are unmounted from bottom up, and elements are mounted from top down
-  //   If we are adding a new first shadow, check if the "first" removed shadow can be reused
-  //   If we are adding a second shadow, check if the "second" removed shadow can be reused, etc
+  //   If we are adding a new first shadow, check if the "first" (last element) removed shadow can be reused
+  //   If we are adding a second shadow, check if the "second" (second to last) removed shadow can be reused
+  //   etc,
   // This allows for reusing the position of the last removed shadow in order of the DOM
+  const warmShadows = state.shadows.filter((shadow) => !shadow.isCold());
   const currentNumShadows = state.shadows.length;
   const currentNumOfRemovedShadows = state.removedShadows.length;
-  const reusableRemovedShadowIdx =
+  // The "compliment" shadow's index for initializing previous shadow
+  const complimentShadowIndex =
     currentNumOfRemovedShadows - currentNumShadows - 1;
-  const reusableRemovedShadow = state.removedShadows[reusableRemovedShadowIdx];
+
+  let relativeStartingShadow;
+  let scale = 1.0;
+  if (complimentShadowIndex >= 0) {
+    relativeStartingShadow = state.removedShadows[complimentShadowIndex];
+  } else if (currentNumOfRemovedShadows > 0) {
+    // Spawn from last shadow if there wasn't a compliment shadow on the last render
+    relativeStartingShadow =
+      state.removedShadows[currentNumOfRemovedShadows - 1];
+    scale = 0.1;
+  } else if (warmShadows.length > 0) {
+    // Spawn from last warm shadow
+    // NOTE: I decided to pick from first shadow as a rule of thumb to follow.
+    relativeStartingShadow = warmShadows[warmShadows.length - 1];
+    scale = 0.1;
+  }
 
   const clientRect = shadowedEl.getBoundingClientRect();
   const [isCold, setIsCold] = createSignal(true);
@@ -125,12 +143,9 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
     dimensions,
     setDimensions,
     prevRect:
-      reusableRemovedShadowIdx < 0
-        ? undefined
-        : {
-            position: reusableRemovedShadow.position(),
-            dimensions: reusableRemovedShadow.dimensions(),
-          },
+      relativeStartingShadow != null
+        ? scaleAndCenterRect(relativeStartingShadow, scale)
+        : undefined,
   };
 
   setState((state) => {
