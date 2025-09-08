@@ -2,6 +2,7 @@ import {
   createEffect,
   createRenderEffect,
   createSignal,
+  For,
   Index,
   onMount,
   Show,
@@ -11,11 +12,21 @@ import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
 import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
 import { useLocation } from "@solidjs/router";
+
+export interface UmbraProps {
+  /**
+   * On Render Effect, force a refresh of all shadow positions
+   * @default true
+   */
+  forceRefreshOnRenderEffect?: boolean;
+}
+
 /**
  * Umbra is the component that manages and renders all shadow elements for shadowed elements
  */
-export default function Umbra() {
+export default function Umbra(props: UmbraProps) {
   const location = useLocation();
+  const forceRefreshOnRenderEffect = props.forceRefreshOnRenderEffect ?? true;
 
   onMount(() => {
     // TODO [X]: Fix resize after breaking change - Fix when using transform and signal off of that
@@ -31,6 +42,9 @@ export default function Umbra() {
       console.log("Clearing removed shadows after location change");
       clearRemovedShadows();
     });
+    if (forceRefreshOnRenderEffect) {
+      queueMicrotask(() => forceRecalculateShadowClientRects());
+    }
   });
 
   createRenderEffect((prevShadows) => {
@@ -52,20 +66,20 @@ export default function Umbra() {
   //   TODO [ ]: REFACTOR codebase transitions with `solid-transition-group`
 
   return (
-    <Index each={state.shadows}>
-      {(shadowRect) => {
+    <For each={state.shadows}>
+      {(shadowRect: ShadowRect) => {
         console.log(shadowRect);
         return (
           // Only showing once no longer Default avoids hardcoded transition from corner on first initial
-          <Show when={shadowRect() !== ZERO_RECT}>
+          <Show when={shadowRect !== ZERO_RECT}>
             <ShadowEl
-              rect={shadowRect()}
+              rect={shadowRect}
               lastAddShadowScrollY={state.lastAddShadowScrollY}
             ></ShadowEl>
           </Show>
         );
       }}
-    </Index>
+    </For>
   );
 }
 
