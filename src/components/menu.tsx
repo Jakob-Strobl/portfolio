@@ -12,7 +12,7 @@ export default function Menu() {
       <nav>
         <ul class="flex flex-col gap-2 text-3xl text-white/88">
           <li
-            class="fade-in delay-75 mb-2"
+            class="fade-in delay-75 mb-1"
             style={{
               // Set inline so the browser doesn't try to fade from 100% -> 0% opacity
               // and then fade back to 100% once ready flag is flipped
