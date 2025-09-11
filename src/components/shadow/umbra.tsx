@@ -29,7 +29,6 @@ export default function Umbra(props: UmbraProps) {
   const forceRefreshOnRenderEffect = props.forceRefreshOnRenderEffect ?? true;
 
   onMount(() => {
-    // TODO [X]: Fix resize after breaking change - Fix when using transform and signal off of that
     window.addEventListener("resize", () => {
       console.log("Window resized, updating shadow positions");
       forceRecalculateShadowClientRects();
@@ -37,7 +36,6 @@ export default function Umbra(props: UmbraProps) {
   });
 
   createRenderEffect(() => {
-    console.log("Location changed: ", location.pathname);
     queueMicrotask(() => {
       console.log("Clearing removed shadows after location change");
       clearRemovedShadows();
@@ -49,16 +47,6 @@ export default function Umbra(props: UmbraProps) {
     return state.shadows;
   });
 
-  // TODO [X]: Find a better way to initialize the position
-  // TODO [X]: Avoid naive corner start
-  // TODO [X]: Scale up into size on first load
-  // TODO [X]: Scale up from center of content
-  // TODO [X]: currently hardcoded for one shadow at a time
-  // TODO [X]: make flexible with 1->N shadow transitions and N->K shadows
-  // TODO [X]: Fix resize and works with multiple shadows
-  // TODO [X]: Handle when layout changes from dynamic content (Example POC in index.tsx)
-  // TODO [X]: also set fade in on mount, fade-indoesn't work with new changess
-  // TODO [X]: PERFORMANCE: Use transform() instead of top/left/width/height
   // TODO [DEFER: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
   //   TODO [ ]: I think it might be better to keep this library out of shadow, but good for content transitions
   //             in the user facing content instead of the ready signals
