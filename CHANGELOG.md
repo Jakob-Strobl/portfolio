@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.5.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.2...v0.5.0) (2025-09-11)
+
+
+### Features
+
+* **contact:** group hover text shadow on icons ([f08ca5d](https://github.com/Jakob-Strobl/portfolio/commit/f08ca5dd5bbc9351915f771a9bced806565dc701))
+* **shadow:** create hook to calc rects on signals ([3908608](https://github.com/Jakob-Strobl/portfolio/commit/39086081739e52272a4150a0cba2173d767109fe))
+* **shadow:** force recalc sizes on dynamic content POC ([248068a](https://github.com/Jakob-Strobl/portfolio/commit/248068a186ef56136d9b8fb42ba11c78061f35ce))
+* **shadow:** improved init positioning and avoid corner start ([c6ec610](https://github.com/Jakob-Strobl/portfolio/commit/c6ec6107ac75416143bf89dd7b41629924d1a04a))
+* **shadow:** multiple shadows working! ([1ae216d](https://github.com/Jakob-Strobl/portfolio/commit/1ae216d6bc53ec51c75cefa82afe545eedf2cf39))
+* **shadow:** scale up from center of content on inital load ([afe8f80](https://github.com/Jakob-Strobl/portfolio/commit/afe8f8030e371001a819e7592263ed80ea02a37a))
+* **shadow:** start relative shadow rules and code cleanup ([1697f20](https://github.com/Jakob-Strobl/portfolio/commit/1697f209a3b0ac79b9e5edd9b25f9c26de5a8b18))
+* **shadow:** use position transfrom() + fade-in ([e314f01](https://github.com/Jakob-Strobl/portfolio/commit/e314f018624d775685f32ae871aa84d1951d9683))
+
+
+### Bug Fixes
+
+* **index-page:** replace ~ import for worker ([6b70b31](https://github.com/Jakob-Strobl/portfolio/commit/6b70b31e88d1eb0e8e55b87f5abbb6ff3aefeedb))
+* **shadow:** recalc DOMRect on resize with signals!! ([a5f7432](https://github.com/Jakob-Strobl/portfolio/commit/a5f74322d0ca792dd264572707dae2651b0fb131))
+* **windows:** add unenv dependency needed on win10 pc ([eeb49f0](https://github.com/Jakob-Strobl/portfolio/commit/eeb49f01a2482d6fc3d3b2665bfa02dd9c81a980))
+
 ## [0.4.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.1...v0.4.2) (2025-09-06)
 
 
