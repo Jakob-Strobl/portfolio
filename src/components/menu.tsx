@@ -10,7 +10,10 @@ export default function Menu() {
   return (
     <Shadow>
       <nav>
-        <ul class="flex flex-col gap-2 text-3xl text-white/88">
+        {/* Define text size on each element as granular as possible
+         *  Controls resulting height of elements in flex col
+         */}
+        <ul class="flex flex-col gap-2 text-white/88">
           <li
             class="fade-in delay-75 mb-1"
             style={{
@@ -22,7 +25,7 @@ export default function Menu() {
           >
             <a
               href="/experience"
-              class="hover:text-shadow-lg duration-300 transition-text"
+              class="hover:text-shadow-lg duration-300 text-3xl transition-text"
             >
               Experience
             </a>
@@ -33,7 +36,7 @@ export default function Menu() {
           >
             <a
               href="/contact"
-              class="hover:text-shadow-lg duration-300 transition-text"
+              class="hover:text-shadow-lg duration-300 text-3xl transition-text"
             >
               Contact
             </a>
@@ -42,10 +45,8 @@ export default function Menu() {
             class="fade-in delay-300 border-night-100/90 mb-1"
             style={{ opacity: !isReady() ? "0" : "100" }}
           ></hr>
-          {/* Using flex on these to auto change the box height to fit */}
-          {/* Avoids parent flex forcing matching larger height since the text is larger for the first two*/}
           <li
-            class="fade-in delay-400 flex"
+            class="fade-in delay-400"
             style={{ opacity: !isReady() ? "0" : "100" }}
           >
             <a
@@ -56,7 +57,7 @@ export default function Menu() {
             </a>
           </li>
           <li
-            class="fade-in delay-500 flex"
+            class="fade-in delay-500"
             style={{ opacity: !isReady() ? "0" : "100" }}
           >
             <a
