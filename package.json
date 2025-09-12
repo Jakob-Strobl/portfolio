@@ -25,6 +25,7 @@
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/vite": "^4.1.13",
     "@types/three": "^0.180.0",
+    "lucide-solid": "^0.544.0",
     "solid-js": "^1.9.9",
     "three": "^0.180.0",
     "unenv": "^1.10.0",
