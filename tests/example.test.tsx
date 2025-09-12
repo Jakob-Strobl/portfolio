@@ -17,9 +17,11 @@ test("app smoke test", async () => {
   page.getByText("Jakob Strobl");
 
   const links = page.getAllByRole("link");
-  expect(links.length).toEqual(2);
+  expect(links.length).toEqual(4);
   expect(links[0]).toHaveTextContent("Experience");
   expect(links[1]).toHaveTextContent("Contact");
+  expect(links[2]).toHaveTextContent("Photography");
+  expect(links[3]).toHaveTextContent("TBD");
 });
 
 test("version number from package.json renders in page", async () => {
