@@ -18,8 +18,6 @@ export default function Menu() {
             class="fade-in delay-75 mb-1"
             style={{
               // Set inline so the browser doesn't try to fade from 100% -> 0% opacity
-              // and then fade back to 100% once ready flag is flipped
-              // This is why the fade looked like it wasn't working. It was starting with fade out.
               opacity: !isReady() ? "0" : "100",
             }}
           >
