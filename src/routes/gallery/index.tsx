@@ -2,7 +2,7 @@ import Shadow from "../../components/shadow/shadow";
 import PhotoSunsetGlimmer from "./2020/sunset-glimmer";
 import PhotoViewOfModernHimeji from "./2020/view-of-modern-himeji";
 import PhotoTemp from "./2025/placeholder";
-import { ArrowBigLeft } from "lucide-solid";
+import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 
 export default function Gallery() {
   return (
