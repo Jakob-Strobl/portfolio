@@ -19,8 +19,8 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       return clientRect;
     }
 
+    // Set lambda to enter transition for shadow that "scale up" from origin position
     if (rect.warmupDelayMs === 0) {
-      // Triggers enter transition for shadow that "scale up" from center
       queueMicrotask(() => rect.setIsCold(false));
     } else {
       setTimeout(() => rect.setIsCold(false), rect.warmupDelayMs);
@@ -29,7 +29,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   });
 
   const statefulRect = createMemo(() => {
-    // console.log(rect.position(), rect.isCold(), scaleAndCenterRect(rect, 0.1), rect.prevRect)
+    // console.log(rect.position(), rect.isCold(), scaleAndCenterRect(rect, 0.1), rect.origin)
     if (!rect.isCold()) {
       return {
         position: rect.position(),
@@ -37,7 +37,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       };
     }
 
-    return rect.prevRect;
+    return rect.origin;
   });
 
   return (

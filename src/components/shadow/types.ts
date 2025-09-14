@@ -24,7 +24,7 @@ export type ShadowRect = {
   dimensions: Accessor<ShadowVec2>;
   setDimensions: Setter<ShadowVec2>;
   shadowedEl: HTMLDivElement;
-  prevRect: {
+  origin: {
     position: ShadowVec2;
     dimensions: ShadowVec2;
   };
@@ -83,6 +83,6 @@ export const ZERO_RECT: ShadowRect = {
   shadowedEl: null,
   isCold: () => true,
   setIsCold: () => {},
-  // @ts-expect-error This is a special case constant where the value of prevRect never matters (any field really)
-  prevRect: null,
+  // @ts-expect-error This is a special case constant where the value of origin never matters (any field really)
+  origin: null,
 };
