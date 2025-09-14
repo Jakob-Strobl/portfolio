@@ -28,6 +28,7 @@ export type ShadowRect = {
     position: ShadowVec2;
     dimensions: ShadowVec2;
   };
+  warmupDelayMs: number;
 };
 
 /**

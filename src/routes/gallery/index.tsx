@@ -24,7 +24,7 @@ export default function Gallery() {
             </div>
           </div>
         </Shadow>
-        <Shadow>
+        <Shadow warmupDelayMs={200}>
           <div class="flex flex-col gap-4">
             <h1 class="text-4xl text-white">2020</h1>
             <div class="flex flex-wrap gap-4">
@@ -36,7 +36,7 @@ export default function Gallery() {
       </div>
       <div class="max-w-36 w-fit">
         {/* TODO [ ]: Parameterize the padding of a shadow? */}
-        <Shadow>
+        <Shadow warmupDelayMs={400}>
           <a
             href="/"
             class="hover:text-shadow-lg duration-300 transition-text flex gap-1 items-center"

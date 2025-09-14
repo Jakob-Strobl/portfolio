@@ -10,6 +10,8 @@ interface ShadowProps {
    * @default 'relative'
    */
   origin?: ShadowOriginOptions;
+  // Delay on the shadow's intial warmup transition - i.e., delays the isCold signal flip to warm
+  warmupDelayMs?: number;
   // TODO [ ]: Add optional title that goes above the shadow?
 }
 
@@ -27,7 +29,7 @@ export default function Shadow(props: ShadowProps) {
   onMount(() => {
     // setTimeout(() => setReady(true), 0);
     // use onMount or createEffect to read after connected to DOM
-    addShadow(shadowEl, props.origin);
+    addShadow(shadowEl, props.origin, props.warmupDelayMs);
   });
 
   onCleanup(() => {
