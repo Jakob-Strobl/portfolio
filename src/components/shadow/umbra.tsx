@@ -18,7 +18,6 @@ import {
   UmbraState,
   ZERO_RECT,
 } from "./types";
-import { useLocation } from "@solidjs/router";
 
 export interface UmbraProps {
   /**
@@ -32,9 +31,6 @@ export interface UmbraProps {
  * Umbra is the component that manages and renders all shadow elements for shadowed elements
  */
 export default function Umbra(props: UmbraProps) {
-  const location = useLocation();
-  const forceRefreshOnRenderEffect = props.forceRefreshOnRenderEffect ?? true;
-
   onMount(() => {
     window.addEventListener("resize", () => {
       console.log("Window resized, updating shadow positions");
@@ -44,7 +40,7 @@ export default function Umbra(props: UmbraProps) {
 
   createRenderEffect((prevShadows) => {
     queueMicrotask(() => {
-      console.log("Clearing removed shadows after location change");
+      console.log("Clearing removed shadows");
       clearRemovedShadows();
     });
     console.log("Umbra render effect - shadows: ", state.shadows, prevShadows);
@@ -54,7 +50,6 @@ export default function Umbra(props: UmbraProps) {
   return (
     <For each={state.shadows}>
       {(shadowRect: ShadowRect) => {
-        console.log(shadowRect);
         return (
           // Only showing once no longer Default avoids hardcoded transition from corner on first initial
           <Show when={shadowRect !== ZERO_RECT}>
@@ -74,6 +69,7 @@ const [state, setState] = createStore<UmbraState>({
 export const addShadow = (
   shadowedEl: HTMLDivElement,
   origin: ShadowOriginOptions = "relative",
+  warmupDelayMs: number = 0,
 ) => {
   if (!isTest()) {
     console.log(
@@ -145,6 +141,7 @@ export const addShadow = (
     dimensions,
     setDimensions,
     prevRect,
+    warmupDelayMs,
   };
 
   setState((state) => {

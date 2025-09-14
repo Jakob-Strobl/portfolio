@@ -15,9 +15,15 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
     // Hypothesis 1: reading the bounding client rect forces this on the client side instead of SSR (?)
     // Hypothesis 2: this forces a reflow which is needed to trigger the transition (?)
     const clientRect = rect.shadowedEl.getBoundingClientRect();
-    if (rect.isCold()) {
+    if (!rect.isCold()) {
+      return clientRect;
+    }
+
+    if (rect.warmupDelayMs === 0) {
       // Triggers enter transition for shadow that "scale up" from center
       queueMicrotask(() => rect.setIsCold(false));
+    } else {
+      setTimeout(() => rect.setIsCold(false), rect.warmupDelayMs);
     }
     return clientRect;
   });
