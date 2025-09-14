@@ -127,7 +127,7 @@ export const addShadow = (
   });
 
   // If relativeStartingShadow is undefined, center and scale up from element we are shadowing
-  let prevRect =
+  let originRect =
     relativeStartingShadow == undefined
       ? scaleAndCenterVec(dimensions, position, 0.1) // center and scale up (scale = 0.1) from element we are shadowing
       : scaleAndCenterRect(relativeStartingShadow, scale); // start from a predefined position
@@ -140,7 +140,7 @@ export const addShadow = (
     setPosition,
     dimensions,
     setDimensions,
-    prevRect,
+    origin: originRect,
     warmupDelayMs,
   };
 
