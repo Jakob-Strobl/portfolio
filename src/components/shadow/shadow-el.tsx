@@ -31,11 +31,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       };
     }
 
-    if (rect.prevRect) {
-      return rect.prevRect;
-    }
-
-    return scaleAndCenterRect(rect, 0.1);
+    return rect.prevRect;
   });
 
   return (

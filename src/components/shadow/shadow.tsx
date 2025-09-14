@@ -1,9 +1,15 @@
 import { children, createUniqueId, onCleanup, onMount } from "solid-js";
 import type { JSX } from "solid-js";
 import { addShadow, removeShadow } from "./umbra";
+import { ShadowOriginOptions } from "./types";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
+  /**
+   * Changes the behavior of where to set the starting position of the element on mount
+   * @default 'relative'
+   */
+  origin?: ShadowOriginOptions;
   // TODO [ ]: Add optional title that goes above the shadow?
 }
 
@@ -21,7 +27,7 @@ export default function Shadow(props: ShadowProps) {
   onMount(() => {
     // setTimeout(() => setReady(true), 0);
     // use onMount or createEffect to read after connected to DOM
-    addShadow(shadowEl);
+    addShadow(shadowEl, props.origin);
   });
 
   onCleanup(() => {

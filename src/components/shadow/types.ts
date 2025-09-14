@@ -1,4 +1,15 @@
-import { Accessor, Setter, Signal } from "solid-js";
+import { Accessor, Setter } from "solid-js";
+
+/**
+ * Changes the behavior of where to set the starting position of the element on mount
+ *  - 'first' = select the first shadow in the array (i.e., DOM)
+ *  - 'relative' = select the compliment index (order removed is flipped) from recently removed shadows
+ *  - 'warmest' = select the latest warm shadow ( read @warn )
+ *
+ * @warn Warm shadow options, like 'warmest', are best for dynamic content added to an already running page
+ *       I.e., doesn't work on a cold page load's initial render since none of the shadows are "warm" yet
+ */
+export type ShadowOriginOptions = "first" | "relative" | "warmest";
 
 export type ShadowVec2 = {
   x: number;
@@ -13,7 +24,7 @@ export type ShadowRect = {
   dimensions: Accessor<ShadowVec2>;
   setDimensions: Setter<ShadowVec2>;
   shadowedEl: HTMLDivElement;
-  prevRect?: {
+  prevRect: {
     position: ShadowVec2;
     dimensions: ShadowVec2;
   };
@@ -26,14 +37,25 @@ export type ShadowRect = {
  */
 export function scaleAndCenterRect(
   shadowRect: ShadowRect,
-  scale = 1.0,
+  scale: number = 1.0,
 ): { position: ShadowVec2; dimensions: ShadowVec2 } {
-  const scaledWidth = shadowRect.dimensions().x * scale;
-  const scaledHeight = shadowRect.dimensions().y * scale;
-  const centeredLeft =
-    shadowRect.position().x + (shadowRect.dimensions().x - scaledWidth) / 2;
-  const centeredTop =
-    shadowRect.position().y + (shadowRect.dimensions().y - scaledHeight) / 2; // TODO [ ]: account for scrollY?
+  return scaleAndCenterVec(shadowRect.dimensions, shadowRect.position, scale);
+}
+
+/**
+ *
+ * @param shadowRect
+ * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
+ */
+export function scaleAndCenterVec(
+  dimensions: Accessor<ShadowVec2>,
+  position: Accessor<ShadowVec2>,
+  scale: number = 1.0,
+): { position: ShadowVec2; dimensions: ShadowVec2 } {
+  const scaledWidth = dimensions().x * scale;
+  const scaledHeight = dimensions().y * scale;
+  const centeredLeft = position().x + (dimensions().x - scaledWidth) / 2;
+  const centeredTop = position().y + (dimensions().y - scaledHeight) / 2; // TODO [ ]: account for scrollY?
 
   return {
     position: { x: centeredLeft, y: centeredTop },
@@ -56,7 +78,10 @@ export const ZERO_RECT: ShadowRect = {
   setPosition: () => {},
   dimensions: () => ({ x: 0, y: 0 }),
   setDimensions: () => {},
-  shadowedEl: null as unknown as HTMLDivElement,
+  // @ts-expect-error This is a special case constant where the value of shadowedEl never matters (any field really)
+  shadowedEl: null,
   isCold: () => true,
   setIsCold: () => {},
+  // @ts-expect-error This is a special case constant where the value of prevRect never matters (any field really)
+  prevRect: null,
 };
