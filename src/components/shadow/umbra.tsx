@@ -10,7 +10,14 @@ import {
 import { createStore } from "solid-js/store";
 import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
-import { scaleAndCenterRect, ShadowRect, UmbraState, ZERO_RECT } from "./types";
+import {
+  scaleAndCenterRect,
+  scaleAndCenterVec,
+  ShadowOriginOptions,
+  ShadowRect,
+  UmbraState,
+  ZERO_RECT,
+} from "./types";
 import { useLocation } from "@solidjs/router";
 
 export interface UmbraProps {
@@ -35,22 +42,14 @@ export default function Umbra(props: UmbraProps) {
     });
   });
 
-  createRenderEffect(() => {
+  createRenderEffect((prevShadows) => {
     queueMicrotask(() => {
       console.log("Clearing removed shadows after location change");
       clearRemovedShadows();
     });
-  });
-
-  createRenderEffect((prevShadows) => {
     console.log("Umbra render effect - shadows: ", state.shadows, prevShadows);
     return state.shadows;
   });
-
-  // TODO [DEFER: REFACTOR: TIL about `solid-transition-group` - use it to simplify transitions
-  //   TODO [ ]: I think it might be better to keep this library out of shadow, but good for content transitions
-  //             in the user facing content instead of the ready signals
-  //   TODO [ ]: REFACTOR codebase transitions with `solid-transition-group`
 
   return (
     <For each={state.shadows}>
@@ -72,9 +71,17 @@ const [state, setState] = createStore<UmbraState>({
   removedShadows: [],
 });
 
-export const addShadow = (shadowedEl: HTMLDivElement) => {
+export const addShadow = (
+  shadowedEl: HTMLDivElement,
+  origin: ShadowOriginOptions = "relative",
+) => {
   if (!isTest()) {
-    console.log("Adding shadow: ", shadowedEl);
+    console.log(
+      "Adding shadow: ",
+      shadowedEl,
+      state.shadows.length,
+      state.removedShadows.length,
+    );
   }
 
   // Check any removed shadows to see if the removed shadows position can be used to start from
@@ -86,24 +93,30 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
   const warmShadows = state.shadows.filter((shadow) => !shadow.isCold());
   const currentNumShadows = state.shadows.length;
   const currentNumOfRemovedShadows = state.removedShadows.length;
-  // The "compliment" shadow's index for initializing previous shadow
+  // The "compliment" shadow's index for initializing previous shadow (think like compliment color)
   const complimentShadowIndex =
     currentNumOfRemovedShadows - currentNumShadows - 1;
 
   let relativeStartingShadow;
+  // Keep same scale by default
   let scale = 1.0;
-  if (complimentShadowIndex >= 0) {
-    relativeStartingShadow = state.removedShadows[complimentShadowIndex];
-  } else if (currentNumOfRemovedShadows > 0) {
-    // Spawn from last shadow if there wasn't a compliment shadow on the last render
-    relativeStartingShadow =
-      state.removedShadows[currentNumOfRemovedShadows - 1];
-    scale = 0.1;
-  } else if (warmShadows.length > 0) {
-    // Spawn from last warm shadow
-    // NOTE: I decided to pick from first shadow as a rule of thumb to follow.
-    relativeStartingShadow = warmShadows[warmShadows.length - 1];
-    scale = 0.1;
+
+  switch (origin) {
+    case "relative":
+      // Don't care about invalid indexing since returns undefined; which centers the shadow on new content
+      relativeStartingShadow = state.removedShadows[complimentShadowIndex];
+      break;
+    case "first":
+      // Always select first warmShadow
+      relativeStartingShadow = state.shadows[0];
+      scale = 0.1;
+      break;
+    case "warmest":
+      relativeStartingShadow = warmShadows[warmShadows.length - 1];
+      scale = 0.1;
+      break;
+    default:
+      console.error("unexpected origin option: ", origin);
   }
 
   const clientRect = shadowedEl.getBoundingClientRect();
@@ -117,6 +130,12 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
     y: clientRect.height,
   });
 
+  // If relativeStartingShadow is undefined, center and scale up from element we are shadowing
+  let prevRect =
+    relativeStartingShadow == undefined
+      ? scaleAndCenterVec(dimensions, position, 0.1) // center and scale up (scale = 0.1) from element we are shadowing
+      : scaleAndCenterRect(relativeStartingShadow, scale); // start from a predefined position
+
   const shadowRect: ShadowRect = {
     shadowedEl,
     isCold,
@@ -125,10 +144,7 @@ export const addShadow = (shadowedEl: HTMLDivElement) => {
     setPosition,
     dimensions,
     setDimensions,
-    prevRect:
-      relativeStartingShadow != null
-        ? scaleAndCenterRect(relativeStartingShadow, scale)
-        : undefined,
+    prevRect,
   };
 
   setState((state) => {
