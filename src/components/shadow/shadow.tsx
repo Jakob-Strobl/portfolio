@@ -1,19 +1,13 @@
-import {
-  children,
-  createSignal,
-  createUniqueId,
-  onCleanup,
-  onMount,
-} from "solid-js";
-import type { JSX } from "solid-js";
+import { children, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
+import type { JSX, Signal } from "solid-js";
 import { addShadow, removeShadow } from "./umbra";
-import { ShadowOriginOptions } from "./types";
+import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
 
   /**
-   * Changes the behavior of where to set the starting position of the element on mount
+   * Set the origin strategy for where to set the starting position of the element on-mount
    * @default 'relative'
    */
   origin?: ShadowOriginOptions;
@@ -21,7 +15,7 @@ interface ShadowProps {
   /**
    * Delay on the shadow's intial warmup transition - i.e., delays the isCold signal flip to warm
    * @default undefined := Do not transition the content's text opacity
-   * @example Set to 0 or greater if you want the content to fade-in
+   * @example Set prop to 0 or greater if you want the content to fade-in
    *
    * // TODO IDEA: Kind of crazy but what if we added shadows in order of warmup vs DOM
    **/
@@ -34,6 +28,11 @@ interface ShadowProps {
    */
   contentFadeInDelayMs?: number;
 
+  /**
+   * Set the resulting shadow element's position to fixed
+   *
+   * TIP: Useful for pinning navigation elements
+   */
   fixed?: boolean;
 
   // TODO [ ]: Add optional title that goes above the shadow?
@@ -49,21 +48,20 @@ export default function Shadow(props: ShadowProps) {
   const resolved = children(() => props.children);
   const shadowId = createUniqueId();
   // If warmupDelayMs is defined, fade-in content
-  const [showContent, setShowContent] = createSignal(
-    props.warmupDelayMs === undefined,
-  );
+  const [shadowState, setShadowState] = createSignal<ShadowStartingStates>(
+    props.warmupDelayMs === undefined ? "ready" : "fade-in",
+  ) as Signal<ShadowStates>;
   let shadowEl: HTMLDivElement;
 
   onMount(() => {
     // setTimeout(() => setReady(true), 0);
     // use onMount or createEffect to read after connected to DOM
-    addShadow(
-      shadowEl,
-      props.origin,
-      props.warmupDelayMs,
-      setShowContent,
-      props.fixed ?? false,
-    );
+    addShadow(shadowEl, props.origin, {
+      shadowState,
+      setShadowState,
+      fixed: props.fixed ?? false,
+      warmupDelayMs: props.warmupDelayMs ?? 0,
+    });
   });
 
   onCleanup(() => {
@@ -72,16 +70,25 @@ export default function Shadow(props: ShadowProps) {
 
   return (
     <div
-      // "ease-out-quad" = cubic-bezier(0.5, 1, 0.89, 1)
-      class="rounded-lg w-full p-5 text-white transition-opacity duration-1000 ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
-      style={{
-        opacity: showContent() ? 100 : 0,
-        "transition-delay": `${props.contentFadeInDelayMs ?? 250}ms`,
-      }}
-      ref={(el) => (shadowEl = el)}
-      data-shadow={shadowId}
+      class={`
+        w-full border-[1px] transition-colors duration-300 rounded-lg
+        ${shadowState() === "warm" ? "border-white/6 hover:border-white/16" : "border-white/0 hover:border-white/0"} 
+      `}
     >
-      {resolved()}
+      <div
+        class="text-white p-5 rounded-lg 
+          transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)]
+        "
+        style={{
+          // Start with 0 opacity so we can "fade-in"
+          opacity: shadowState() === "fade-in" ? 0 : 100,
+          "transition-delay": `${props.contentFadeInDelayMs ?? 250}ms`,
+        }}
+        ref={(el) => (shadowEl = el)}
+        data-shadow={shadowId}
+      >
+        {resolved()}
+      </div>
     </div>
   );
 }

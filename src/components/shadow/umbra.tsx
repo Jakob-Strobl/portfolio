@@ -1,11 +1,4 @@
-import {
-  createRenderEffect,
-  createSignal,
-  For,
-  onMount,
-  Setter,
-  Show,
-} from "solid-js";
+import { createRenderEffect, createSignal, For, onMount, Setter, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
@@ -14,6 +7,7 @@ import {
   scaleAndCenterVec,
   ShadowOriginOptions,
   ShadowRect,
+  ShadowStates,
   UmbraState,
   ZERO_RECT,
 } from "./types";
@@ -68,17 +62,10 @@ const [state, setState] = createStore<UmbraState>({
 export const addShadow = (
   shadowedEl: HTMLDivElement,
   origin: ShadowOriginOptions = "relative",
-  warmupDelayMs: number = 0,
-  setShowContent: Setter<boolean>,
-  fixed: boolean,
+  shadowRectOptions: Pick<ShadowRect, "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed">,
 ) => {
   if (!isTest()) {
-    console.log(
-      "Adding shadow: ",
-      shadowedEl,
-      state.shadows.length,
-      state.removedShadows.length,
-    );
+    console.log("Adding shadow: ", shadowedEl, state.shadows.length, state.removedShadows.length);
   }
 
   // Check any removed shadows to see if the removed shadows position can be used to start from
@@ -87,12 +74,11 @@ export const addShadow = (
   //   If we are adding a second shadow, check if the "second" (second to last) removed shadow can be reused
   //   etc,
   // This allows for reusing the position of the last removed shadow in order of the DOM
-  const warmShadows = state.shadows.filter((shadow) => !shadow.isCold());
+  const warmShadows = state.shadows.filter((shadow) => shadow.shadowState() == "warm");
   const currentNumShadows = state.shadows.length;
   const currentNumOfRemovedShadows = state.removedShadows.length;
   // The "compliment" shadow's index for initializing previous shadow (think like compliment color)
-  const complimentShadowIndex =
-    currentNumOfRemovedShadows - currentNumShadows - 1;
+  const complimentShadowIndex = currentNumOfRemovedShadows - currentNumShadows - 1;
 
   let relativeStartingShadow;
   // Keep same scale by default
@@ -117,7 +103,6 @@ export const addShadow = (
   }
 
   const clientRect = shadowedEl.getBoundingClientRect();
-  const [isCold, setIsCold] = createSignal(true);
   const [position, setPosition] = createSignal({
     x: clientRect.x,
     y: clientRect.y,
@@ -134,17 +119,13 @@ export const addShadow = (
       : scaleAndCenterRect(relativeStartingShadow, scale); // start from a predefined position
 
   const shadowRect: ShadowRect = {
+    ...shadowRectOptions,
     shadowedEl,
-    isCold,
-    setIsCold,
     position,
     setPosition,
     dimensions,
     setDimensions,
     origin: originRect,
-    warmupDelayMs,
-    setShowContent,
-    fixed,
   };
 
   setState((state) => {
@@ -159,23 +140,16 @@ export const removeShadow = (shadowToRemoveId: string) => {
     console.log("Removing shadow by Id: ", shadowToRemoveId);
   }
 
-  const removedShadow = state.shadows.find(
-    (shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId,
-  );
+  const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
 
   if (removedShadow == undefined) {
-    console.warn(
-      "Tried to remove shadow that doesn't exist: ",
-      shadowToRemoveId,
-    );
+    console.warn("Tried to remove shadow that doesn't exist: ", shadowToRemoveId);
     return;
   }
 
   console.warn("Soft Removed Shadow Around: ", removedShadow.shadowedEl);
 
-  const filteredShadows = state.shadows.filter(
-    (shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId,
-  );
+  const filteredShadows = state.shadows.filter((shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId);
 
   setState({
     shadows: filteredShadows,
