@@ -12,7 +12,7 @@ export default function Gallery() {
     // Sum: 236
     <div class="w-236">
       <div class="flex flex-col gap-8 mb-4">
-        <Shadow>
+        <Shadow warmupDelayMs={0} contentFadeInDelayMs={500}>
           <div class="flex flex-col gap-4">
             <h1 class="text-4xl text-white">2025</h1>
             <div class="flex flex-wrap gap-4">
@@ -24,7 +24,7 @@ export default function Gallery() {
             </div>
           </div>
         </Shadow>
-        <Shadow warmupDelayMs={200}>
+        <Shadow warmupDelayMs={200} contentFadeInDelayMs={500}>
           <div class="flex flex-col gap-4">
             <h1 class="text-4xl text-white">2020</h1>
             <div class="flex flex-wrap gap-4">
@@ -36,7 +36,7 @@ export default function Gallery() {
       </div>
       <div class="max-w-36 w-fit">
         {/* TODO [ ]: Parameterize the padding of a shadow? */}
-        <Shadow warmupDelayMs={400}>
+        <Shadow warmupDelayMs={400} contentFadeInDelayMs={500}>
           <a
             href="/"
             class="hover:text-shadow-lg duration-300 transition-text flex gap-1 items-center"
