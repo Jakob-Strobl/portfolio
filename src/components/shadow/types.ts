@@ -11,14 +11,33 @@ import { Accessor, Setter } from "solid-js";
  */
 export type ShadowOriginOptions = "first" | "relative" | "warmest";
 
+export type ShadowStartingStates = "ready" | "fade-in";
+export type ShadowInProgressStates = "mounted";
+export type ShadowRestingState = "warm";
+/**
+ * **STARTING STATES**
+ * 'ready'   : Initialize a shadow with content ready
+ *             Fade-in transitions can still be managed by the content itself
+ *
+ * 'fade-in' : Initialize a shadow with content fade-in managed by shadow
+ *
+ * **INTERMEDIATE STATES**
+ * 'mounted' : Shadow is mounted and transitioning-in on the DOM
+ *
+ * **FINAL (RESTING) STATE**
+ * 'warm'    : Shadow is positioned and transition is complete and content can fade-in now
+ */
+export type ShadowStates = ShadowStartingStates | ShadowInProgressStates | ShadowRestingState;
+
+// TODO refactor vec2
 export type ShadowVec2 = {
   x: number;
   y: number;
 };
 
 export type ShadowRect = {
-  isCold: Accessor<boolean>;
-  setIsCold: Setter<boolean>;
+  shadowState: Accessor<ShadowStates>;
+  setShadowState: Setter<ShadowStates>;
   position: Accessor<ShadowVec2>;
   setPosition: Setter<ShadowVec2>;
   dimensions: Accessor<ShadowVec2>;
@@ -29,7 +48,6 @@ export type ShadowRect = {
     dimensions: ShadowVec2;
   };
   warmupDelayMs: number;
-  setShowContent: Setter<boolean>;
   fixed: boolean;
 };
 
