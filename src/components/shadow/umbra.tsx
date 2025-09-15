@@ -70,6 +70,7 @@ export const addShadow = (
   origin: ShadowOriginOptions = "relative",
   warmupDelayMs: number = 0,
   setShowContent: Setter<boolean>,
+  fixed: boolean,
 ) => {
   if (!isTest()) {
     console.log(
@@ -103,8 +104,8 @@ export const addShadow = (
       relativeStartingShadow = state.removedShadows[complimentShadowIndex];
       break;
     case "first":
-      // Always select first warmShadow
-      relativeStartingShadow = state.shadows[0];
+      // Always select first warmShadow (what about first removed?)
+      relativeStartingShadow = state.removedShadows[0]; //state.shadows[0];
       scale = 0.1;
       break;
     case "warmest":
@@ -143,6 +144,7 @@ export const addShadow = (
     origin: originRect,
     warmupDelayMs,
     setShowContent,
+    fixed,
   };
 
   setState((state) => {
