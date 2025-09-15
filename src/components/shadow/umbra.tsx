@@ -1,10 +1,9 @@
 import {
-  createEffect,
   createRenderEffect,
   createSignal,
   For,
-  Index,
   onMount,
+  Setter,
   Show,
 } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -70,6 +69,7 @@ export const addShadow = (
   shadowedEl: HTMLDivElement,
   origin: ShadowOriginOptions = "relative",
   warmupDelayMs: number = 0,
+  setShowContent: Setter<boolean>,
 ) => {
   if (!isTest()) {
     console.log(
@@ -142,6 +142,7 @@ export const addShadow = (
     setDimensions,
     origin: originRect,
     warmupDelayMs,
+    setShowContent,
   };
 
   setState((state) => {
