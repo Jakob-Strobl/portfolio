@@ -12,20 +12,27 @@ import { Accessor, Setter } from "solid-js";
 export type ShadowOriginOptions = "first" | "relative" | "warmest";
 
 export type ShadowStartingStates = "ready" | "fade-in";
-export type ShadowInProgressStates = "mounted";
+export type ShadowInProgressStates = "mounted" | "moving";
 export type ShadowRestingState = "warm";
 /**
  * **STARTING STATES**
- * 'ready'   : Initialize a shadow with content ready
+ *
+ * `'ready'`   : Initialize a shadow with the content ready<br>
  *             Fade-in transitions can still be managed by the content itself
  *
- * 'fade-in' : Initialize a shadow with content fade-in managed by shadow
+ * `'fade-in'` : Initialize a shadow with the content fade-in managed by shadow
  *
  * **INTERMEDIATE STATES**
- * 'mounted' : Shadow is mounted and transitioning-in on the DOM
+ *
+ * `'mounted'` : Shadow is mounted and transitioning-in on the DOM
+ *
+ * `'moving'`  : Reserved for special events that cause the shadows to need to move
+ *             (e.g., window resize, dynamic content)
  *
  * **FINAL (RESTING) STATE**
- * 'warm'    : Shadow is positioned and transition is complete and content can fade-in now
+ *
+ * `'warm'`    : Shadow is positioned with transition "effectively complete".
+ *             Content can fade-in now if it hasn't already
  */
 export type ShadowStates = ShadowStartingStates | ShadowInProgressStates | ShadowRestingState;
 

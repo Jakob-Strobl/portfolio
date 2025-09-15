@@ -188,6 +188,7 @@ export const forceRecalculateShadowClientRects = () => {
     const clientRect = shadow.shadowedEl.getBoundingClientRect();
     shadow.setPosition({ x: clientRect.x, y: clientRect.y });
     shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
+    shadow.setShadowState("moving"); // removes borders until the transition after the recalculated rects is "warm"
   });
 
   setState({ shadows: [...state.shadows] });
