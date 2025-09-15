@@ -72,7 +72,7 @@ export default function Shadow(props: ShadowProps) {
     <div
       class={`
         w-full border-[1px] transition-colors duration-300 rounded-lg
-        ${shadowState() === "warm" ? "border-white/6 hover:border-white/16" : "border-white/0 hover:border-white/0"} 
+        ${shadowState() === "warm" ? "border-white/6 hover:border-white/14" : "border-white/0 hover:border-white/0"} 
       `}
     >
       <div

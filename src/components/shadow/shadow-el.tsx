@@ -20,14 +20,18 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
     rect.warmupDelayMs + animationDurationMs * bezierCurveEffectiveCompleteProgressionRate;
 
   const isShadowCold = (rect: ShadowRect) => rect.shadowState() === "ready" || rect.shadowState() === "fade-in";
-  const isShadowWarm = (rect: ShadowRect) => rect.shadowState() === "mounted" || rect.shadowState() === "warm";
+  const isShadowWarm = (rect: ShadowRect) =>
+    rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
 
   createRenderEffect((prev) => {
-    // IDK why this needs to be here to trigger css transition
+    // IDK why this get client rect call needs to be here.
+    //   It helps with starting transitions the transitions consistent after multiple navigations
+    //   Even though the result is not used outside of this effect...
     // Hypothesis 1: reading the bounding client rect forces this on the client side instead of SSR (?)
     // Hypothesis 2: this forces a reflow which is needed to trigger the transition (?)
     const clientRect = rect.shadowedEl.getBoundingClientRect();
     if (isShadowWarm(rect)) {
+      rect.shadowState() !== "warm" && setTimeout(() => rect.setShadowState("warm"), animationEffectivelyCompleteTimer);
       return clientRect;
     }
 
