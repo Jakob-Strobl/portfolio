@@ -1,5 +1,5 @@
 import { createMemo, createRenderEffect } from "solid-js";
-import { scaleAndCenterRect, ShadowRect } from "./types";
+import { ShadowRect } from "./types";
 
 interface ShadowRectProps {
   rect: ShadowRect;
@@ -20,11 +20,15 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
     }
 
     // Set lambda to enter transition for shadow that "scale up" from origin position
-    if (rect.warmupDelayMs === 0) {
-      queueMicrotask(() => rect.setIsCold(false));
+    if (rect.warmupDelayMs >= 0) {
+      setTimeout(() => {
+        rect.setIsCold(false);
+        rect.setShowContent(true);
+      }, rect.warmupDelayMs);
     } else {
-      setTimeout(() => rect.setIsCold(false), rect.warmupDelayMs);
+      queueMicrotask(() => rect.setIsCold(false));
     }
+
     return clientRect;
   });
 

@@ -17,7 +17,7 @@ export default function Contact() {
 
   return (
     <div class="m-4">
-      <Shadow>
+      <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
         {/* padding's screem size breakpoints should match the image width's breakpoints */}
         <div class="flex flex-col p-6 sm:p-8 xl:p-12">
           <div>
