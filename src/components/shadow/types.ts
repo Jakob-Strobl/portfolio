@@ -2,7 +2,7 @@ import { Accessor, Setter } from "solid-js";
 
 /**
  * Changes the behavior of where to set the starting position of the element on mount
- *  - 'first' = select the first shadow in the array (i.e., DOM)
+ *  - 'first' = select the first removed shadow in the array (if one exists)
  *  - 'relative' = select the compliment index (order removed is flipped) from recently removed shadows
  *  - 'warmest' = select the latest warm shadow ( read @warn )
  *
@@ -30,6 +30,7 @@ export type ShadowRect = {
   };
   warmupDelayMs: number;
   setShowContent: Setter<boolean>;
+  fixed: boolean;
 };
 
 /**

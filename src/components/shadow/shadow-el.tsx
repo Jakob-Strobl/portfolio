@@ -57,9 +57,10 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         top: 0,
         left: 0,
         transform: `translate3d(${statefulRect().position.x}px, ${
-          statefulRect().position.y + window.scrollY
+          statefulRect().position.y + (rect.fixed ? 0 : window.scrollY)
         }px, 0)`,
         opacity: rect.isCold() ? 0 : 0.6,
+        position: rect.fixed ? "fixed" : undefined,
       }}
     ></div>
   );

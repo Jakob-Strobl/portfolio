@@ -22,6 +22,8 @@ interface ShadowProps {
    * Delay on the shadow's intial warmup transition - i.e., delays the isCold signal flip to warm
    * @default undefined := Do not transition the content's text opacity
    * @example Set to 0 or greater if you want the content to fade-in
+   *
+   * // TODO IDEA: Kind of crazy but what if we added shadows in order of warmup vs DOM
    **/
   warmupDelayMs?: number;
 
@@ -32,7 +34,10 @@ interface ShadowProps {
    */
   contentFadeInDelayMs?: number;
 
+  fixed?: boolean;
+
   // TODO [ ]: Add optional title that goes above the shadow?
+  // TODO [ ]: Parameterize the padding of a shadow?
 }
 
 /**
@@ -52,7 +57,13 @@ export default function Shadow(props: ShadowProps) {
   onMount(() => {
     // setTimeout(() => setReady(true), 0);
     // use onMount or createEffect to read after connected to DOM
-    addShadow(shadowEl, props.origin, props.warmupDelayMs, setShowContent);
+    addShadow(
+      shadowEl,
+      props.origin,
+      props.warmupDelayMs,
+      setShowContent,
+      props.fixed ?? false,
+    );
   });
 
   onCleanup(() => {
