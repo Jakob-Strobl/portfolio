@@ -1,9 +1,6 @@
 import { createSignal, onCleanup, onMount, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
-
-// TODO probably a better place to put this generic 2d vec type
-// TODO vec2.origin = { 0 , 0 }
-type Position = { x: number; y: number };
+import { Vec2 } from "~/types/vector2";
 
 interface NotifyBubbleProps {
   children: JSX.Element | JSX.ArrayElement;
@@ -11,7 +8,7 @@ interface NotifyBubbleProps {
    * @field x Left (- negative) / Right (+ positive) of the cursor
    * @field y Up (-) / Below (+) the cursor
    */
-  offset?: Partial<Position>;
+  offset?: Partial<Vec2>;
   /**
    * Any mouse event that initiated this bubble
    * Used to get the starting position of the mouse
@@ -26,9 +23,7 @@ export default function NotifyBubble(props: NotifyBubbleProps) {
 
   const [isReady, setReady] = createSignal(false);
 
-  const [mousePosition, setMousePosition] = createSignal<Position>(
-    props.originEvent ?? { x: 0, y: 0 },
-  );
+  const [mousePosition, setMousePosition] = createSignal<Vec2>(props.originEvent ?? { x: 0, y: 0 });
 
   const handleMouseMove = (event: MouseEvent) => {
     setMousePosition({ x: event.clientX, y: event.clientY });
