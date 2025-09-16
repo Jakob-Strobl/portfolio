@@ -59,7 +59,7 @@ export default function Gallery() {
             </div>
           </Shadow>
           <Shadow
-            warmupDelayMs={125}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2020",
@@ -78,7 +78,7 @@ export default function Gallery() {
             </div>
           </Shadow>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={500}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2019",
