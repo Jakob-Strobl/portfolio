@@ -25,7 +25,7 @@ export default function Gallery() {
           >
             <div class="flex flex-col gap-4">
               <h1 class="text-4xl text-white">Japan - Hokkaido</h1>
-              <div class="flex flex-wrap gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
@@ -44,7 +44,7 @@ export default function Gallery() {
           >
             <div class="flex flex-col gap-4">
               <h1 class="text-4xl text-white">Korea - East Coast on the Pacific</h1>
-              <div class="flex flex-wrap gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                 <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
                 <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
               </div>
@@ -59,7 +59,7 @@ export default function Gallery() {
           >
             <div class="flex flex-col gap-4">
               <h1 class="text-4xl text-white">Japan - Osaka/Himeji</h1>
-              <div class="flex flex-wrap gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
@@ -78,7 +78,7 @@ export default function Gallery() {
           >
             <div class="flex flex-col gap-4">
               <h1 class="text-4xl text-white">Korea - Study Abroad</h1>
-              <div class="flex flex-wrap gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                 <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
                 <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
                 {/* <PhotoTemp thumbnailView={true}></PhotoTemp>

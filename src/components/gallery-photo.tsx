@@ -6,13 +6,7 @@ export interface GalleryPhotoProps {
 export default function GalleryPhoto(props: GalleryPhotoProps) {
   const isThumbnailView = props.thumbnailView ?? true;
   return (
-    <div
-      class={
-        isThumbnailView
-          ? "lg:w-42 lg:h-42 md:w-36 md:h-36 w-32 h-32 overflow-hidden"
-          : ""
-      }
-    >
+    <div class={isThumbnailView ? "w-full 2xl:h-72 md:h-54" : ""}>
       <img class="w-full h-full rounded-sm object-cover" src={props.uri}></img>
     </div>
   );
