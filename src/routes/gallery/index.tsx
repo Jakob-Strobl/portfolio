@@ -1,20 +1,12 @@
-import LinearLayout from "~/layouts/linear-layout";
 import Shadow from "../../components/shadow/shadow";
 import PhotoSunsetGlimmer from "./2020/sunset-glimmer";
 import PhotoViewOfModernHimeji from "./2020/view-of-modern-himeji";
 import PhotoTemp from "./2025/placeholder";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
-import TimelineLayout, { timelineTitleDatasetKey } from "~/layouts/timeline-layout";
+import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
 
 export default function Gallery() {
   return (
-    // Width of photos is w-42 (desktop) = w-42 * 5 images = 210
-    // Width of gap is 4 (4 gaps per 5 images) = 16
-    // Width of shadow padding is p-5 = p-5 * 2 both sides = 10
-    // Sum: 236
-    // TODO [X] Create a layout based on this left-center-right structure that starts offset from the top
-    // Right now mt-120 looks good on desktop (1440p full + half screen).
-    // Will need to change layout for mobile portriat
     <TimelineLayout
       defaultTitle="2025"
       navBack={

@@ -1,8 +1,8 @@
 import { children, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
 import type { JSX, Signal } from "solid-js";
-import { addShadow, removeShadow } from "./umbra";
+import { addShadow, removeShadow } from "./actions";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
-import { DataAttributeKey } from "~/types/dom";
+import { DataAttributeKey } from "../../types/dom";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
