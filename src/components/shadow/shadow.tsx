@@ -2,10 +2,10 @@ import { children, createSignal, createUniqueId, onCleanup, onMount } from "soli
 import type { JSX, Signal } from "solid-js";
 import { addShadow, removeShadow } from "./umbra";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
+import { DataAttributeKey } from "~/types/dom";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
-
   /**
    * Set the origin strategy for where to set the starting position of the element on-mount
    * @default 'relative'
@@ -34,6 +34,10 @@ interface ShadowProps {
    * TIP: Useful for pinning navigation elements
    */
   fixed?: boolean;
+
+  dataset?: {
+    [name: DataAttributeKey]: string | undefined;
+  };
 
   // TODO [ ]: Add optional title that goes above the shadow?
   // TODO [ ]: Parameterize the padding of a shadow?
@@ -74,6 +78,7 @@ export default function Shadow(props: ShadowProps) {
         w-full border-[1px] transition-colors duration-300 rounded-lg
         ${shadowState() === "warm" ? "border-white/6 hover:border-white/14" : "border-white/0 hover:border-white/0"} 
       `}
+      {...props.dataset}
     >
       <div
         class="text-white p-5 rounded-lg 
