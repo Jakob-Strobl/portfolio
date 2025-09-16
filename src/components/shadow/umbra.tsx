@@ -1,16 +1,8 @@
-import { createRenderEffect, createSignal, For, onMount, Setter, Show } from "solid-js";
+import { createRenderEffect, createSignal, For, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { isTest } from "../../actions/test-actions";
 import ShadowEl from "./shadow-el";
-import {
-  scaleAndCenterRect,
-  scaleAndCenterVec,
-  ShadowOriginOptions,
-  ShadowRect,
-  ShadowStates,
-  UmbraState,
-  ZERO_RECT,
-} from "./types";
+import { scaleAndCenterRect, scaleAndCenterVec, ShadowOriginOptions, ShadowRect, UmbraState, ZERO_RECT } from "./types";
 
 export interface UmbraProps {
   /**

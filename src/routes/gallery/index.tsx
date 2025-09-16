@@ -4,6 +4,7 @@ import PhotoSunsetGlimmer from "./2020/sunset-glimmer";
 import PhotoViewOfModernHimeji from "./2020/view-of-modern-himeji";
 import PhotoTemp from "./2025/placeholder";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
+import TimelineLayout, { timelineTitleDatasetKey } from "~/layouts/timeline-layout";
 
 export default function Gallery() {
   return (
@@ -14,19 +15,24 @@ export default function Gallery() {
     // TODO [X] Create a layout based on this left-center-right structure that starts offset from the top
     // Right now mt-120 looks good on desktop (1440p full + half screen).
     // Will need to change layout for mobile portriat
-    <LinearLayout
+    <TimelineLayout
+      defaultTitle="2025"
       navBack={
-        <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed>
-          <a href="/" class="hover:text-shadow-lg duration-300 transition-text flex gap-1 items-center">
-            <ArrowBigLeft size={20} /> Home
-          </a>
-        </Shadow>
+        <a href="/">
+          <ArrowBigLeft size={20} /> Home
+        </a>
       }
       content={
         <>
-          <Shadow warmupDelayMs={125} contentFadeInDelayMs={500}>
+          <Shadow
+            warmupDelayMs={125}
+            contentFadeInDelayMs={500}
+            dataset={{
+              [timelineTitleDatasetKey]: "2025",
+            }}
+          >
             <div class="flex flex-col gap-4">
-              <h1 class="text-4xl text-white">2025</h1>
+              <h1 class="text-4xl text-white">Japan - Hokkaido</h1>
               <div class="flex flex-wrap gap-4">
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
                 <PhotoTemp thumbnailView={true}></PhotoTemp>
@@ -37,17 +43,69 @@ export default function Gallery() {
               </div>
             </div>
           </Shadow>
-          <Shadow warmupDelayMs={250} contentFadeInDelayMs={500}>
+          <Shadow
+            warmupDelayMs={250}
+            contentFadeInDelayMs={500}
+            dataset={{
+              [timelineTitleDatasetKey]: "2024",
+            }}
+          >
             <div class="flex flex-col gap-4">
-              <h1 class="text-4xl text-white">2020</h1>
+              <h1 class="text-4xl text-white">Korea - East Coast on the Pacific</h1>
               <div class="flex flex-wrap gap-4">
                 <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
                 <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
               </div>
             </div>
           </Shadow>
+          <Shadow
+            warmupDelayMs={125}
+            contentFadeInDelayMs={500}
+            dataset={{
+              [timelineTitleDatasetKey]: "2020",
+            }}
+          >
+            <div class="flex flex-col gap-4">
+              <h1 class="text-4xl text-white">Japan - Osaka/Himeji</h1>
+              <div class="flex flex-wrap gap-4">
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+              </div>
+            </div>
+          </Shadow>
+          <Shadow
+            warmupDelayMs={250}
+            contentFadeInDelayMs={500}
+            dataset={{
+              [timelineTitleDatasetKey]: "2019",
+            }}
+          >
+            <div class="flex flex-col gap-4">
+              <h1 class="text-4xl text-white">Korea - Study Abroad</h1>
+              <div class="flex flex-wrap gap-4">
+                <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
+                <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
+                {/* <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp>
+                <PhotoTemp thumbnailView={true}></PhotoTemp> */}
+              </div>
+            </div>
+          </Shadow>
         </>
       }
-    ></LinearLayout>
+    ></TimelineLayout>
   );
 }
