@@ -1,5 +1,6 @@
 import { Accessor, Setter } from "solid-js";
-import { Vec2 } from "~/types/vector2";
+import { Rect } from "../../types/rect";
+import { Vec2 } from "../../types/vector2";
 
 export type ShadowStartingStates = "ready" | "fade-in";
 export type ShadowInProgressStates = "mounted" | "moving";
@@ -45,10 +46,7 @@ export type ShadowRect = {
   dimensions: Accessor<Vec2>;
   setDimensions: Setter<Vec2>;
   shadowedEl: HTMLDivElement;
-  origin: {
-    position: Vec2;
-    dimensions: Vec2;
-  };
+  origin: Rect;
   warmupDelayMs: number;
   fixed: boolean;
 };

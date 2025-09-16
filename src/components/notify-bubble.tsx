@@ -1,6 +1,6 @@
 import { createSignal, onCleanup, onMount, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
-import { Vec2 } from "~/types/vector2";
+import { Vec2 } from "../types/vector2";
 
 interface NotifyBubbleProps {
   children: JSX.Element | JSX.ArrayElement;

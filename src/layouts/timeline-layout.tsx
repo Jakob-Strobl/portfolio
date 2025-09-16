@@ -1,8 +1,8 @@
-import { createEffect, createSignal, JSX, onMount, Show } from "solid-js";
-import LinearLayout, { LinearLayoutProps } from "./linear-layout";
-import Shadow from "~/components/shadow/shadow";
+import { createEffect, createSignal, onMount } from "solid-js";
+import { LinearLayoutProps } from "./linear-layout";
+import Shadow from "../components/shadow/shadow";
 import { createIntersectionObserver } from "@solid-primitives/intersection-observer";
-import { DataAttributeKey } from "~/types/dom";
+import { DataAttributeKey } from "../types/dom";
 
 export type TimelineLayout = LinearLayoutProps & {
   defaultTitle?: string;
