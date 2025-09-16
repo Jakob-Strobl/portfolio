@@ -1,17 +1,6 @@
 import { Accessor, Setter } from "solid-js";
 import { Vec2 } from "~/types/vector2";
 
-/**
- * Changes the behavior of where to set the starting position of the element on mount
- *  - 'first' = select the first removed shadow in the array (if one exists)
- *  - 'relative' = select the compliment index (order removed is flipped) from recently removed shadows
- *  - 'warmest' = select the latest warm shadow ( read @warn )
- *
- * @warn Warm shadow options, like 'warmest', are best for dynamic content added to an already running page
- *       I.e., doesn't work on a cold page load's initial render since none of the shadows are "warm" yet
- */
-export type ShadowOriginOptions = "first" | "relative" | "warmest";
-
 export type ShadowStartingStates = "ready" | "fade-in";
 export type ShadowInProgressStates = "mounted" | "moving";
 export type ShadowRestingState = "warm";
@@ -37,6 +26,17 @@ export type ShadowRestingState = "warm";
  */
 export type ShadowStates = ShadowStartingStates | ShadowInProgressStates | ShadowRestingState;
 
+/**
+ * Changes the behavior of where to set the starting position of the element on mount
+ *  - 'first' = select the first removed shadow in the array (if one exists)
+ *  - 'relative' = select the compliment index (order removed is flipped) from recently removed shadows
+ *  - 'warmest' = select the latest warm shadow ( read @warn )
+ *
+ * @warn Warm shadow options, like 'warmest', are best for dynamic content added to an already running page
+ *       I.e., doesn't work on a cold page load's initial render since none of the shadows are "warm" yet
+ */
+export type ShadowOriginOptions = "first" | "relative" | "warmest";
+
 export type ShadowRect = {
   shadowState: Accessor<ShadowStates>;
   setShadowState: Setter<ShadowStates>;
@@ -52,42 +52,6 @@ export type ShadowRect = {
   warmupDelayMs: number;
   fixed: boolean;
 };
-
-/**
- *
- * @param shadowRect
- * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
- */
-export function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0): { position: Vec2; dimensions: Vec2 } {
-  return scaleAndCenterVec(shadowRect.dimensions, shadowRect.position, scale);
-}
-
-/**
- *
- * @param shadowRect
- * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
- */
-export function scaleAndCenterVec(
-  dimensions: Accessor<Vec2>,
-  position: Accessor<Vec2>,
-  scale: number = 1.0,
-): { position: Vec2; dimensions: Vec2 } {
-  const scaledWidth = dimensions().x * scale;
-  const scaledHeight = dimensions().y * scale;
-  const centeredLeft = position().x + (dimensions().x - scaledWidth) / 2;
-  const centeredTop = position().y + (dimensions().y - scaledHeight) / 2; // TODO [ ]: account for scrollY?
-
-  return {
-    position: { x: centeredLeft, y: centeredTop },
-    dimensions: { x: scaledWidth, y: scaledHeight },
-  };
-}
-
-export interface UmbraState {
-  shadows: Array<ShadowRect>;
-  // Keep track of recently removed shadows so we can use their position and FLIP method transition
-  removedShadows: Array<ShadowRect>;
-}
 
 // NOTE(default-value):
 //   This ZERO_RECT is used to control behavior on cold starts of Shadow
@@ -105,3 +69,9 @@ export const ZERO_RECT: ShadowRect = {
   // @ts-expect-error This is a special case constant where the value of origin never matters (any field really)
   origin: null,
 };
+
+export interface UmbraState {
+  shadows: Array<ShadowRect>;
+  // Keep track of recently removed shadows so we can use their position and FLIP method transition
+  removedShadows: Array<ShadowRect>;
+}
