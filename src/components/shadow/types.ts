@@ -1,4 +1,5 @@
 import { Accessor, Setter } from "solid-js";
+import { Vec2 } from "~/types/vector2";
 
 /**
  * Changes the behavior of where to set the starting position of the element on mount
@@ -36,23 +37,17 @@ export type ShadowRestingState = "warm";
  */
 export type ShadowStates = ShadowStartingStates | ShadowInProgressStates | ShadowRestingState;
 
-// TODO refactor vec2
-export type ShadowVec2 = {
-  x: number;
-  y: number;
-};
-
 export type ShadowRect = {
   shadowState: Accessor<ShadowStates>;
   setShadowState: Setter<ShadowStates>;
-  position: Accessor<ShadowVec2>;
-  setPosition: Setter<ShadowVec2>;
-  dimensions: Accessor<ShadowVec2>;
-  setDimensions: Setter<ShadowVec2>;
+  position: Accessor<Vec2>;
+  setPosition: Setter<Vec2>;
+  dimensions: Accessor<Vec2>;
+  setDimensions: Setter<Vec2>;
   shadowedEl: HTMLDivElement;
   origin: {
-    position: ShadowVec2;
-    dimensions: ShadowVec2;
+    position: Vec2;
+    dimensions: Vec2;
   };
   warmupDelayMs: number;
   fixed: boolean;
@@ -63,10 +58,7 @@ export type ShadowRect = {
  * @param shadowRect
  * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
  */
-export function scaleAndCenterRect(
-  shadowRect: ShadowRect,
-  scale: number = 1.0,
-): { position: ShadowVec2; dimensions: ShadowVec2 } {
+export function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0): { position: Vec2; dimensions: Vec2 } {
   return scaleAndCenterVec(shadowRect.dimensions, shadowRect.position, scale);
 }
 
@@ -76,10 +68,10 @@ export function scaleAndCenterRect(
  * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
  */
 export function scaleAndCenterVec(
-  dimensions: Accessor<ShadowVec2>,
-  position: Accessor<ShadowVec2>,
+  dimensions: Accessor<Vec2>,
+  position: Accessor<Vec2>,
   scale: number = 1.0,
-): { position: ShadowVec2; dimensions: ShadowVec2 } {
+): { position: Vec2; dimensions: Vec2 } {
   const scaledWidth = dimensions().x * scale;
   const scaledHeight = dimensions().y * scale;
   const centeredLeft = position().x + (dimensions().x - scaledWidth) / 2;
