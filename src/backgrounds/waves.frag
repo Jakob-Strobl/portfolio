@@ -1,6 +1,7 @@
 precision mediump float;
         
 const vec3 cameraPos = vec3(0.0, 1.0, 10.0);
+// https://keiwando.com/color-picker/
 const vec3 fogColor = vec3(0.0745,0.05098,0.12549);
 uniform float sineTime; 
 

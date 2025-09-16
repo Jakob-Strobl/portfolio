@@ -32,9 +32,6 @@ export default function TimelineLayout(props: TimelineLayout) {
     elementsToObserve,
     (entries) => {
       const intersecting = entries.filter((entry) => entry.isIntersecting);
-      console.log(
-        entries.flatMap((entry) => [entry.intersectionRatio, entry.target.getAttribute(timelineTitleDatasetKey)]),
-      );
       if (intersecting.length === 0) {
         return;
       }
@@ -67,6 +64,11 @@ export default function TimelineLayout(props: TimelineLayout) {
 
   return (
     <>
+      {/* Fade Out at Top */}
+      <div
+        class="fixed top-0 left-0 w-full h-60 z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent"
+        style={{ opacity: isReady() ? 1 : 0 }}
+      ></div>
       {/* LEFT Gutter */}
       <div class="w-1/5 h-full flex flex-col items-end justify-start px-2 mt-120">
         <div class="fixed max-w-3/4 w-fit">
@@ -75,21 +77,19 @@ export default function TimelineLayout(props: TimelineLayout) {
               {props.navBack}
             </div>
           </Shadow>
-          <Show when={title() !== ""}>
-            <p
-              class="text-white text-4xl/8 cursor-vertical-text w-[1ch] transition-opacity delay-750 duration-2000 wrap-anywhere text-center mr-2 self-end float-right ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
-              style={{ opacity: isReady() ? 0.7 : 0 }}
-            >
-              {title()}
-            </p>
-          </Show>
+          <p
+            class="text-white text-4xl/8 cursor-vertical-text w-[1ch] transition-opacity delay-1000 duration-1500 wrap-anywhere text-center mr-2 self-end float-right ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
+            style={{ opacity: isReady() ? 0.7 : 0 }}
+          >
+            {title()}
+          </p>
         </div>
       </div>
       {/* CENTER Content */}
       <div class="w-3/5 h-full mt-120">
-        <div ref={contentContainerRef} class="flex flex-col gap-8 mb-4 items-stretch">
+        <div ref={contentContainerRef} class="flex flex-col gap-8 mb-4 ">
           {props.content}
-          <div class="max-h-[40vh] min-h-[16vh] h-dvh"></div>
+          <div class="max-h-[48vh] min-h-[16vh] h-dvh"></div>
         </div>
       </div>
       {/* RIGHT Gutter */}
