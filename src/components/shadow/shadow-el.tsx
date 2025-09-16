@@ -23,7 +23,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
 
-  createRenderEffect((prev) => {
+  createRenderEffect(() => {
     // IDK why this get client rect call needs to be here.
     //   It helps with starting transitions the transitions consistent after multiple navigations
     //   Even though the result is not used outside of this effect...
