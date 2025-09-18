@@ -7,6 +7,7 @@ import { DataAttributeKey } from "../types/dom";
 export type TimelineLayout = LinearLayoutProps & {
   defaultTitle?: string;
 };
+
 export const timelineTitleDatasetKey: DataAttributeKey = "data-timeline-title";
 // TODO give this and linear a simimlar base layout if pattern sticks
 export default function TimelineLayout(props: TimelineLayout) {
