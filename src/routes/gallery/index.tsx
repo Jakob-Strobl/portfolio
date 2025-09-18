@@ -12,11 +12,11 @@ const exampleResource: PhotoResource = {
   uri: "https://od73or139i.ufs.sh/f/fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1",
 };
 export default function Gallery() {
-  const navBack = (
-    <a href="/gallery" class="flex gap-1 items-center">
-      <ArrowBigLeft size={20} /> Back
-    </a>
-  );
+  // const navBack = (
+  //   <a href="/gallery" class="flex gap-1 items-center">
+  //     <ArrowBigLeft size={20} /> Back
+  //   </a>
+  // );
   return (
     // <FullPhotoLayout resource={exampleResource} navBack={navBack}></FullPhotoLayout>
     <TimelineLayout
