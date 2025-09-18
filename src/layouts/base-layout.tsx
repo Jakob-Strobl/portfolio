@@ -1,7 +1,7 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { Suspense } from "solid-js";
-import IsomorphicBackground from "~/components/background";
-import Umbra from "~/components/shadow/umbra";
+import IsomorphicBackground from "../components/background";
+import Umbra from "../components/shadow/umbra";
 
 export default function BaseLayout(props: RouteSectionProps) {
   return (

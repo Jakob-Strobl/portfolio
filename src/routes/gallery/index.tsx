@@ -4,9 +4,16 @@ import PhotoViewOfModernHimeji from "./2020/view-of-modern-himeji";
 import PhotoTemp from "./2025/placeholder";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
+import FullPhotoLayout from "../../layouts/full-photo-layout";
+import { PhotoResource } from "../../types/photo-resource";
 
+const exampleResource: PhotoResource = {
+  name: "Sunset Glimmer",
+  uri: "https://od73or139i.ufs.sh/f/fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1",
+};
 export default function Gallery() {
   return (
+    // <FullPhotoLayout resource={exampleResource}></FullPhotoLayout>
     <TimelineLayout
       defaultTitle="2025"
       navBack={

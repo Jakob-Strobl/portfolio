@@ -43,6 +43,8 @@ export default function TimelineLayout(props: TimelineLayout) {
 
       let bestEntry: IntersectionObserverEntry | null = null;
       let highestRatio = -1;
+      // TODO  [ ]: We can breakup ties with their current positions via the client rects
+      //            and calculate distance to a special midpoint. It works good enough for now to skip that step
       for (const entry of allIntersections.values()) {
         if (entry.intersectionRatio > highestRatio) {
           highestRatio = entry.intersectionRatio;
@@ -73,7 +75,7 @@ export default function TimelineLayout(props: TimelineLayout) {
       {/* LEFT Gutter */}
       <div class="w-1/5 h-full flex flex-col items-end justify-start px-2 mt-120">
         <div class="fixed max-w-3/4 w-fit">
-          <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed dataset={{ "data-year": "2025" }}>
+          <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed>
             <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
               {props.navBack}
             </div>

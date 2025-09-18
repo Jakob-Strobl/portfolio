@@ -81,7 +81,7 @@ export default function Shadow(props: ShadowProps) {
       {...props.dataset}
     >
       <div
-        class="text-white p-5 rounded-lg 
+        class="text-white p-5 rounded-lg
           transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)]
         "
         style={{
