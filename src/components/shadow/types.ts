@@ -32,11 +32,13 @@ export type ShadowStates = ShadowStartingStates | ShadowInProgressStates | Shado
  *  - 'first' = select the first removed shadow in the array (if one exists)
  *  - 'relative' = select the compliment index (order removed is flipped) from recently removed shadows
  *  - 'warmest' = select the latest warm shadow ( read @warn )
+ *  - 'self' = select the current element to be shadowed as origin
+ *             NOTE: This is also the default transition when there's no removed shadow to use as origin
  *
  * @warn Warm shadow options, like 'warmest', are best for dynamic content added to an already running page
  *       I.e., doesn't work on a cold page load's initial render since none of the shadows are "warm" yet
  */
-export type ShadowOriginOptions = "first" | "relative" | "warmest";
+export type ShadowOriginOptions = "first" | "relative" | "warmest" | "self";
 
 export type ShadowRect = {
   shadowState: Accessor<ShadowStates>;

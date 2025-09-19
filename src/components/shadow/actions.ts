@@ -64,6 +64,9 @@ export const addShadow = (
       relativeStartingShadow = warmShadows[warmShadows.length - 1];
       scale = 0.1;
       break;
+    case "self":
+      // Leave as undefined so we scale up from center of element to be shadowed
+      break;
     default:
       console.error("unexpected origin option: ", origin);
   }
