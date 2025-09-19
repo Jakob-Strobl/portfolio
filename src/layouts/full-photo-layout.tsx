@@ -1,9 +1,10 @@
-import { JSX } from "solid-js";
+import { For, JSX } from "solid-js";
 import GalleryPhoto from "../components/gallery-photo";
 import Shadow from "../components/shadow/shadow";
 import { PhotoResource } from "../types/photo-resource";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import ArrowBigRight from "lucide-solid/icons/arrow-big-right";
+import { getUriFromKey } from "../actions/photo-actions";
 // import Home from "lucide-solid/icons/home"
 
 export interface FullPhotoLayoutProps {
@@ -42,7 +43,19 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           <div class="h-24 w-full">
             <Shadow warmupDelayMs={250} origin="self">
               {/* Shadow padding is 5 top and bottom, so calc(h-24 - 5 (spacing) * 2) = h-20 - 10 = h-14 */}
-              <div class="h-14"></div>
+              <div class="h-14 flex gap-4">
+                <For each={props.photoCollection}>
+                  {(photo) => {
+                    const isFullPhoto = photo.uri === props.resource.uri;
+                    return (
+                      <div class="min-w-9 max-w-30 grid grid-rows-[1fr, 8px] flex flex-col gap-2 items-center justify-center justify-items-center self-center">
+                        <img class="rounded-sm max-h-14" src={getUriFromKey(photo.uri)}></img>
+                        {isFullPhoto ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
+                      </div>
+                    );
+                  }}
+                </For>
+              </div>
             </Shadow>
           </div>
           <div class="">

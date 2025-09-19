@@ -3,10 +3,12 @@ import { getUriFromKey } from "../actions/photo-actions";
 export interface GalleryPhotoProps {
   uriKey: string;
   thumbnailView?: boolean;
+  collectionDirName?: string;
 }
 
 export default function GalleryPhoto(props: GalleryPhotoProps) {
   const isThumbnailView = props.thumbnailView ?? true;
+  const fullScreenLink = `/gallery/collections/${props.collectionDirName ? props.collectionDirName + "/" : ""}${props.uriKey}`;
   return (
     <div
       class={
@@ -16,12 +18,19 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
             "h-[calc(100vh---spacing(48))]"
       }
     >
-      <a href={`/gallery/photo/${props.uriKey}`}>
+      {isThumbnailView ? (
+        <a href={fullScreenLink}>
+          <img
+            class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
+            src={getUriFromKey(props.uriKey)}
+          ></img>
+        </a>
+      ) : (
         <img
           class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
           src={getUriFromKey(props.uriKey)}
         ></img>
-      </a>
+      )}
     </div>
   );
 }

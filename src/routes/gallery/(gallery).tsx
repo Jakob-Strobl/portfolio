@@ -1,11 +1,10 @@
 import Shadow from "../../components/shadow/shadow";
-import PhotoSunsetGlimmer from "./2020/sunset-glimmer";
-import PhotoViewOfModernHimeji from "./2020/view-of-modern-himeji";
-import PhotoTemp from "./2025/placeholder";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
-import FullPhotoLayout from "../../layouts/full-photo-layout";
 import { PhotoResource } from "../../types/photo-resource";
+import GalleryPhoto from "~/components/gallery-photo";
+import { PhotoCollection as KoreaPhotoCollection } from "./collections/korea-pacific-coast/+photos";
+import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+photos";
 
 const exampleResource: PhotoResource = {
   name: "Sunset Glimmer",
@@ -35,17 +34,7 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2025",
             }}
           >
-            <div class="flex flex-col gap-4">
-              <h1 class="text-4xl text-white">Japan - Hokkaido</h1>
-              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-              </div>
-            </div>
+            {HimejiPhotoCollection}
           </Shadow>
           <Shadow
             warmupDelayMs={250}
@@ -54,15 +43,9 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2024",
             }}
           >
-            <div class="flex flex-col gap-4">
-              <h1 class="text-4xl text-white">Korea - East Coast on the Pacific</h1>
-              <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-                <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
-                <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
-              </div>
-            </div>
+            {KoreaPhotoCollection}
           </Shadow>
-          <Shadow
+          {/* <Shadow
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -72,16 +55,10 @@ export default function Gallery() {
             <div class="flex flex-col gap-4">
               <h1 class="text-4xl text-white">Japan - Osaka/Himeji</h1>
               <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
               </div>
             </div>
-          </Shadow>
-          <Shadow
+          </Shadow> */}
+          {/* <Shadow
             warmupDelayMs={500}
             contentFadeInDelayMs={500}
             dataset={{
@@ -93,21 +70,9 @@ export default function Gallery() {
               <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                 <PhotoSunsetGlimmer thumbnailView={true}></PhotoSunsetGlimmer>
                 <PhotoViewOfModernHimeji></PhotoViewOfModernHimeji>
-                {/* <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp>
-                <PhotoTemp thumbnailView={true}></PhotoTemp> */}
               </div>
             </div>
-          </Shadow>
+          </Shadow> */}
         </>
       }
     ></TimelineLayout>

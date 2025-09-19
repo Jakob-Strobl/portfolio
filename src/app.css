@@ -45,6 +45,8 @@
   --text-shadow-md: #ca9cf2 0 0 0.45rem;
   --text-shadow-lg: #ca9cf2 0 0 0.7rem;
 
+  --drop-shadow-outline: 0 0 0.45rem;
+
   /* Custom opacity */
   --opacity-88: 0.88;
 
