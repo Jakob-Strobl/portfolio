@@ -5,9 +5,6 @@ export interface GalleryPhotoProps {
 }
 
 export default function PhotoSunsetGlimmer(props: GalleryPhotoProps) {
-  const uri =
-    "https://od73or139i.ufs.sh/f/fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1";
-  return (
-    <GalleryPhoto uri={uri} thumbnailView={props.thumbnailView}></GalleryPhoto>
-  );
+  const uri = "fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1";
+  return <GalleryPhoto uriKey={uri} thumbnailView={props.thumbnailView}></GalleryPhoto>;
 }

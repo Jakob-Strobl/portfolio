@@ -5,9 +5,6 @@ export interface GalleryPhotoProps {
 }
 
 export default function PhotoViewOfModernHimeji(props: GalleryPhotoProps) {
-  const uri =
-    "https://od73or139i.ufs.sh/f/fASTqmqQqXI16uEgpeEl8OsCSwmiuexDdh2pIbKR5cg4UvH1";
-  return (
-    <GalleryPhoto uri={uri} thumbnailView={props.thumbnailView}></GalleryPhoto>
-  );
+  const uri = "fASTqmqQqXI16uEgpeEl8OsCSwmiuexDdh2pIbKR5cg4UvH1";
+  return <GalleryPhoto uriKey={uri} thumbnailView={props.thumbnailView}></GalleryPhoto>;
 }
