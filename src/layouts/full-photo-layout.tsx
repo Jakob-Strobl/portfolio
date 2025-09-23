@@ -24,6 +24,25 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
   const location = useLocation();
   const relativeBasePath = location.pathname.slice(0, location.pathname.lastIndexOf("/"));
   const [fullPhotoUri, setFullPhotoUri] = createSignal<string>(props.resource.uri);
+  const [fullPhotoIdx, setFullPhotoIdx] = createSignal<number>(
+    props.photoCollection?.findIndex((photo) => photo.uri === fullPhotoUri()) ?? 0,
+  );
+
+  const getNextPhoto = () => {
+    if (!props.photoCollection || props.photoCollection.length <= 1) {
+      return props.resource;
+    }
+
+    const currentIdx = fullPhotoIdx();
+    const nextIdx = (currentIdx + 1) % props.photoCollection.length;
+    return props.photoCollection[nextIdx];
+  };
+
+  const navigateToPhoto = (photoUri: string) => {
+    setFullPhotoUri(photoUri);
+    setFullPhotoIdx(props.photoCollection?.findIndex((p) => p.uri === photoUri) ?? 0);
+  };
+
   return (
     <>
       <div class="flex flex-col justify-between gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5">
@@ -53,7 +72,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
                     const isFullPhoto = () => photo.uri === fullPhotoUri();
                     return (
                       <div class="min-w-9 max-w-30 grid grid-rows-[1fr, 8px] flex flex-col gap-2 items-center justify-center justify-items-center self-center">
-                        <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => setFullPhotoUri(photo.uri)}>
+                        <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => navigateToPhoto(photo.uri)}>
                           <img class="rounded-sm max-h-14" src={getUriFromKey(photo.uri)}></img>
                         </A>
                         {isFullPhoto() ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
@@ -67,9 +86,12 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           <div class="">
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
-                <a href="/">
+                <A
+                  href={`${relativeBasePath}/${getNextPhoto().uri}`}
+                  onClick={() => navigateToPhoto(getNextPhoto().uri)}
+                >
                   Next <ArrowBigRight size={20} />
-                </a>
+                </A>
               </div>
             </Shadow>
           </div>
