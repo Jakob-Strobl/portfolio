@@ -1,4 +1,5 @@
-import { For, JSX } from "solid-js";
+import { createSignal, For, JSX } from "solid-js";
+import { A, useLocation } from "@solidjs/router";
 import GalleryPhoto from "../components/gallery-photo";
 import Shadow from "../components/shadow/shadow";
 import { PhotoResource } from "../types/photo-resource";
@@ -14,12 +15,15 @@ export interface FullPhotoLayoutProps {
 }
 
 const navBackFallback = () => (
-  <a href="/">
+  <A href="/">
     <ArrowBigLeft size={20} /> Home
-  </a>
+  </A>
 );
 
 export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
+  const location = useLocation();
+  const relativeBasePath = location.pathname.slice(0, location.pathname.lastIndexOf("/"));
+  const [fullPhotoUri, setFullPhotoUri] = createSignal<string>(props.resource.uri);
   return (
     <>
       <div class="flex flex-col justify-between gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5">
@@ -28,7 +32,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
         {/* Top Row - Full Photo */}
         <div class="h-[calc(100vh---spacing(38))]">
           <Shadow warmupDelayMs={0}>
-            <GalleryPhoto uriKey={props.resource.uri} thumbnailView={false}></GalleryPhoto>
+            <GalleryPhoto uriKey={fullPhotoUri()} thumbnailView={false}></GalleryPhoto>
           </Shadow>
         </div>
         {/* Bottom Row  - Collection Navigation */}
@@ -46,11 +50,13 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
               <div class="h-14 flex gap-4">
                 <For each={props.photoCollection}>
                   {(photo) => {
-                    const isFullPhoto = photo.uri === props.resource.uri;
+                    const isFullPhoto = () => photo.uri === fullPhotoUri();
                     return (
                       <div class="min-w-9 max-w-30 grid grid-rows-[1fr, 8px] flex flex-col gap-2 items-center justify-center justify-items-center self-center">
-                        <img class="rounded-sm max-h-14" src={getUriFromKey(photo.uri)}></img>
-                        {isFullPhoto ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
+                        <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => setFullPhotoUri(photo.uri)}>
+                          <img class="rounded-sm max-h-14" src={getUriFromKey(photo.uri)}></img>
+                        </A>
+                        {isFullPhoto() ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
                       </div>
                     );
                   }}
