@@ -45,7 +45,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
 
   return (
     <>
-      <div class="flex flex-col justify-between gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5">
+      <div class="flex flex-col justify-around gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5">
         {/* spacing: 24 (bottom nav) + (5 (shadow padding) * 2 (py)) + (5 (layout padding) * 2) + 4 (Flex GAP)*/}
         {/* TODO(Investigate): Some interesting pre-defined width/heights via aspect-ratio */}
         {/* Top Row - Full Photo */}
@@ -55,25 +55,24 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           </Shadow>
         </div>
         {/* Bottom Row  - Collection Navigation */}
-        <div class="flex gap-2 xl:h-24 lg:h-20 md:h-16 px-16 items-center">
-          <div class="">
+        <div class="grid grid-rows-1 grid-cols-[auto_1fr_auto] gap-2 lg:px-16 md:px-12 sm:px-8 px-6 items-center">
+          <div class="w-fit">
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
                 {props.navBack ?? navBackFallback()}
               </div>
             </Shadow>
           </div>
-          <div class="h-24 w-full">
-            <Shadow warmupDelayMs={250} origin="self">
-              {/* Shadow padding is 5 top and bottom, so calc(h-24 - 5 (spacing) * 2) = h-20 - 10 = h-14 */}
-              <div class="h-14 flex gap-4">
+          <div class="overflow-clip">
+            <Shadow warmupDelayMs={250} origin="self" paddingOverride="p-2">
+              <div class="h-20 flex gap-4 overflow-x-scroll">
                 <For each={props.photoCollection}>
                   {(photo) => {
                     const isFullPhoto = () => photo.uri === fullPhotoUri();
                     return (
-                      <div class="min-w-9 max-w-30 grid grid-rows-[1fr, 8px] flex flex-col gap-2 items-center justify-center justify-items-center self-center">
+                      <div class="min-w-12 max-w-24 grid grid-rows-[1fr, 8px] gap-1.5 items-center justify-between  justify-items-center self-center">
                         <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => navigateToPhoto(photo.uri)}>
-                          <img class="rounded-sm max-h-14" src={getUriFromKey(photo.uri)}></img>
+                          <img class="rounded-sm max-h-14 min-h-10" src={getUriFromKey(photo.uri)}></img>
                         </A>
                         {isFullPhoto() ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
                       </div>
@@ -83,7 +82,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
               </div>
             </Shadow>
           </div>
-          <div class="">
+          <div class="w-fit">
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
                 <A
