@@ -55,6 +55,37 @@
 }
 
 @layer base {
+  /* Scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2; /* Width and height for vertical/horizontal scrollbars */
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Semi-transparent dark gray, rounded, with transparent "padding" */
+    @apply bg-night-100/24 rounded-xl border-2 border-transparent;
+    /* Using background-clip to make the border part of the transparent background */
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-night-100/40;
+  }
+
+  /* Scrollbar for Firefox */
+  /* Apply to html or specific containers */
+  html {
+    scrollbar-width: thin; /* 'auto' or 'none' */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* thumb-color track-color */
+  }
+
+  /*
+   * For specific scrollable containers, you might want to create a
+   * utility class or component class. See Approach 2.
+   */
   html,
   body {
     font-family: Raleway, sans-serif;
