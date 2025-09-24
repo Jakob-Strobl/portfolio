@@ -4,6 +4,7 @@ import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
 import { isTest } from "../src/actions/test-actions";
+import { Route, Router } from "@solidjs/router";
 
 // @vitest-environment happy-dom
 
@@ -13,7 +14,11 @@ test("smoke test", async () => {
 });
 
 test("app smoke test", async () => {
-  const page = render(() => <Home></Home>);
+  const page = render(() => (
+    <Router>
+      <Route path="/" component={Home} />
+    </Router>
+  ));
   page.getByText("Jakob Strobl");
 
   const links = page.getAllByRole("link");
@@ -25,11 +30,13 @@ test("app smoke test", async () => {
 });
 
 test("version number from package.json renders in page", async () => {
-  const page = render(() => <Home></Home>);
+  const page = render(() => (
+    <Router>
+      <Route path="/" component={Home} />
+    </Router>
+  ));
 
-  const versionNumber = page.getByText(
-    (_, element) => element?.textContent == `v${version}`,
-  );
+  const versionNumber = page.getByText((_, element) => element?.textContent == `v${version}`);
   // not visible due to inline style
   expect(versionNumber).toBeDefined();
   expect(versionNumber).not.toBeVisible();
