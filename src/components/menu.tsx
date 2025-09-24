@@ -1,5 +1,6 @@
 import { onMount, createSignal } from "solid-js";
 import Shadow from "./shadow/shadow";
+import { A } from "@solidjs/router";
 
 export default function Menu() {
   const [isReady, setReady] = createSignal(false);
@@ -21,49 +22,25 @@ export default function Menu() {
               opacity: !isReady() ? "0" : "100",
             }}
           >
-            <a
-              href="/experience"
-              class="hover:text-shadow-lg duration-300 text-3xl transition-text"
-            >
+            <A href="/experience" class="hover:text-shadow-lg duration-300 text-3xl transition-text">
               Experience
-            </a>
+            </A>
           </li>
-          <li
-            class="fade-in delay-150 mb-2"
-            style={{ opacity: !isReady() ? "0" : "100" }}
-          >
-            <a
-              href="/contact"
-              class="hover:text-shadow-lg duration-300 text-3xl transition-text"
-            >
+          <li class="fade-in delay-150 mb-2" style={{ opacity: !isReady() ? "0" : "100" }}>
+            <A href="/contact" class="hover:text-shadow-lg duration-300 text-3xl transition-text">
               Contact
-            </a>
+            </A>
           </li>
-          <hr
-            class="fade-in delay-300 border-night-100/90 mb-1"
-            style={{ opacity: !isReady() ? "0" : "100" }}
-          ></hr>
-          <li
-            class="fade-in delay-400"
-            style={{ opacity: !isReady() ? "0" : "100" }}
-          >
-            <a
-              href="/gallery"
-              class="hover:text-shadow-lg duration-300 transition-text text-xl"
-            >
+          <hr class="fade-in delay-300 border-night-100/90 mb-1" style={{ opacity: !isReady() ? "0" : "100" }}></hr>
+          <li class="fade-in delay-400" style={{ opacity: !isReady() ? "0" : "100" }}>
+            <A href="/gallery" class="hover:text-shadow-lg duration-300 transition-text text-xl">
               Photography
-            </a>
+            </A>
           </li>
-          <li
-            class="fade-in delay-500"
-            style={{ opacity: !isReady() ? "0" : "100" }}
-          >
-            <a
-              href="/gallery"
-              class="hover:text-shadow-lg duration-300 transition-text text-xl"
-            >
+          <li class="fade-in delay-500" style={{ opacity: !isReady() ? "0" : "100" }}>
+            <A href="/" class="hover:text-shadow-lg duration-300 transition-text text-xl">
               TBD
-            </a>
+            </A>
           </li>
         </ul>
       </nav>

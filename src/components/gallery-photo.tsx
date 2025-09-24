@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import { getUriFromKey } from "../actions/photo-actions";
 
 export interface GalleryPhotoProps {
@@ -19,12 +20,12 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
       }
     >
       {isThumbnailView ? (
-        <a href={fullScreenLink}>
+        <A href={fullScreenLink}>
           <img
             class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
             src={getUriFromKey(props.uriKey)}
           ></img>
-        </a>
+        </A>
       ) : (
         <img
           class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
