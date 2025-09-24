@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 import { copyToClipboard } from "../actions/clipboard-actions";
 import NotifyBubble from "../components/notify-bubble";
 import Shadow from "../components/shadow/shadow";
+import { A } from "@solidjs/router";
 
 export default function Contact() {
   const handle = "hey";
@@ -25,18 +26,9 @@ export default function Contact() {
           </div>
           <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
             <div id="github">
-              <a
-                class="group flex flex-col items-center gap-8"
-                href="https://github.com/Jakob-Strobl"
-                target="_blank"
-              >
-                <img
-                  class="github-normalized-size"
-                  src="./images/Github-octocat.png"
-                />
-                <p class="group-hover:text-shadow-lg duration-300 transition-text">
-                  GitHub
-                </p>
+              <a class="group flex flex-col items-center gap-8" href="https://github.com/Jakob-Strobl" target="_blank">
+                <img class="github-normalized-size" src="./images/Github-octocat.png" />
+                <p class="group-hover:text-shadow-lg duration-300 transition-text">GitHub</p>
               </a>
             </div>
             <div id="linkedin">
@@ -45,13 +37,8 @@ export default function Contact() {
                 href="https://www.linkedin.com/in/jakob-strobl"
                 target="_blank"
               >
-                <img
-                  class="linkedin-normalized-size select-none"
-                  src="./images/LinkedIn.png"
-                />
-                <p class="group-hover:text-shadow-lg duration-300 transition-text">
-                  LinkedIn
-                </p>
+                <img class="linkedin-normalized-size select-none" src="./images/LinkedIn.png" />
+                <p class="group-hover:text-shadow-lg duration-300 transition-text">LinkedIn</p>
               </a>
             </div>
           </div>
@@ -73,10 +60,7 @@ export default function Contact() {
                 {handle}
                 <span class="text-white p-2"> at </span>jstrobl.com
                 {showClipboardBubble() != undefined && (
-                  <NotifyBubble
-                    offset={{ x: 0, y: -8 }}
-                    originEvent={showClipboardBubble()}
-                  >
+                  <NotifyBubble offset={{ x: 0, y: -8 }} originEvent={showClipboardBubble()}>
                     <p>Copied to clipboard!</p>
                   </NotifyBubble>
                 )}
@@ -84,12 +68,9 @@ export default function Contact() {
             </span>
           </p>
         </div>
-        <a
-          href="/"
-          class="inline-block mt-4 hover:text-shadow-lg duration-300 transition-text "
-        >
+        <A href="/" class="inline-block mt-4 hover:text-shadow-lg duration-300 transition-text ">
           back
-        </a>
+        </A>
       </Shadow>
     </div>
   );

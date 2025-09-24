@@ -1,4 +1,4 @@
-import { useParams } from "@solidjs/router";
+import { A, useParams } from "@solidjs/router";
 import FullPhotoLayout from "../../../../layouts/full-photo-layout";
 import { PhotoResource } from "../../../../types/photo-resource";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
@@ -14,9 +14,9 @@ export default function FullPhoto() {
     <FullPhotoLayout
       resource={photoResource}
       navBack={
-        <a href="/gallery">
+        <A href="/gallery">
           <ArrowBigLeft size={20} /> Home
-        </a>
+        </A>
       }
       photoCollection={photoCollection}
     ></FullPhotoLayout>

@@ -6,7 +6,7 @@ export const photoCollection: PhotoResource[] = [
   { uri: "fASTqmqQqXI1LB5kaBjc9teUpfVYjgsAJXGlDFdzZQby5nPh", name: "" },
 ];
 
-export const PhotoCollection = (
+export const PhotoCollection = () => (
   <div class="flex flex-col gap-4">
     <h1 class="text-4xl text-white">Korea - Around Gangneung (강릉시)</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">

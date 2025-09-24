@@ -7,21 +7,16 @@ import { PhotoCollection as GangneungPhotoCollection } from "./collections/korea
 import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+photos";
 import { PhotoCollection as JejuPhotoCollection } from "./collections/korea-jeju/+photos";
 import { PhotoCollection as SeoulPhotoCollection } from "./collections/korea-seoul/+photos";
+import { A } from "@solidjs/router";
 export default function Gallery() {
-  // const navBack = (
-  //   <a href="/gallery" class="flex gap-1 items-center">
-  //     <ArrowBigLeft size={20} /> Back
-  //   </a>
-  // );
   return (
-    // <FullPhotoLayout resource={exampleResource} navBack={navBack}></FullPhotoLayout>
     <TimelineLayout
       defaultTitle="2025"
-      navBack={
-        <a href="/">
+      navBack={() => (
+        <A href="/">
           <ArrowBigLeft size={20} /> Home
-        </a>
-      }
+        </A>
+      )}
       content={
         <>
           <Shadow
@@ -31,7 +26,7 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2018-2019",
             }}
           >
-            {SeoulPhotoCollection}
+            {SeoulPhotoCollection()}
           </Shadow>
           <Shadow
             warmupDelayMs={250}
@@ -40,7 +35,7 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2019",
             }}
           >
-            {JejuPhotoCollection}
+            {JejuPhotoCollection()}
           </Shadow>
           <Shadow
             warmupDelayMs={250}
@@ -49,7 +44,7 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2019",
             }}
           >
-            {HimejiPhotoCollection}
+            {HimejiPhotoCollection()}
           </Shadow>
           <Shadow
             warmupDelayMs={250}
@@ -58,7 +53,7 @@ export default function Gallery() {
               [timelineTitleDatasetKey]: "2019",
             }}
           >
-            {GangneungPhotoCollection}
+            {GangneungPhotoCollection()}
           </Shadow>
         </>
       }
