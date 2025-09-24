@@ -16,6 +16,10 @@ export default function TimelineLayout(props: TimelineLayout) {
   const [isReady, setReady] = createSignal(false);
   const allIntersections = new Map<Element, IntersectionObserverEntry>();
   let contentContainerRef: HTMLDivElement | undefined;
+  // These margins and height have relation - need to work together to look good
+  // Gradient Height should at max be half the --spacing as the respective margin top rule
+  const topMargin = "lg:mt-80 md:mt-64 sm:mt-48 mt-32";
+  const gradientHeight = "lg:h-40 md:h-32 sm:h-24 h-16";
 
   // Holds the actual DOM elements we want to observe.
   // This will be populated once the contentContainerRef is available in the DOM. See createEffect below
@@ -63,19 +67,19 @@ export default function TimelineLayout(props: TimelineLayout) {
 
   onMount(() => {
     setTimeout(() => setReady(true), 0);
-    console.log("contentContainer", contentContainerRef);
+    // console.log("contentContainer", contentContainerRef);
   });
 
   return (
     <>
-      {/* Fade Out at Top */}
+      {/* Top Horizontal Margin - gradient fade out content at top (fades around same time as background)*/}
       <div
-        class="fixed top-0 left-0 w-full h-60 z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent"
+        class={`fixed top-0 left-0 w-full ${gradientHeight} z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent`}
         style={{ opacity: isReady() ? 1 : 0 }}
       ></div>
       {/* LEFT Gutter */}
-      <div class="w-1/5 h-full flex flex-col items-end justify-start px-2 mt-120">
-        <div class="fixed max-w-3/4 w-fit">
+      <div class={`md:w-1/5 w-1/8 h-full flex flex-col items-end justify-start px-2 ${topMargin}`}>
+        <div class="fixed md:max-w-3/4 max-w-1/2 w-fit">
           <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed>
             <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
               {props.navBack?.()}
@@ -90,14 +94,14 @@ export default function TimelineLayout(props: TimelineLayout) {
         </div>
       </div>
       {/* CENTER Content */}
-      <div class="w-3/5 h-full mt-120">
+      <div class={`w-3/5 h-full ${topMargin}`}>
         <div ref={contentContainerRef} class="flex flex-col gap-8 mb-4 ">
           {props.content}
           <div class="max-h-[48vh] min-h-[16vh] h-dvh"></div>
         </div>
       </div>
       {/* RIGHT Gutter */}
-      <div class="w-1/5 h-full mt-120">{props.focus}</div>
+      <div class={`md:w-1/5 w-0 h-full ${topMargin}`}>{props.focus}</div>
     </>
   );
 }
