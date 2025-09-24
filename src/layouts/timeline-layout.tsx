@@ -9,6 +9,7 @@ export type TimelineLayout = LinearLayoutProps & {
 };
 
 export const timelineTitleDatasetKey: DataAttributeKey = "data-timeline-title";
+
 // TODO give this and linear a simimlar base layout if pattern sticks
 export default function TimelineLayout(props: TimelineLayout) {
   const [title, setTitle] = createSignal(props.defaultTitle ?? "");
@@ -77,7 +78,7 @@ export default function TimelineLayout(props: TimelineLayout) {
         <div class="fixed max-w-3/4 w-fit">
           <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed>
             <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
-              {props.navBack}
+              {props.navBack?.()}
             </div>
           </Shadow>
           <p

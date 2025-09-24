@@ -1,13 +1,12 @@
 import Shadow from "../../components/shadow/shadow";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
-import { PhotoResource } from "../../types/photo-resource";
-import GalleryPhoto from "~/components/gallery-photo";
 import { PhotoCollection as GangneungPhotoCollection } from "./collections/korea-pacific-coast/+photos";
 import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+photos";
 import { PhotoCollection as JejuPhotoCollection } from "./collections/korea-jeju/+photos";
 import { PhotoCollection as SeoulPhotoCollection } from "./collections/korea-seoul/+photos";
 import { A } from "@solidjs/router";
+
 export default function Gallery() {
   return (
     <TimelineLayout
