@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.6.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.5.0...v0.6.0) (2025-09-25)
+
+
+### Features
+
+* **base:** slim custom scroll bar on website ([867aa36](https://github.com/Jakob-Strobl/portfolio/commit/867aa3666851687d01c51969c7a040bfd97a7cca))
+* **gallery:** click photos in full photo collection nav ([eb7d308](https://github.com/Jakob-Strobl/portfolio/commit/eb7d308e7d19345085ad50f328f5f1a5a5ba6a71))
+* **gallery:** darken thumbnail photos until hover ([5ebb582](https://github.com/Jakob-Strobl/portfolio/commit/5ebb5826090efc2aba104fc671deab586e9aba09))
+* **gallery:** fixed position back-nav layout ([a4d1786](https://github.com/Jakob-Strobl/portfolio/commit/a4d1786b830b197cdc89a1782bb3136a9771178e))
+* **gallery:** full photo route works w/ layout ([d1207ba](https://github.com/Jakob-Strobl/portfolio/commit/d1207ba26e0489322f016e110a3d48ca6244bdb3))
+* **gallery:** full photo view next button navigation ([802d945](https://github.com/Jakob-Strobl/portfolio/commit/802d94592893c096431861701a285f2444106b3b))
+* **gallery:** longer warmup for new examples ([da9ad67](https://github.com/Jakob-Strobl/portfolio/commit/da9ad674507773ee5182093bed3585d5bc05f94c))
+* **gallery:** nice looking fade-in timings ([a79b118](https://github.com/Jakob-Strobl/portfolio/commit/a79b1180f4ab09ee5b8307f29d672c0da3e9731e))
+* **gallery:** photo collection renders on full view ([a2cc7b7](https://github.com/Jakob-Strobl/portfolio/commit/a2cc7b7a6b3648685a07398474394e5c97ea1ced))
+* **gallery:** photo collections! korea, jeju, himeji ([44518c2](https://github.com/Jakob-Strobl/portfolio/commit/44518c2b52a3cb406d7551a63294af3b13b970a5))
+* **gallery:** photo gallery rough draft (wip) ([e31a5ab](https://github.com/Jakob-Strobl/portfolio/commit/e31a5ab0f056f921d243e4b5b63dc9e476491d71))
+* **gallery:** use table grid for photos ([a08ba9a](https://github.com/Jakob-Strobl/portfolio/commit/a08ba9aaff093e420bc53274e05e939754d3fcaa))
+* **layouts:** add linear layout poc on gallery ([96a2fd1](https://github.com/Jakob-Strobl/portfolio/commit/96a2fd179db6918c749d17ce2e3ea2c2cc9512a7))
+* **layouts:** add navback prop to full-photo ([b8b1f2e](https://github.com/Jakob-Strobl/portfolio/commit/b8b1f2ead13cd5d6632a4726d33f748b6cdcafce))
+* **layouts:** fade-out at top of timeline layout ([8a1fab3](https://github.com/Jakob-Strobl/portfolio/commit/8a1fab3aecafd56f6da5e5737d6e2ecea7e19d4b))
+* **layouts:** full photo layout - rough draft ([d73204c](https://github.com/Jakob-Strobl/portfolio/commit/d73204c0d4caf4a8da4c1100d7e2d40bd7f2ed0c))
+* **layouts:** full-photo mobile responsiveness upgrade ([320877d](https://github.com/Jakob-Strobl/portfolio/commit/320877d5cf19da38ff480d858feb0cf5c2812662))
+* **layouts:** timeline layout w/ intersection obs ([d6bd202](https://github.com/Jakob-Strobl/portfolio/commit/d6bd20251b95431ba812d08be03b1c423d4d601f))
+* **menu:** gallery submenu navigation w/ style ([49c2845](https://github.com/Jakob-Strobl/portfolio/commit/49c2845c74c0c9c3759a0cc232201f8f7de98e31))
+* **shadow:** add self origin option ([a97ec1e](https://github.com/Jakob-Strobl/portfolio/commit/a97ec1eeffa730c21ab2f3b16313feebffd041df))
+* **shadow:** add starting origin options + cleanup ([dd19769](https://github.com/Jakob-Strobl/portfolio/commit/dd19769aae196478f35763606b718c7efab0b66b))
+* **shadow:** add warmup delay option ([8fe0f1d](https://github.com/Jakob-Strobl/portfolio/commit/8fe0f1d188c5300d80450f87f5c29619c6cf7589))
+* **shadow:** border transition w/ hover via states ([2042b7b](https://github.com/Jakob-Strobl/portfolio/commit/2042b7bcca22bf3ea3db580bb547d9a1073f5b47))
+* **shadow:** enable position fixed on shadow ([08f2954](https://github.com/Jakob-Strobl/portfolio/commit/08f29545b73510e81664896712066c34237483b9))
+* **shadow:** fade-in content with delay (ms) option ([2aaeea5](https://github.com/Jakob-Strobl/portfolio/commit/2aaeea55b949d4fc62f03a8e027a53dd69270a12))
+* **shadow:** fade-out/in border on window resize ([f6d89f8](https://github.com/Jakob-Strobl/portfolio/commit/f6d89f8d6076301b2e0698997b45b072a9fde8bf))
+
+
+### Bug Fixes
+
+* comment out navBack to fix hydration mismatch on refresh ([72cd47e](https://github.com/Jakob-Strobl/portfolio/commit/72cd47e6f2f479aaa61134a9c1ee6792fee89c76))
+* forgot to call function on navback param ([b0b2ddc](https://github.com/Jakob-Strobl/portfolio/commit/b0b2ddc5dd7b93cb5ce4aec3aa36f7b94e6be348))
+* **gallery:** stop all icons being imported on dev ([ff7adf4](https://github.com/Jakob-Strobl/portfolio/commit/ff7adf4746a6fdadfbd4688d3b5b0bdb2b06e6f1))
+
 ## [0.5.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.4.2...v0.5.0) (2025-09-11)
 
 
