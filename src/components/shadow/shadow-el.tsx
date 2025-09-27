@@ -29,6 +29,11 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   const [scrollYOffset, setScrollYOffset]: Signal<number> = createSignal<number>(0);
   onMount(() => {
     setScrollYOffset(window.scrollY);
+
+    // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
+    window.addEventListener("resize", () => {
+      setScrollYOffset(window.scrollY);
+    });
   });
 
   createRenderEffect(() => {
