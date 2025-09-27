@@ -1,4 +1,4 @@
-import { createMemo, createRenderEffect } from "solid-js";
+import { createMemo, createRenderEffect, createSignal, onMount, Signal } from "solid-js";
 import { ShadowRect } from "./types";
 
 interface ShadowRectProps {
@@ -22,6 +22,14 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   const isShadowCold = (rect: ShadowRect) => rect.shadowState() === "ready" || rect.shadowState() === "fade-in";
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
+
+  // FIX: We get the value on load, so it lines up with the content. Once aligned it will scroll with content.
+  //      So this fixed the orignal `window.scrollY` in the transform. What was happening is everytime the rects state would change,
+  //      it would also recalc the transform. I didn't realize since the expression is getting re-evaluated so is the value of window.scrollY
+  const [scrollYOffset, setScrollYOffset]: Signal<number> = createSignal<number>(0);
+  onMount(() => {
+    setScrollYOffset(window.scrollY);
+  });
 
   createRenderEffect(() => {
     // IDK why this get client rect call needs to be here.
@@ -71,7 +79,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         top: 0,
         left: 0,
         transform: `translate3d(${statefulRect().position.x}px, ${
-          statefulRect().position.y + (rect.fixed ? 0 : window.scrollY)
+          statefulRect().position.y + (rect.fixed ? 0 : scrollYOffset())
         }px, 0)`,
         opacity: isShadowCold(rect) ? 0 : 0.6,
         position: rect.fixed ? "fixed" : undefined,
