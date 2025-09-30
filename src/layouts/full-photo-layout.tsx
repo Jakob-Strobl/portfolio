@@ -72,7 +72,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           </Shadow>
         </div>
         {/* Bottom Row  - Collection Navigation */}
-        <div class="grid grid-rows-1 grid-cols-[auto_1fr_auto] gap-2 lg:px-16 md:px-12 sm:px-8 px-6 items-center">
+        <div class="grid grid-rows-1 grid-cols-[auto_minmax(0,1fr)_auto] min-w-0 gap-2 lg:px-16 md:px-12 sm:px-8 px-6 items-center">
           <div class="w-fit">
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
@@ -82,7 +82,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           </div>
           <div class="overflow-clip">
             <Shadow warmupDelayMs={250} origin="self" paddingOverride="p-2">
-              <div ref={scrollContainerRef} class="max-w-1/2 h-20 flex gap-4 overflow-x-scroll scrollbar-custom pb-4">
+              <div ref={scrollContainerRef} class="h-20 flex gap-4 overflow-x-scroll scrollbar-custom pb-4">
                 <For each={props.photoCollection}>
                   {(photo) => {
                     const isFullPhoto = () => photo.uri === fullPhotoUri();
