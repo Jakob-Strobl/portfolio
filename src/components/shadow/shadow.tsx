@@ -83,7 +83,7 @@ export default function Shadow(props: ShadowProps) {
     >
       <div
         class={`text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-3 lg:p-4 2xl:p-5"} rounded-lg 
-          transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)] h-[inherit]
+          transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)] h-[inherit] text-sm md:text-md xl:text-lg 
         `}
         style={{
           // Start with 0 opacity so we can "fade-in"
