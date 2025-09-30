@@ -87,7 +87,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
 
   return (
     <>
-      <div class="grid grid-rows-[minmax(0,1fr)_auto] grid-cols-1 justify-around gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5 pb-[env(safe-area-inset-bottom)]">
+      <div class="grid grid-rows-[minmax(0,1fr)_auto] grid-cols-1 justify-around gap-3 w-full h-[100svh] p-2 md:p-3 lg:p-4 xl:p-5 pb-[env(safe-area-inset-bottom)]">
         {/* spacing: 24 (bottom nav) + (5 (shadow padding) * 2 (py)) + (5 (layout padding) * 2) + 4 (Flex GAP)*/}
         {/* TODO(Investigate): Some interesting pre-defined width/heights via aspect-ratio */}
         {/* Top Row - Full Photo */}
