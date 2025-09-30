@@ -77,10 +77,6 @@
 
   /* Scrollbar for Firefox */
   /* Apply to html or specific containers */
-  html {
-    scrollbar-width: thin; /* 'auto' or 'none' */
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* thumb-color track-color */
-  }
 
   /*
    * For specific scrollable containers, you might want to create a
