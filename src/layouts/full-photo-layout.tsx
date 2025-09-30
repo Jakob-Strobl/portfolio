@@ -1,5 +1,5 @@
 import { createEffect, createSignal, For, JSX } from "solid-js";
-import { A, useLocation } from "@solidjs/router";
+import { A, useLocation, useParams } from "@solidjs/router";
 import GalleryPhoto from "../components/gallery-photo";
 import Shadow from "../components/shadow/shadow";
 import { PhotoResource } from "../types/photo-resource";
@@ -22,6 +22,7 @@ const navBackFallback = () => (
 
 export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
   const location = useLocation();
+  const params = useParams();
   const relativeBasePath = location.pathname.slice(0, location.pathname.lastIndexOf("/"));
   const [fullPhotoUri, setFullPhotoUri] = createSignal<string>(props.resource.uri);
   const [fullPhotoIdx, setFullPhotoIdx] = createSignal<number>(
@@ -43,6 +44,30 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
     setFullPhotoIdx(props.photoCollection?.findIndex((p) => p.uri === photoUri) ?? 0);
   };
 
+  // Sync signals with URL changes (browser nav)
+  createEffect(() => {
+    const currentPath = location.pathname;
+    const uriFromPath = currentPath.substring(currentPath.lastIndexOf("/") + 1);
+
+    if (uriFromPath && uriFromPath !== fullPhotoUri()) {
+      setFullPhotoUri(uriFromPath);
+      setFullPhotoIdx(props.photoCollection?.findIndex((p) => p.uri === uriFromPath) ?? 0);
+    }
+  });
+
+  // Sync signals with URL changes (browser nav)
+  // When naving back / fwd update the full photo being displayed
+  createEffect(() => {
+    const currentPath = location.pathname;
+    const uriFromPath = currentPath.substring(currentPath.lastIndexOf("/") + 1);
+
+    if (uriFromPath && uriFromPath !== fullPhotoUri()) {
+      setFullPhotoUri(uriFromPath);
+      setFullPhotoIdx(props.photoCollection?.findIndex((p) => p.uri === uriFromPath) ?? 0);
+    }
+  });
+
+  // Scroll Effect
   let scrollContainerRef!: HTMLDivElement;
   createEffect(() => {
     const currentUri = fullPhotoUri(); // Track the signal
@@ -112,10 +137,7 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           <div class="w-fit">
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
-                <A
-                  href={`${relativeBasePath}/${getNextPhoto().uri}`}
-                  onClick={() => navigateToPhoto(getNextPhoto().uri)}
-                >
+                <A href={`${relativeBasePath}/${getNextPhoto().uri}`}>
                   Next <ArrowBigRight size={20} />
                 </A>
               </div>
