@@ -85,7 +85,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const wind_direction = new Vector2().random().normalize();
   const base = new Vector2();
   const waves: Wave[] = [];
-  const window_width = window.innerWidth ?? 1920;
+  const window_width = window.outerWidth ?? 1920;
   const window_height = window.outerHeight ?? 1080;
   const [canvasEl, setCanvasEl] = createSignal<HTMLCanvasElement>();
   const [isReady, setReady] = createSignal(false);
@@ -110,10 +110,10 @@ export default function WavesBackground(props: WavesBackgroundProps) {
       }
 
       function resizeHandler() {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.aspect = window.outerWidth / window.outerHeight;
         camera.updateProjectionMatrix();
 
-        renderer?.setSize(window.innerWidth, window.innerHeight);
+        renderer?.setSize(window.outerWidth, window.outerHeight);
       }
 
       onMount(() => {
