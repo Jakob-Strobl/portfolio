@@ -131,7 +131,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   return (
     <canvas
       ref={setCanvasEl}
-      class="fade-in duration-700"
+      class="fade-in duration-700 min-h-[-webkit-fill-available]"
       classList={{
         "opacity-0": !isReady(),
       }}
