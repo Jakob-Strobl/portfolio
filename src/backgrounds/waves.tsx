@@ -1,13 +1,4 @@
-import {
-  Vector2,
-  WebGLRenderer,
-  Mesh,
-  Scene,
-  PerspectiveCamera,
-  Color,
-  PlaneGeometry,
-  RawShaderMaterial,
-} from "three";
+import { Vector2, WebGLRenderer, Mesh, Scene, PerspectiveCamera, Color, PlaneGeometry, RawShaderMaterial } from "three";
 
 import vertex from "./waves.vert";
 import fragment from "./waves.frag";
@@ -24,10 +15,7 @@ interface Wave {
 
 function createWave(base_pos: Vector2, base_direction: Vector2): Wave {
   const wave = {
-    direction: base_direction.rotateAround(
-      base_pos,
-      Math.PI * Math.random() * 0.25 - Math.PI * 0.125,
-    ),
+    direction: base_direction.rotateAround(base_pos, Math.PI * Math.random() * 0.25 - Math.PI * 0.125),
     amplitude: Math.random(),
     length: 40 * Math.random() + 10,
     speed: 10 * Math.random() + 15,
@@ -62,12 +50,7 @@ function createWaveMesh(waves: Wave[]): Mesh {
   return mesh;
 }
 
-function createScene(
-  waves: Wave[],
-  width: number,
-  height: number,
-  canvas: HTMLCanvasElement,
-) {
+function createScene(waves: Wave[], width: number, height: number, canvas: HTMLCanvasElement) {
   const aspect_ratio = width / height;
   const camera = new PerspectiveCamera(90, aspect_ratio, 0.1, 100);
   camera.position.z = 10;
@@ -103,7 +86,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const base = new Vector2();
   const waves: Wave[] = [];
   const window_width = window.innerWidth ?? 1920;
-  const window_height = window.innerHeight ?? 1080;
+  const window_height = window.outerHeight ?? 1080;
   const [canvasEl, setCanvasEl] = createSignal<HTMLCanvasElement>();
   const [isReady, setReady] = createSignal(false);
 
@@ -113,12 +96,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
   createEffect(() => {
     if (canvasEl() != null && canvasEl()?.getContext != null) {
-      const { renderer, wave_mesh, scene, camera } = createScene(
-        waves,
-        window_width,
-        window_height,
-        canvasEl()!,
-      );
+      const { renderer, wave_mesh, scene, camera } = createScene(waves, window_width, window_height, canvasEl()!);
 
       function renderCanvas(this: WebGLRenderer, timestamp = 0) {
         requestAnimationFrame(renderCanvas.bind(this));
@@ -128,9 +106,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         //@ts-ignore
         wave_mesh.material.uniforms["time"].value = timestamp * 0.005;
         //@ts-ignore
-        wave_mesh.material.uniforms["sineTime"].value = Math.sin(
-          timestamp * 0.00005,
-        );
+        wave_mesh.material.uniforms["sineTime"].value = Math.sin(timestamp * 0.00005);
       }
 
       function resizeHandler() {
