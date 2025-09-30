@@ -1,4 +1,4 @@
-import { createSignal, For, JSX } from "solid-js";
+import { createEffect, createSignal, For, JSX } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import GalleryPhoto from "../components/gallery-photo";
 import Shadow from "../components/shadow/shadow";
@@ -43,6 +43,23 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
     setFullPhotoIdx(props.photoCollection?.findIndex((p) => p.uri === photoUri) ?? 0);
   };
 
+  let scrollContainerRef!: HTMLDivElement;
+  createEffect(() => {
+    const currentUri = fullPhotoUri(); // Track the signal
+    if (scrollContainerRef && currentUri) {
+      // Find the selected photo element by data attribute
+      const selectedElement = scrollContainerRef.querySelector(`[data-photo-uri="${currentUri}"]`);
+
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
+  });
+
   return (
     <>
       <div class="flex flex-col justify-around gap-3 w-full h-full p-2 md:p-3 lg:p-4 xl:p-5">
@@ -65,12 +82,15 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           </div>
           <div class="overflow-clip">
             <Shadow warmupDelayMs={250} origin="self" paddingOverride="p-2">
-              <div class="h-20 flex gap-4 overflow-x-scroll">
+              <div ref={scrollContainerRef} class="max-w-1/2 h-20 flex gap-4 overflow-x-scroll scrollbar-custom pb-4">
                 <For each={props.photoCollection}>
                   {(photo) => {
                     const isFullPhoto = () => photo.uri === fullPhotoUri();
                     return (
-                      <div class="min-w-12 max-w-24 grid grid-rows-[1fr, 8px] gap-1.5 items-center justify-between  justify-items-center self-center">
+                      <div
+                        data-photo-uri={photo.uri}
+                        class="min-w-12 max-w-24 grid grid-rows-[1fr, 8px] gap-1.5 items-center justify-between  justify-items-center self-center"
+                      >
                         <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => navigateToPhoto(photo.uri)}>
                           <img class="rounded-sm max-h-14 min-h-10" src={getUriFromKey(photo.uri)}></img>
                         </A>
