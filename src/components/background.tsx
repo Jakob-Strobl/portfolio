@@ -1,8 +1,6 @@
 import { clientOnly } from "@solidjs/start";
 
-const ClientOnlyBackgroundComponent = clientOnly(
-  () => import("../backgrounds/waves"),
-);
+const ClientOnlyBackgroundComponent = clientOnly(() => import("../backgrounds/waves"));
 
 /**
  * Isomorphic background loads the background component only on the client side
@@ -10,7 +8,7 @@ const ClientOnlyBackgroundComponent = clientOnly(
  */
 export default function IsomorphicBackground() {
   return (
-    <div class="w-screen h-screen fixed -z-10 inset-0">
+    <div class="w-[100lvw] h-[100lvh] fixed -z-10 inset-0">
       {/* Number of waves should always match the number of waves defined in the shader */}
       <ClientOnlyBackgroundComponent num_waves={4} />
     </div>

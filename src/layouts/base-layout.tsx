@@ -7,7 +7,7 @@ export default function BaseLayout(props: RouteSectionProps) {
   return (
     <>
       <IsomorphicBackground></IsomorphicBackground>
-      <main class="flex flex-row h-screen w-screen items-center justify-center">
+      <main class="flex flex-row h-[100lvh] w-[100lvw] items-center justify-center">
         <Umbra></Umbra>
         <Suspense>{props.children}</Suspense>
       </main>
