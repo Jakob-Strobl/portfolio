@@ -76,14 +76,14 @@ export default function Shadow(props: ShadowProps) {
   return (
     <div
       class={`
-        w-full border-[1px] transition-colors duration-300 rounded-lg
+        w-full h-[inherit] border-[1px] transition-colors duration-300 rounded-lg
         ${shadowState() === "warm" ? "border-white/6 hover:border-white/14" : "border-white/0 hover:border-white/0"} 
       `}
       {...props.dataset}
     >
       <div
-        class={`text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-5"} rounded-lg
-          transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)]
+        class={`text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-3 lg:p-4 2xl:p-5"} rounded-lg 
+          transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)] h-[inherit]
         `}
         style={{
           // Start with 0 opacity so we can "fade-in"
