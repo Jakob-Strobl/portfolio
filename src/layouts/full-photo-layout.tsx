@@ -82,19 +82,26 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
           </div>
           <div class="overflow-clip">
             <Shadow warmupDelayMs={250} origin="self" paddingOverride="p-2">
-              <div ref={scrollContainerRef} class="h-20 flex gap-4 overflow-x-scroll scrollbar-custom pb-4">
+              <div ref={scrollContainerRef} class="h-20 flex gap-4 overflow-x-scroll scrollbar-custom items-center">
                 <For each={props.photoCollection}>
                   {(photo) => {
                     const isFullPhoto = () => photo.uri === fullPhotoUri();
                     return (
                       <div
                         data-photo-uri={photo.uri}
-                        class="min-w-12 max-w-24 grid grid-rows-[1fr, 8px] gap-1.5 items-center justify-between  justify-items-center self-center"
+                        class="min-w-12 max-w-24 grid grid-rows-[1fr, 8px] gap-1.5 items-center justify-between justify-items-center"
                       >
-                        <A href={`${relativeBasePath}/${photo.uri}`} onClick={() => navigateToPhoto(photo.uri)}>
-                          <img class="rounded-sm max-h-14 min-h-10" src={getUriFromKey(photo.uri)}></img>
+                        <A
+                          href={`${relativeBasePath}/${photo.uri}`}
+                          class="min-w-[inherit]"
+                          onClick={() => navigateToPhoto(photo.uri)}
+                        >
+                          <img
+                            class="rounded-sm max-h-14 min-h-10 min-w-full object-cover "
+                            src={getUriFromKey(photo.uri)}
+                          ></img>
                         </A>
-                        {isFullPhoto() ? <div class="w-1.5 h-1.5 bg-night-600 rounded-4xl"></div> : <></>}
+                        <div class={`w-1.5 h-1.5 rounded-4xl ${isFullPhoto() ? "bg-night-600" : ""}`}></div>
                       </div>
                     );
                   }}
