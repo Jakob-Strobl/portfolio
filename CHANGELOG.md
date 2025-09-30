@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.0...v0.6.1) (2025-09-30)
+
+
+### Bug Fixes
+
+* **layouts:** full photo collection bar shrinks on win/firefox ([7c29d85](https://github.com/Jakob-Strobl/portfolio/commit/7c29d85972354202b2f185679de46458fbe9458c))
+* **layouts:** full photo nav back/fwd sets curr photo ([6973682](https://github.com/Jakob-Strobl/portfolio/commit/6973682ed84f1780b2405afe99e7a83b1e3d369f))
+* **layouts:** full photo scrollTo on next photo ([247234b](https://github.com/Jakob-Strobl/portfolio/commit/247234bd04716a3d0cb6d9e4c2e730c866e17980))
+* **shadow:** misalignment when mounting on non-zero scrollY ([d777d56](https://github.com/Jakob-Strobl/portfolio/commit/d777d5668f84dafeecfe446d461079d946ea3e05))
+* **shadow:** shadows misaligned when scrolling on load/warmup ([1220876](https://github.com/Jakob-Strobl/portfolio/commit/1220876e452f82c05dee9e131a608abf2cca877b))
+
 ## [0.6.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.5.0...v0.6.0) (2025-09-25)
 
 
