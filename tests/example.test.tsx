@@ -10,7 +10,7 @@ import { Route, Router } from "@solidjs/router";
 
 test("smoke test", async () => {
   const page = render(() => <IsomorphicBackground />);
-  expect(page.container.querySelector("div.w-screen.h-screen")).toBeVisible();
+  expect(page.container.querySelector("div.w-[100lvw].h-[100lvh]")).toBeVisible();
 });
 
 test("app smoke test", async () => {
