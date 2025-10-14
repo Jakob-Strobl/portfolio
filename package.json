@@ -16,7 +16,6 @@
     "test-watch": "vitest",
     "pretty-check": "bunx prettier . --check",
     "prettify": "bunx prettier . --write",
-    "prepare": "husky"
   },
   "dependencies": {
     "@solid-primitives/intersection-observer": "^2.2.2",
