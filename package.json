@@ -43,7 +43,6 @@
     "autoprefixer": "^10.4.21",
     "git-format-staged": "^3.1.1",
     "happy-dom": "^18.0.1",
-    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
