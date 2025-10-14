@@ -5,12 +5,14 @@ export const photoCollection: PhotoResource[] = [
   {
     name: "Jeju - Lighthouse viewpoint.jpg",
     uri: "fASTqmqQqXI1DrvY7fdLsW13jeYEvI0TCPkwi8gGxU6zrV5b",
+    dimensions: { x: 3000, y: 2000 },
   },
   {
     name: "Jeju - Red Rock Ocean.jpg",
     uri: "fASTqmqQqXI1TsR3jSocnENl4meBXTq5CuD6QsRoUYSgViOh",
+    dimensions: { x: 3000, y: 1988 },
   },
-  { uri: "fASTqmqQqXI1VXwz1tbBgydWPSpiM6fRcA1EVqIv7wrQHoYe", name: "" },
+  { uri: "fASTqmqQqXI1VXwz1tbBgydWPSpiM6fRcA1EVqIv7wrQHoYe", name: "Boat off the coast of Jeju", dimensions: { x: 2560, y: 1716 } },
 ];
 
 export const PhotoCollection = () => (
