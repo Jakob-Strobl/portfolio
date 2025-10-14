@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.1...v0.6.2) (2025-10-14)
+
+
+### Bug Fixes
+
+* **gallery:** add aspect ratios to improve slow connections ([5413517](https://github.com/Jakob-Strobl/portfolio/commit/5413517ed6ba27f5a90dd6a359031486bdc825aa))
+* **gallery:** add width / height definitions to thumbnails ([fb5c83d](https://github.com/Jakob-Strobl/portfolio/commit/fb5c83d96d5c1e1421af035c7fb151a181543fcd))
+
 ## [0.6.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.0...v0.6.1) (2025-09-30)
 
 
