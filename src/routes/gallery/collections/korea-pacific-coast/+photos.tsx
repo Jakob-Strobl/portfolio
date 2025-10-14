@@ -11,7 +11,7 @@ export const PhotoCollection = () => (
     <h1 class="text-4xl text-white">Korea - Around Gangneung (강릉시)</h1>
     <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
       {photoCollection.map((photo) => (
-        <GalleryPhoto collectionDirName="korea-pacific-coast" uriKey={photo.uri} />
+        <GalleryPhoto collectionDirName="korea-pacific-coast" uriKey={photo.uri} dimensions={photo.dimensions}/>
       ))}
     </div>
   </div>
