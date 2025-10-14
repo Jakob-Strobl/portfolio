@@ -2,8 +2,8 @@ import GalleryPhoto from "~/components/gallery-photo";
 import { PhotoResource } from "~/types/photo-resource";
 
 export const photoCollection: PhotoResource[] = [
-  { uri: "fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1", name: "" },
-  { uri: "fASTqmqQqXI1LB5kaBjc9teUpfVYjgsAJXGlDFdzZQby5nPh", name: "" },
+  { uri: "fASTqmqQqXI1sZyUvqV9vPXZ6p0bHc3QqiN2RsAoaWTrhzx1", name: "Sunset Glimmer", dimensions: { x: 2560, y: 3841 } },
+  { uri: "fASTqmqQqXI1LB5kaBjc9teUpfVYjgsAJXGlDFdzZQby5nPh", name: "Pacific Shoreline", dimensions: { x: 2560, y: 1701 } },
 ];
 
 export const PhotoCollection = () => (
