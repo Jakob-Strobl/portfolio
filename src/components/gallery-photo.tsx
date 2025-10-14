@@ -1,11 +1,13 @@
 import { A } from "@solidjs/router";
 import { getAspectRatio, getUriFromKey } from "../actions/photo-actions";
+import { Vec2 } from "~/types/vector2";
+import { aspectRatio } from "~/actions/vector-actions";
 
 export interface GalleryPhotoProps {
   uriKey: string;
   thumbnailView?: boolean;
   collectionDirName?: string;
-  aspectRatio?: number;
+  dimensions?: Vec2;
 }
 
 export default function GalleryPhoto(props: GalleryPhotoProps) {
@@ -25,7 +27,9 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
           <img
             class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
             src={getUriFromKey(props.uriKey)}
-            aspect-ratio={props.aspectRatio ?? "3/2"}
+            aspect-ratio={aspectRatio(props.dimensions)}
+            width={props.dimensions?.x}
+            height={props.dimensions?.y}
           ></img>
         </A>
       ) : (

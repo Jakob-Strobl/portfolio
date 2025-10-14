@@ -1,4 +1,5 @@
 import { PhotoResource } from "~/types/photo-resource";
+import { aspectRatio } from "./vector-actions";
 
 /**
  * Get the URI of the photo stored on Upload Thing via its key
@@ -15,8 +16,8 @@ export function getUriFromKey(uriKey: string): string {
  * @returns Aspect ratio as a floating point number and defaults to 3:2 if dimensions are not known
  */
 export function getAspectRatio(photo: PhotoResource): number {
-  if (photo.dimensions != null) {
-    return photo.dimensions.x / photo.dimensions.y;
+  if (photo.dimensions == null) {
+    return 1.5; // default to 3:2
   }
-  return 1.5; // default to 3:2
+  return aspectRatio(photo.dimensions);
 }
