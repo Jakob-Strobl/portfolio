@@ -30,6 +30,9 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   onMount(() => {
     setScrollYOffset(window.scrollY);
 
+    
+    if (rect.fixed) return; // skip resizing listener for fixed shadows
+
     // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
     window.addEventListener("resize", () => {
       setScrollYOffset(window.scrollY);
@@ -84,7 +87,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         top: 0,
         left: 0,
         transform: `translate3d(${statefulRect().position.x}px, ${
-          statefulRect().position.y + (scrollYOffset())
+          statefulRect().position.y + (rect.fixed ? 0 : scrollYOffset())
         }px, 0)`,
         opacity: isShadowCold(rect) ? 0 : 0.6,
         position: rect.fixed ? "fixed" : undefined,
