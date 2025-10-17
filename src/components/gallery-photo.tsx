@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router";
-import { getAspectRatio, getUriFromKey } from "../actions/photo-actions";
+import { getUriFromKey } from "../actions/photo-actions";
 import { Vec2 } from "~/types/vector2";
 import { aspectRatio } from "~/actions/vector-actions";
 
