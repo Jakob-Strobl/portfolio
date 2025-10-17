@@ -79,7 +79,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       class={`
         absolute -z-10 rounded-lg
         bg-night-black fade-in-bg
-        transition-all duration-[${animationDurationMs}ms] ease-out
+        transition-all duration-[${animationDurationMs}ms] ease-out safe-bottom
       `}
       style={{
         width: `${statefulRect().dimensions.x}px`,
