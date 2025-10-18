@@ -71,7 +71,7 @@ export default function TimelineLayout(props: TimelineLayout) {
   });
 
   return (
-    <>
+    <div class="flex flex-row h-screen items-center xs:justify-center justify-start">
       {/* Top Horizontal Margin - gradient fade out content at top (fades around same time as background)*/}
       <div
         // 300vw to cover portrait to landscape orientations on mobile
@@ -103,6 +103,6 @@ export default function TimelineLayout(props: TimelineLayout) {
       </div>
       {/* RIGHT Gutter */}
       <div class={`md:w-1/5 w-0 h-full ${topMargin}`}>{props.focus}</div>
-    </>
+    </div>
   );
 }
