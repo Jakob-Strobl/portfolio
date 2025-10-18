@@ -81,6 +81,10 @@ function createScene(waves: Wave[], width: number, height: number, canvas: HTMLC
 
 function getCanvasDimensions(): Vec2 {
   if (isMobile()) {
+    if (screen.orientation.type.startsWith("landscape")) {
+      return { x: screen.height, y: screen.width };
+    } 
+    
     return { x: screen.width, y: screen.height };
   }
 
