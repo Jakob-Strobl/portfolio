@@ -84,7 +84,7 @@ function getCanvasDimensions(): Vec2 {
     if (screen.orientation.type.startsWith("landscape")) {
       return { x: screen.height, y: screen.width };
     } 
-    
+
     return { x: screen.width, y: screen.height };
   }
 
@@ -138,7 +138,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
         // FIX(Safari iOS): On orientation change the resize event is fired before the dimensions are updated, 
         //   hence the timeout.
         window.addEventListener("orientationchange", () => setTimeout(resizeHandler, 300));
-        setTimeout(() => setReady(true), 1);
+        setTimeout(() => setReady(true), 100);
       });
       onCleanup(() => window.removeEventListener("resize", resizeHandler));
 
@@ -151,9 +151,9 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   return (
     <canvas
       ref={setCanvasEl}
-      class="fade-in duration-700 min-h-[-webkit-fill-available]"
-      classList={{
-        "opacity-0": !isReady(),
+      class="fade-in duration-[2000ms] min-h-[-webkit-fill-available]"
+      style={{
+        opacity: !isReady() ? "0" : "100",
       }}
     ></canvas>
   );
