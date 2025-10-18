@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.0...v0.7.1) (2025-10-18)
+
+
+### Build System
+
+* upgrade to latest + clear lock file due to stale updates ([f227887](https://github.com/Jakob-Strobl/portfolio/commit/f227887269256e1a6ce36a658045b8703969faa0))
+
 ## [0.7.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.2...v0.7.0) (2025-10-18)
 
 
