@@ -3,6 +3,8 @@ import { Vector2, WebGLRenderer, Mesh, Scene, PerspectiveCamera, Color, PlaneGeo
 import vertex from "./waves.vert";
 import fragment from "./waves.frag";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { isMobile } from "../actions/device-actions";
+import { Vec2 } from "../types/vector2";
 
 interface Wave {
   direction: Vector2;
@@ -77,6 +79,17 @@ function createScene(waves: Wave[], width: number, height: number, canvas: HTMLC
   return { renderer, wave_mesh, scene, camera };
 }
 
+function getCanvasDimensions(): Vec2 {
+  if (isMobile()) {
+    return { x: screen.width, y: screen.height };
+  }
+
+  const vv = window.visualViewport;
+  return vv
+    ? { x: vv.width, y: vv.height }
+    : { x: window.innerWidth, y: window.outerHeight };
+}
+
 export interface WavesBackgroundProps {
   num_waves: number;
 }
@@ -85,8 +98,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const wind_direction = new Vector2().random().normalize();
   const base = new Vector2();
   const waves: Wave[] = [];
-  const window_width = window.outerWidth ?? 1920;
-  const window_height = window.outerHeight ?? 1080;
+  const { x: viewportWidth, y: viewportHieght } = getCanvasDimensions();0;
   const [canvasEl, setCanvasEl] = createSignal<HTMLCanvasElement>();
   const [isReady, setReady] = createSignal(false);
 
@@ -96,7 +108,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
   createEffect(() => {
     if (canvasEl() != null && canvasEl()?.getContext != null) {
-      const { renderer, wave_mesh, scene, camera } = createScene(waves, window_width, window_height, canvasEl()!);
+      const { renderer, wave_mesh, scene, camera } = createScene(waves, viewportWidth, viewportHieght, canvasEl()!);
 
       function renderCanvas(this: WebGLRenderer, timestamp = 0) {
         requestAnimationFrame(renderCanvas.bind(this));
@@ -110,10 +122,11 @@ export default function WavesBackground(props: WavesBackgroundProps) {
       }
 
       function resizeHandler() {
-        camera.aspect = window.outerWidth / window.outerHeight;
+        const { x: width, y: height } = getCanvasDimensions();
+        camera.aspect = width / height;
         camera.updateProjectionMatrix();
 
-        renderer?.setSize(window.outerWidth, window.outerHeight);
+        renderer?.setSize(width, height);
       }
 
       onMount(() => {
