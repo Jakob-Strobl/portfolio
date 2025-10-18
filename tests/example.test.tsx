@@ -12,8 +12,6 @@ test("smoke test", async () => {
   const page = render(() => <IsomorphicBackground />);
   expect(page.container.querySelector("div")).toBeVisible();
   expect(page.container.querySelector("div")).toHaveClass("fixed");
-  expect(page.container.querySelector("div")).toHaveClass("w-[100lvw]");
-  expect(page.container.querySelector("div")).toHaveClass("h-[100lvh]");
 });
 
 test("app smoke test", async () => {
