@@ -155,7 +155,8 @@ export const clearRemovedShadows = () => {
 export const forceRecalculateShadowClientRects = () => {
   state.shadows.forEach((shadow) => {
     const clientRect = shadow.shadowedEl.getBoundingClientRect();
-    shadow.setPosition({ x: clientRect.x, y: clientRect.y });
+    const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
+    shadow.setPosition({ x: clientRect.x, y: clientY });
     shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
     shadow.setShadowState("moving"); // removes borders until the transition after the recalculated rects is "warm"
   });
