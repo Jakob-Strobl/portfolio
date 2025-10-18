@@ -9,7 +9,7 @@ export default function Menu() {
   });
 
   return (
-    <Shadow>
+    <Shadow warmupDelayMs={0}>
       <nav>
         {/* Define text size on each element as granular as possible
          *  Controls resulting height of elements in flex col
