@@ -118,6 +118,9 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
       onMount(() => {
         window.addEventListener("resize", resizeHandler);
+        // FIX(Safari iOS): On orientation change the resize event is fired before the dimensions are updated, 
+        //   hence the timeout.
+        window.addEventListener("orientationchange", () => setTimeout(resizeHandler, 300));
         setTimeout(() => setReady(true), 1);
       });
       onCleanup(() => window.removeEventListener("resize", resizeHandler));
