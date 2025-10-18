@@ -1,5 +1,6 @@
 // @refresh reload
 import { createHandler, StartServer } from "@solidjs/start/server";
+import { createSignal, onMount } from "solid-js";
 
 export default createHandler(() => (
   <StartServer
@@ -22,9 +23,7 @@ export default createHandler(() => (
             // NOTE(style):
             //    To avoid flashbanging the user on refresh, we set inline style
             //    because we can't guarantee the tailwind styles will be loaded in time
-            "background-color": "black",
-            "min-height": "100vh",
-            "min-height": "-webkit-fill-available",
+            "background-color": "#130d20",
           }}
         >
           <div id="app">{children}</div>
