@@ -23,6 +23,8 @@ export default createHandler(() => (
             //    To avoid flashbanging the user on refresh, we set inline style
             //    because we can't guarantee the tailwind styles will be loaded in time
             "background-color": "black",
+            "min-height": "100vh",
+            "min-height": "-webkit-fill-available",
           }}
         >
           <div id="app">{children}</div>

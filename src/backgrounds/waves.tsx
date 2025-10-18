@@ -98,7 +98,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
   const wind_direction = new Vector2().random().normalize();
   const base = new Vector2();
   const waves: Wave[] = [];
-  const { x: viewportWidth, y: viewportHieght } = getCanvasDimensions();0;
+  const { x: viewportWidth, y: viewportHieght } = getCanvasDimensions();
   const [canvasEl, setCanvasEl] = createSignal<HTMLCanvasElement>();
   const [isReady, setReady] = createSignal(false);
 
