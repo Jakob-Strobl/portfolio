@@ -52,13 +52,13 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
           });
         }
       }, { passive: true})
-      
     } else {
+      // skip resizing listener for fixed shadows
       // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
       window.addEventListener("resize", () => {
         setScrollYOffset(window.scrollY);
       });
-    } // skip resizing listener for fixed shadows
+    } 
   });
 
   createRenderEffect(() => {
