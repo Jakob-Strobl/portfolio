@@ -74,10 +74,6 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
     return rect.origin;
   });
 
-  const shouldUpdateTransform = createMemo(() => {
-    return !rect.fixed || window.scrollY >= 0;
-  });
-
   return (
     <div
       class={`
@@ -90,9 +86,9 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         height: `${statefulRect().dimensions.y}px`,
         top: 0,
         left: 0,
-        transform: shouldUpdateTransform() ? `translate3d(${statefulRect().position.x}px, ${
+        transform: `translate3d(${statefulRect().position.x}px, ${
           statefulRect().position.y + (rect.fixed ? 0 : scrollYOffset())
-        }px, 0)` : undefined,
+        }px, 0)`,
         opacity: isShadowCold(rect) ? 0 : 0.6,
         position: rect.fixed ? "fixed" : undefined,
       }}
