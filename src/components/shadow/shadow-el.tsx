@@ -1,4 +1,4 @@
-import { createMemo, createRenderEffect, createSignal, onMount, Signal } from "solid-js";
+import { batch, createMemo, createRenderEffect, createSignal, onMount, Signal } from "solid-js";
 import { ShadowRect } from "./types";
 
 interface ShadowRectProps {
@@ -27,16 +27,34 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   //      So this fixed the orignal `window.scrollY` in the transform. What was happening is everytime the rects state would change,
   //      it would also recalc the transform. I didn't realize since the expression is getting re-evaluated so is the value of window.scrollY
   const [scrollYOffset, setScrollYOffset]: Signal<number> = createSignal<number>(0);
+  // FIX(IOS): On iOS when bouncing at top, scrollY goes negative which misaligns fixed shadows
+  const [isElasticBouncing, setIsElasticBouncing] = createSignal(false);
   onMount(() => {
     setScrollYOffset(window.scrollY);
 
     
-    if (rect.fixed) return; // skip resizing listener for fixed shadows
+    if (rect.fixed) {
+      window.addEventListener("scroll", () => {
+        const wasElastic = isElasticBouncing();
+        const isElastic = window.scrollY < 0;
+        if (isElastic !== wasElastic) {
+          setIsElasticBouncing(isElastic);
+        }
 
-    // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
-    window.addEventListener("resize", () => {
-      setScrollYOffset(window.scrollY);
-    });
+        if (wasElastic && window.scrollY === 0) {
+          batch(() => {
+            setIsElasticBouncing(false);
+            rect.shadowedEl.getBoundingClientRect(); // force reflow
+          });
+        }
+      }, { passive: true})
+      
+    } else {
+      // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
+      window.addEventListener("resize", () => {
+        setScrollYOffset(window.scrollY);
+      });
+    } // skip resizing listener for fixed shadows
   });
 
   createRenderEffect(() => {
