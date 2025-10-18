@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.7.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.2...v0.7.0) (2025-10-18)
+
+
+### Features
+
+* **menu:** shadow warms up before showing content ([516a603](https://github.com/Jakob-Strobl/portfolio/commit/516a6032304d51622e8410ed5a4ad461b90b3325))
+* **waves:** render behind navbar and notch on ios ([504c908](https://github.com/Jakob-Strobl/portfolio/commit/504c908e5bcb5eb980609a87df36eb95acf3615a))
+
+
+### Bug Fixes
+
+* **layout:** incorrect width on mobile cause overflow ([cdbe517](https://github.com/Jakob-Strobl/portfolio/commit/cdbe5171dd367243710d2d4eeb6caae2b20b1d77))
+* **layout:** left align timeline layout on mobile ([2da0058](https://github.com/Jakob-Strobl/portfolio/commit/2da0058a4c73a357aa7ea9c64add120bd7f7c287))
+* **layout:** left gutter min-width always fits button ([b222c22](https://github.com/Jakob-Strobl/portfolio/commit/b222c22840bc3f20f8e85f91e6b972c5f91bc586))
+* **layouts:** gradient fade covers landscape ([44bd6ac](https://github.com/Jakob-Strobl/portfolio/commit/44bd6ace10066c5aa5c33649319414f44d3857b8))
+* **shadow:** add safe-bottom css env var ([90cfe1d](https://github.com/Jakob-Strobl/portfolio/commit/90cfe1d0bece35365a816d7f6d53b6d5ac5549db))
+* **shadow:** always use scroll offset for fixed position? ([d9f96c5](https://github.com/Jakob-Strobl/portfolio/commit/d9f96c58882b45c37602c566d8b1bee7207ef2ed))
+* **shadow:** avoid re-transforming fixed elements ([e0246dc](https://github.com/Jakob-Strobl/portfolio/commit/e0246dca1f948fe586bb4d1b52c553fc425f7f4b))
+* **shadow:** clamp negative clientY on elastic scroll on ios ([6123e33](https://github.com/Jakob-Strobl/portfolio/commit/6123e338e10c9fc9ef8e940b80a01fd75a61b700))
+* **shadow:** fixed shadows listen for scroll ([0935fec](https://github.com/Jakob-Strobl/portfolio/commit/0935feccc54bda24d5bfb2652dec725b6ba5c25b))
+* **shadow:** remove safe-bottom and recalc positions ([dac7460](https://github.com/Jakob-Strobl/portfolio/commit/dac74607556361691005a3ad608c5a43a18e1d1f))
+* **shadow:** revert last change + skip resize event on fixed ([4fb6f57](https://github.com/Jakob-Strobl/portfolio/commit/4fb6f571f0c4255ca0e7b8a2355249b27aec82a2))
+* **shadow:** use clamped Y position for fixed shadows ([9545e01](https://github.com/Jakob-Strobl/portfolio/commit/9545e011ca41a9cf361ec7b3668b796654df4a40))
+* **waves:** handle landscape orientation ([e06a3f5](https://github.com/Jakob-Strobl/portfolio/commit/e06a3f5208e89dd7af71144c7236d33538d8d89a))
+* **waves:** initial canvas width when landscape on ios ([288cf12](https://github.com/Jakob-Strobl/portfolio/commit/288cf12b08e180f7617b58922d53c3c865ed5666))
+* **waves:** render behind notch ([182121e](https://github.com/Jakob-Strobl/portfolio/commit/182121e1a6ff36dcee229dd52ff0674c75bda9bf))
+
 ## [0.6.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.6.1...v0.6.2) (2025-10-14)
 
 
