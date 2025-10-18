@@ -74,7 +74,8 @@ export default function TimelineLayout(props: TimelineLayout) {
     <>
       {/* Top Horizontal Margin - gradient fade out content at top (fades around same time as background)*/}
       <div
-        class={`fixed top-0 left-0 w-full ${gradientHeight} z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent`}
+        // 300vw to cover portrait to landscape orientations on mobile
+        class={`fixed top-0 left-0 w-[300vw] ${gradientHeight} z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent`}
         style={{ opacity: isReady() ? 1 : 0 }}
       ></div>
       {/* LEFT Gutter */}
