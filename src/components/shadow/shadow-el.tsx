@@ -44,7 +44,11 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         if (wasElastic && window.scrollY === 0) {
           batch(() => {
             setIsElasticBouncing(false);
-            rect.shadowedEl.getBoundingClientRect(); // force reflow
+            const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
+            const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
+            rect.setPosition({ x: clientRect.x, y: clientY });
+            rect.setDimensions({ x: clientRect.width, y: clientRect.height });
+            rect.setShadowState("moving");
           });
         }
       }, { passive: true})
@@ -97,7 +101,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       class={`
         absolute -z-10 rounded-lg
         bg-night-black fade-in-bg
-        transition-all duration-[${animationDurationMs}ms] ease-out safe-bottom
+        transition-all duration-[${animationDurationMs}ms] ease-out
       `}
       style={{
         width: `${statefulRect().dimensions.x}px`,
