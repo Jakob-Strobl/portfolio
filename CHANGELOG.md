@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.1...v0.7.2) (2025-11-16)
+
+
+### Bug Fixes
+
+* shadow size md breakpoint from missing height ([8a21a62](https://github.com/Jakob-Strobl/portfolio/commit/8a21a62a9958d8eee36bffd8577d022e98545059))
+
 ## [0.7.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.0...v0.7.1) (2025-10-18)
 
 
