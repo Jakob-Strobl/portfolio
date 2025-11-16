@@ -17,7 +17,8 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
     <div
       class={
         isThumbnailView
-          ? "w-full 2xl:h-72 md:h-54 sm:h-48 h-40 rounded-sm bg-black"
+          // lg:+ is 2 columns, < lg: is 1 column so that's why md has bigger height
+          ? "w-full 2xl:h-72 xl:h-64 lg:h-56 md:h-64 sm:h-48 h-40 rounded-sm bg-black"
           : // spacing: 24 (bottom nav) + (5 (layout padding) * 2) + (5 (shadow padding) * 2) + 4 Layout GAP | xl:h-24 lg:h-20 md:h-16
             "h-full"
       }
