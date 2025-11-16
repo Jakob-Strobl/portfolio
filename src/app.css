@@ -25,6 +25,8 @@
 }
 
 @theme {
+
+
   --color-night-black: #0b0712;
   --color-night-900: #13051f;
   --color-night-800: #2d0d4a;
@@ -51,7 +53,9 @@
   --opacity-88: 0.88;
 
   /* Custom screens */
-  --breakpoint-xs: 480px;
+  --breakpoint-xs: 30rem;
+  --breakpoint-3xl: 112rem;
+  --breakpoint-4xl: 142ren;
 }
 
 @layer base {
