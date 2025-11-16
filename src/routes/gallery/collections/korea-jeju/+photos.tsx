@@ -12,13 +12,17 @@ export const photoCollection: PhotoResource[] = [
     uri: "fASTqmqQqXI1TsR3jSocnENl4meBXTq5CuD6QsRoUYSgViOh",
     dimensions: { x: 3000, y: 1988 },
   },
-  { uri: "fASTqmqQqXI1VXwz1tbBgydWPSpiM6fRcA1EVqIv7wrQHoYe", name: "Boat off the coast of Jeju", dimensions: { x: 2560, y: 1716 } },
+  {
+    uri: "fASTqmqQqXI1VXwz1tbBgydWPSpiM6fRcA1EVqIv7wrQHoYe",
+    name: "Boat off the coast of Jeju",
+    dimensions: { x: 2560, y: 1716 },
+  },
 ];
 
 export const PhotoCollection = () => (
   <div class="flex flex-col gap-4">
     <h1 class="text-4xl text-white">Korea - Jeju</h1>
-    <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 gap-4">
       {photoCollection.map((photo) => (
         <GalleryPhoto collectionDirName="korea-jeju" uriKey={photo.uri} dimensions={photo.dimensions} />
       ))}
