@@ -17,8 +17,9 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
     <div
       class={
         isThumbnailView
-          // lg:+ is 2 columns, < lg: is 1 column so that's why md has bigger height
-          ? "w-full 2xl:h-72 xl:h-64 lg:h-56 md:h-64 sm:h-48 h-40 rounded-sm bg-black"
+          ? // lg:+ is 2 columns, < lg: is 1 column so that's why md has bigger height
+            // HACK(safari): `w-screen max-w-full` avoids a weird quick were w-full was becoming w-fit when content was not visible yet - causing misaligned shadow width on first load
+            "w-screen max-w-full 2xl:h-72 xl:h-64 lg:h-56 md:h-64 sm:h-48 h-40 rounded-sm bg-black"
           : // spacing: 24 (bottom nav) + (5 (layout padding) * 2) + (5 (shadow padding) * 2) + 4 Layout GAP | xl:h-24 lg:h-20 md:h-16
             "h-full"
       }
