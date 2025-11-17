@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.2...v0.7.3) (2025-11-17)
+
+
+### Bug Fixes
+
+* **safari:** image not using full width while hidden (loading) ([a80716a](https://github.com/Jakob-Strobl/portfolio/commit/a80716aed8503a60442b82ee34873efb3dfeddf0))
+
 ## [0.7.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.1...v0.7.2) (2025-11-16)
 
 
