@@ -9,7 +9,7 @@ export interface CenteredLayoutProps {
 export default function CenteredLayout(props: CenteredLayoutProps) {
   const resolved = children(() => props.children);
   return (
-    <div class={`flex flex-row h-screen items-center justify-center m-2 ml-4`}>
+    <div class={`flex flex-row h-screen items-center justify-center m-4`}>
       {/* CENTER Content */}
       <div class="flex flex-row gap-2 place-content-center relative w-full">
         <div class="w-fit">
