@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.0...v0.9.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* **contact:** nav back shadow is not fixed on centered layout ([c7d32be](https://github.com/Jakob-Strobl/portfolio/commit/c7d32be4a9d0396dc020bf66b773b7addae6f61b))
+
 ## [0.9.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.8.1...v0.9.0) (2025-12-13)
 
 
