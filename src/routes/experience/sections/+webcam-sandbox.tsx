@@ -1,8 +1,10 @@
 export const WebcamSandboxSection = () => (
   <div class="flex flex-col gap-2">
-    <h1 class="text-2xl">3D Webcam Sandbox</h1>
+    <div class="text-2xl flex justify-between">
+      <h1>3D Webcam Sandbox</h1> <h2 class="font-light">2021</h2>
+    </div>
     <p class="text-white/70">Godot, Rust with gdext, Nokhwa, OpenSeeFace</p>
-    <p class="text-white/70 text-sm">
+    <p class="text-white/70 text-base">
       A real-time 3D renderer with face tracking that rigs face movements to any 3D model and simultaneously updates
       texture resources with the video feed
     </p>
