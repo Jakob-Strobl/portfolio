@@ -15,6 +15,7 @@ export default function Experience() {
   return (
     <TimelineLayout
       defaultTitle="2025"
+      contentGap="gap-4"
       navBack={() => (
         <A href="/">
           <ArrowBigLeft size={20} /> Home

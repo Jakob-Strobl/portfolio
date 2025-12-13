@@ -6,6 +6,7 @@ import { DataAttributeKey } from "../types/dom";
 
 export type TimelineLayout = LinearLayoutProps & {
   defaultTitle?: string;
+  contentGap?: string;
 };
 
 export const timelineTitleDatasetKey: DataAttributeKey = "data-timeline-title";
@@ -13,6 +14,7 @@ export const timelineTitleDatasetKey: DataAttributeKey = "data-timeline-title";
 // TODO give this and linear a simimlar base layout if pattern sticks
 export default function TimelineLayout(props: TimelineLayout) {
   const [title, setTitle] = createSignal(props.defaultTitle ?? "");
+  const contentGap = props.contentGap ?? "gap-8";
   const [isReady, setReady] = createSignal(false);
   const allIntersections = new Map<Element, IntersectionObserverEntry>();
   let contentContainerRef: HTMLDivElement | undefined;
@@ -87,7 +89,7 @@ export default function TimelineLayout(props: TimelineLayout) {
             </div>
           </Shadow>
           <p
-            class="text-white text-4xl/8 cursor-vertical-text w-[1ch] transition-opacity delay-1000 duration-1500 wrap-anywhere text-center mr-2 self-end float-right ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
+            class="text-white text-2xl/6 cursor-vertical-text w-[1ch] transition-opacity delay-1000 duration-1500 wrap-anywhere text-center mr-2 self-end float-right ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
             style={{ opacity: isReady() ? 0.7 : 0 }}
           >
             {title()}
@@ -96,7 +98,7 @@ export default function TimelineLayout(props: TimelineLayout) {
       </div>
       {/* CENTER Content */}
       <div class={`w-3/5 h-full ${topMargin}`}>
-        <div ref={contentContainerRef} class="flex flex-col gap-8 mb-4 ">
+        <div ref={contentContainerRef} class={`flex flex-col ${contentGap} mb-4`}>
           {props.content}
           <div class="max-h-[48vh] min-h-[16vh] h-dvh"></div>
         </div>
