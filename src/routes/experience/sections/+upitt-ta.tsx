@@ -22,7 +22,11 @@ export const UpittTaSection = () => (
           CS0449 - Intro to Systems Programming with C
           <ul class="list-disc list-inside space-y-1 mt-1 ml-4">
             <li>
-              <a class="hover:text-night-500 text-night-400" href="https://www.youtube.com/watch?v=_fTCMhaWsdk">
+              <a
+                class="hover:text-night-500 text-night-400"
+                href="https://www.youtube.com/watch?v=_fTCMhaWsdk"
+                target="_blank"
+              >
                 Attack Lab Primer - YouTube 2020
               </a>
             </li>
