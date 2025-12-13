@@ -2,7 +2,7 @@ export const WebcamSandboxSection = () => (
   <div class="flex flex-col gap-2">
     <div>
       <div class="text-2xl flex justify-between items-baseline flex-wrap">
-        <h1>3D Webcam Sandbox</h1> <h2 class="font-light text-xl">2021</h2>
+        <h1>3D Webcam Sandbox</h1> <h2 class="font-light text-xl">2023 - Hiatus</h2>
       </div>
       <p class="text-white/70">Godot, Rust with gdext, Nokhwa, OpenSeeFace</p>
     </div>
