@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.8.0...v0.8.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* **experience:** correct timespan for webcam project ([b111b4f](https://github.com/Jakob-Strobl/portfolio/commit/b111b4f8f7ac1181b5ab972fea237fd5ff6bf96f))
+
 ## [0.8.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.3...v0.8.0) (2025-12-13)
 
 
