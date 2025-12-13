@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.1...v0.9.2) (2025-12-13)
+
+
+### Bug Fixes
+
+* **layout:** remove left margin - center absolutely ([b8d87b1](https://github.com/Jakob-Strobl/portfolio/commit/b8d87b17b8b984580f4e39bad1cb5e5028b71705))
+
 ## [0.9.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.0...v0.9.1) (2025-12-13)
 
 
