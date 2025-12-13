@@ -138,7 +138,8 @@ export default function FullPhotoLayout(props: FullPhotoLayoutProps) {
             <Shadow warmupDelayMs={500} origin="self">
               <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
                 <A href={`${relativeBasePath}/${getNextPhoto().uri}`}>
-                  Next <ArrowBigRight size={20} />
+                  <span class="hidden sm:inline">Next</span>
+                  <ArrowBigRight size={20} />
                 </A>
               </div>
             </Shadow>

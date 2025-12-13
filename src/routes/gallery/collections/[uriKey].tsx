@@ -14,7 +14,8 @@ export default function FullPhoto() {
       resource={photoResource}
       navBack={
         <A href="/gallery">
-          <ArrowBigLeft size={20} /> Home
+          <ArrowBigLeft size={20} />
+          <span class="hidden sm:inline">Gallery</span>
         </A>
       }
     ></FullPhotoLayout>

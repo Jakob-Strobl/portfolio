@@ -18,7 +18,8 @@ export default function Experience() {
       contentGap="gap-4"
       navBack={() => (
         <A href="/">
-          <ArrowBigLeft size={20} /> Home
+          <ArrowBigLeft size={20} />
+          <span class="hidden sm:inline">Home</span>
         </A>
       )}
       content={

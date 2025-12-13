@@ -13,7 +13,8 @@ export default function Gallery() {
       defaultTitle="2025"
       navBack={() => (
         <A href="/">
-          <ArrowBigLeft size={20} /> Home
+          <ArrowBigLeft size={20} />
+          <span class="hidden sm:inline">Home</span>
         </A>
       )}
       content={
