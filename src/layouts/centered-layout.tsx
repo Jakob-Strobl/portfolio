@@ -13,7 +13,7 @@ export default function CenteredLayout(props: CenteredLayoutProps) {
       {/* CENTER Content */}
       <div class="flex flex-row gap-2 place-content-center relative w-full">
         <div class="w-fit">
-          <Shadow warmupDelayMs={0} contentFadeInDelayMs={500} fixed>
+          <Shadow warmupDelayMs={0} contentFadeInDelayMs={500}>
             <div class="hover:text-shadow-lg duration-300 transition-text *:flex *:gap-1 *:items-center">
               {props.navBack?.()}
             </div>
