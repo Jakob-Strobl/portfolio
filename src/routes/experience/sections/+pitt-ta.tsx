@@ -3,7 +3,7 @@ export const UpittTaSection = () => (
     <h1 class="text-2xl">University of Pittsburgh</h1>
 
     <div>
-      <div class="text-lg mt-2 flex justify-between">
+      <div class="text-lg mt-2 flex justify-between flex-wrap">
         <h2>Undergraduate Teaching Assistant</h2>
         <h3 class="font-light">Spring 2018, Fall 2019, Spring 2020</h3>
       </div>
@@ -41,7 +41,7 @@ export const UpittTaSection = () => (
 
     <h1 class="text-xl mt-4">TLI - Tech Divaz & High School Academy Summer Camp</h1>
     <div>
-      <div class="text-lg flex justify-between">
+      <div class="text-lg flex justify-between flex-wrap">
         <h2>Lead Instructor</h2> <h3 class="font-light">Summer 2018</h3>
       </div>
       <p class="text-white/70 text-base">Grades 6-12</p>

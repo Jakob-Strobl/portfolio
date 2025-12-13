@@ -1,7 +1,7 @@
 export const ExclaimSection = () => (
   <div class="flex flex-col gap-2">
     <div>
-      <div class="text-2xl flex justify-between items-baseline">
+      <div class="text-2xl flex justify-between items-baseline flex-wrap">
         <h1>Exclaim</h1> <h2 class="font-light text-xl">2021</h2>
       </div>
       <p class="text-white/70">Rust</p>

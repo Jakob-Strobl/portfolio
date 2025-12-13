@@ -1,7 +1,7 @@
 export const PolishPicSection = () => (
   <div class="flex flex-col gap-2">
     <div>
-      <div class="text-2xl flex justify-between items-baseline">
+      <div class="text-2xl flex justify-between items-baseline flex-wrap">
         <h1>Polish Pic</h1> <h2 class="font-light text-xl">Oct 2025 - Present</h2>
       </div>
       <p class="text-white/70">Svelte 5 with SvelteKit, Rust + WASM, Tailwind v4</p>
