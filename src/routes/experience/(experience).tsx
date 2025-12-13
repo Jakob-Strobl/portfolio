@@ -4,8 +4,8 @@ import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-
 import { A } from "@solidjs/router";
 import { LevelUpSection } from "./sections/+level-up";
 import { CoxAutomotiveSection } from "./sections/+cox-automotive";
-import { UpittTaSection } from "./sections/+upitt-ta";
-import { UpittEducationSection } from "./sections/+upitt-education";
+import { UpittTaSection } from "./sections/+pitt-ta";
+import { UpittEducationSection } from "./sections/+pitt-education";
 import { YonseiEducationSection } from "./sections/+yonsei-education";
 import { PolishPicSection } from "./sections/+polish-pic";
 import { WebcamSandboxSection } from "./sections/+webcam-sandbox";
