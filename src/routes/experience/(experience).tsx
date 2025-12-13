@@ -46,7 +46,7 @@ export default function Experience() {
             {CoxAutomotiveSection()}
           </Shadow>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2018",
@@ -60,7 +60,7 @@ export default function Experience() {
             <hr class=" border-night-300 mt-2"></hr>
           </div>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2016",
@@ -69,7 +69,7 @@ export default function Experience() {
             {UpittEducationSection()}
           </Shadow>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2018",
@@ -79,7 +79,7 @@ export default function Experience() {
           </Shadow>
           {/* Certificates */}
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2024",
@@ -93,7 +93,7 @@ export default function Experience() {
             <hr class=" border-night-300 mt-2"></hr>
           </div>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2025",
@@ -102,7 +102,7 @@ export default function Experience() {
             {PolishPicSection()}
           </Shadow>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2023",
@@ -111,7 +111,7 @@ export default function Experience() {
             {WebcamSandboxSection()}
           </Shadow>
           <Shadow
-            warmupDelayMs={250}
+            warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
               [timelineTitleDatasetKey]: "2021",
