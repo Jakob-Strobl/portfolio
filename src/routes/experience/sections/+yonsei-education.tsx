@@ -2,7 +2,7 @@ export const YonseiEducationSection = () => (
   <div class="flex flex-col gap-2">
     <h1 class="text-2xl">Yonsei University</h1>
     <div class="mt-2 flex justify-between text-lg">
-      <h2>Study Abroad Program · Seoul, South Korea</h2> <h3>Mar 2023 - Jul 2025</h3>
+      <h2>Study Abroad Program · Seoul, South Korea</h2> <h3>Fall 2018 - Spring 2019</h3>
     </div>
 
     <div class="flex justify-between text-base text-white/70">

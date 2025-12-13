@@ -24,9 +24,18 @@
   font-weight: 500;
 }
 
+@font-face {
+  font-family: "Raleway";
+  /* prettier-ignore */
+  src:
+    /* load from client's local if possible */
+    local("Raleway-light"),
+    url("/fonts/Raleway-Light.ttf");
+  font-style: normal;
+  font-weight: 300;
+}
+
 @theme {
-
-
   --color-night-black: #0b0712;
   --color-night-900: #13051f;
   --color-night-800: #2d0d4a;
