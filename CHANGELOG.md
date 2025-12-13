@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.8.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.3...v0.8.0) (2025-12-13)
+
+
+### Features
+
+* add light raleway font for project timespan ([3956d2f](https://github.com/Jakob-Strobl/portfolio/commit/3956d2ff59bdda7a9383e7a8eacbaaee383f03fb))
+* experience tab with work, education, projects ([01ec7d6](https://github.com/Jakob-Strobl/portfolio/commit/01ec7d6b36e6fe033d8b72e7ee347915851dd6d3))
+* **experience:** tighten spacing and typography of content ([77d2d6b](https://github.com/Jakob-Strobl/portfolio/commit/77d2d6b7b21233a0fb978e175625d26e0811b1e3))
+* init opencode with Opus 4.5 ([95f62bb](https://github.com/Jakob-Strobl/portfolio/commit/95f62bb6ffd32b9516453e7024a8a3053053b517))
+* **layout:** add gap prop to timeline layout ([c962818](https://github.com/Jakob-Strobl/portfolio/commit/c96281805e1af41df5a61551cca52c014cc21966))
+* put dates on projects on right hand side ([8a88356](https://github.com/Jakob-Strobl/portfolio/commit/8a88356f5bca2b6def1ae92b3c2e7a8b8b5da1d0))
+
+
+### Bug Fixes
+
+* **experience:** open attack lab video in new tab ([82fc9d2](https://github.com/Jakob-Strobl/portfolio/commit/82fc9d22130cb3547599ed9c0ac9eb1212051a79))
+* **experience:** wrap header with timespan for mobile ([31f2bd7](https://github.com/Jakob-Strobl/portfolio/commit/31f2bd70f79a984d9ed94227f17d5a2cdef0daab))
+* naming of pitt sections ([f1e4ca8](https://github.com/Jakob-Strobl/portfolio/commit/f1e4ca863ca52d8745570db7bf560675447d1fc6))
+
 ## [0.7.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.7.2...v0.7.3) (2025-11-17)
 
 
