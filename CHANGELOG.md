@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.8.1...v0.9.0) (2025-12-13)
+
+
+### Features
+
+* **contact:** update page to latest layout centered ([6603af7](https://github.com/Jakob-Strobl/portfolio/commit/6603af7e81cd824de38850ec8b03bad5b3d9be66))
+* hide nav button text on small screens ([560789d](https://github.com/Jakob-Strobl/portfolio/commit/560789d1446b6fd32adb0024c715a74abd508b9a))
+* **layout:** shrink back button on smaller screens ([8b45d5d](https://github.com/Jakob-Strobl/portfolio/commit/8b45d5dd8d77a28074265da08a5bccc534eb3b01))
+
+
+### Bug Fixes
+
+* **contact:** firefox blank screen due to icon import path ([3c07326](https://github.com/Jakob-Strobl/portfolio/commit/3c073264cc866b5be9dfcdbf64882ff1bba4f8c1))
+
 ## [0.8.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.8.0...v0.8.1) (2025-12-13)
 
 
