@@ -23,11 +23,12 @@ test("app smoke test", async () => {
   page.getByText("Jakob Strobl");
 
   const links = page.getAllByRole("link");
-  expect(links.length).toEqual(4);
+  expect(links.length).toEqual(5);
   expect(links[0]).toHaveTextContent("Experience");
   expect(links[1]).toHaveTextContent("Contact");
   expect(links[2]).toHaveTextContent("Photography");
   expect(links[3]).toHaveTextContent("TBD");
+  expect(links[4]).toHaveAttribute("href", "https://github.com/Jakob-Strobl/portfolio/releases");
 });
 
 test("version number from package.json renders in page", async () => {
@@ -37,7 +38,7 @@ test("version number from package.json renders in page", async () => {
     </Router>
   ));
 
-  const versionNumber = page.getByText((_, element) => element?.textContent == `v${version}`);
+  const versionNumber = page.getByText(version);
   // not visible due to inline style
   expect(versionNumber).toBeDefined();
   expect(versionNumber).not.toBeVisible();
