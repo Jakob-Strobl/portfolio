@@ -1,5 +1,6 @@
 import Menu from "../components/menu";
 import { onMount, createSignal } from "solid-js";
+import ExternalLink from "lucide-solid/icons/external-link";
 
 export default function Home() {
   const [isReady, setReady] = createSignal(false);
@@ -20,9 +21,15 @@ export default function Home() {
         >
           <h1 class="font-medium text-white text-5xl">Jakob Strobl</h1>
           <Menu></Menu>
-          <p class="text-gray-300">
+          <p class="text-gray-300 group flex items-baseline">
             <span class="text-xs">v</span>
-            {process.env.PROJECT_VERSION}
+            <a class="relative" target="_blank" href="https://github.com/Jakob-Strobl/portfolio/releases">
+              {process.env.PROJECT_VERSION}{" "}
+              <ExternalLink
+                class="absolute top-1/4 left-full ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                size={12}
+              ></ExternalLink>
+            </a>
           </p>
         </div>
       </div>
