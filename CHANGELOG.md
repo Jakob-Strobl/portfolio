@@ -3,6 +3,18 @@
 ## [0.9.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.2...v0.9.3) (2025-12-16)
 
 
+### Features
+
+* **home:** link github repo releases on version tag ([b8e60cd](https://github.com/Jakob-Strobl/portfolio/commit/b8e60cd6c2db5e167510de3b0cc6088d36761979))
+
+
+### Bug Fixes
+
+* **tests:** broken tests from code changes on home page ([c1c93fe](https://github.com/Jakob-Strobl/portfolio/commit/c1c93fe078af7f6e3e7a964585012faafb38f3ba))
+
+## [0.9.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.2...v0.9.3) (2025-12-16)
+
+
 ### Bug Fixes
 
 * **home:** link github repo releases on version tag ([9507ad3](https://github.com/Jakob-Strobl/portfolio/commit/9507ad3b7f29ee4cf883d5478f08f57999e6e336))
