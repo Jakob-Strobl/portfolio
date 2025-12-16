@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.2...v0.9.3) (2025-12-16)
+
+
+### Bug Fixes
+
+* **home:** link github repo releases on version tag ([9507ad3](https://github.com/Jakob-Strobl/portfolio/commit/9507ad3b7f29ee4cf883d5478f08f57999e6e336))
+
 ## [0.9.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.1...v0.9.2) (2025-12-13)
 
 
