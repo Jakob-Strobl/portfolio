@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.4...v0.9.5) (2025-12-17)
+
+
+### Bug Fixes
+
+* cleanup console logs or pin to just dev ([2ced5b0](https://github.com/Jakob-Strobl/portfolio/commit/2ced5b01dc5954eb51bd6d229bc6c3a08f9c96b4))
+* **test:** resolve vitest JSX extension error for @solidjs/router ([20fc22a](https://github.com/Jakob-Strobl/portfolio/commit/20fc22a6b2a4574582d71d0446bd39f142aed338))
+
 ## [0.9.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.3...v0.9.4) (2025-12-17)
 
 
