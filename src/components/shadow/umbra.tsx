@@ -19,8 +19,10 @@ export interface UmbraProps {}
  */
 export default function Umbra(props: UmbraProps) {
   onMount(() => {
+    // Turning off on mobile because it was causing a lot of thrashing and recalcs
+    // It handles tab bar collapse on Mac Safari in a desktop environment
     if (window.visualViewport && !isMobile()) {
-      // Use visualViewport for modern browsers (catches window resize + Safari UI chrome)
+      // Use visualViewport for modern browsers (catches window resize + Safari UI chrome tab bar)
       window.visualViewport.addEventListener(
         "resize",
         () => {
