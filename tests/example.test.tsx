@@ -1,12 +1,9 @@
-import { test, expect } from "vitest";
 import { render } from "@solidjs/testing-library";
 import { version } from "../package.json";
 import IsomorphicBackground from "../src/components/background";
 import Home from "../src/routes";
 import { isTest } from "../src/actions/test-actions";
 import { Route, Router } from "@solidjs/router";
-
-// @vitest-environment happy-dom
 
 test("smoke test", async () => {
   const page = render(() => <IsomorphicBackground />);

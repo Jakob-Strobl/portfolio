@@ -16,7 +16,8 @@
       "vinxi/types/client",
       "three",
       "vite-plugin-glsl/ext",
-      "@testing-library/jest-dom"
+      "@testing-library/jest-dom",
+      "vitest/globals"
     ],
     "isolatedModules": true,
     "paths": {
