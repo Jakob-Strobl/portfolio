@@ -5,6 +5,7 @@ import fragment from "./waves.frag";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { isMobile } from "../actions/device-actions";
 import { Vec2 } from "../types/vector2";
+import { isTest } from "../actions/test-actions";
 
 interface Wave {
   direction: Vector2;
@@ -73,7 +74,9 @@ function createScene(waves: Wave[], width: number, height: number, canvas: HTMLC
     renderer.setSize(width, height);
     renderer.setClearColor(new Color(0x130d20));
   } catch (e) {
-    console.warn("Waves: Failed to create WebGLRenderer", e);
+    if (!isTest()) {
+      console.warn("Waves: Failed to create WebGLRenderer");
+    }
   }
 
   return { renderer, wave_mesh, scene, camera };

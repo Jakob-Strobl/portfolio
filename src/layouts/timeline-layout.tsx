@@ -69,7 +69,6 @@ export default function TimelineLayout(props: TimelineLayout) {
 
   onMount(() => {
     setTimeout(() => setReady(true), 0);
-    // console.log("contentContainer", contentContainerRef);
   });
 
   return (

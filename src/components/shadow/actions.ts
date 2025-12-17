@@ -4,13 +4,13 @@ import { scaleAndCenterVec } from "../../actions/vector-actions";
 import { Rect } from "../../types/rect";
 import { isTest } from "../../actions/test-actions";
 import { setState, state } from "./umbra";
+import { isDev } from "solid-js/web";
 
 export function createRecalculateShadowClientRectsOn(...signals: Accessor<any>[]) {
   createEffect(() => {
     // "listen" to all passed signals
     signals.forEach((signal) => signal());
     queueMicrotask(() => {
-      console.log("HOOK: listenToForceRecalculateShadowClientRects triggered by signals: ", signals);
       forceRecalculateShadowClientRects();
     });
   });
@@ -30,7 +30,7 @@ export const addShadow = (
   origin: ShadowOriginOptions = "relative",
   shadowRectOptions: Pick<ShadowRect, "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed">,
 ) => {
-  if (!isTest()) {
+  if (!isTest() && isDev) {
     console.log("Adding shadow: ", shadowedEl, state.shadows.length, state.removedShadows.length);
   }
 
@@ -105,18 +105,12 @@ export const addShadow = (
 };
 
 export const removeShadow = (shadowToRemoveId: string) => {
-  if (!isTest()) {
-    console.log("Removing shadow by Id: ", shadowToRemoveId);
-  }
-
-  const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
+    const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
 
   if (removedShadow == undefined) {
     console.warn("Tried to remove shadow that doesn't exist: ", shadowToRemoveId);
     return;
   }
-
-  console.warn("Soft Removed Shadow Around: ", removedShadow.shadowedEl);
 
   const filteredShadows = state.shadows.filter((shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId);
 
@@ -127,11 +121,6 @@ export const removeShadow = (shadowToRemoveId: string) => {
 };
 
 export const hardRemoveShadow = (shadowToRemoveId: string | undefined) => {
-  if (!isTest()) {
-    console.log("Hard removing shadow by Id: ", shadowToRemoveId);
-    console.log("removedShadow length = ", state.removedShadows.length);
-  }
-
   if (shadowToRemoveId == undefined) {
     console.warn("Tried to hard remove shadow with undefined id");
     return;
@@ -145,10 +134,6 @@ export const hardRemoveShadow = (shadowToRemoveId: string | undefined) => {
 };
 
 export const clearRemovedShadows = () => {
-  if (!isTest()) {
-    console.log(`Clearing removed shadows [${state.removedShadows.length}]`);
-  }
-
   setState({ removedShadows: [] });
 };
 

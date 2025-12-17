@@ -85,7 +85,6 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   });
 
   const statefulRect = createMemo(() => {
-    // console.log(rect.position(), isShadowCold(rect), scaleAndCenterRect(rect, 0.1), rect.origin)
     if (isShadowWarm(rect)) {
       return {
         position: rect.position(),
