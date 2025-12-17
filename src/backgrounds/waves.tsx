@@ -86,15 +86,13 @@ function getCanvasDimensions(): Vec2 {
   if (isMobile()) {
     if (screen.orientation.type.startsWith("landscape")) {
       return { x: screen.height, y: screen.width };
-    } 
+    }
 
     return { x: screen.width, y: screen.height };
   }
 
   const vv = window.visualViewport;
-  return vv
-    ? { x: vv.width, y: vv.height }
-    : { x: window.innerWidth, y: window.outerHeight };
+  return vv ? { x: vv.width, y: vv.height } : { x: window.innerWidth, y: window.outerHeight };
 }
 
 export interface WavesBackgroundProps {
@@ -138,7 +136,7 @@ export default function WavesBackground(props: WavesBackgroundProps) {
 
       onMount(() => {
         window.addEventListener("resize", resizeHandler);
-        // FIX(Safari iOS): On orientation change the resize event is fired before the dimensions are updated, 
+        // FIX(Safari iOS): On orientation change the resize event is fired before the dimensions are updated,
         //   hence the timeout.
         window.addEventListener("orientationchange", () => setTimeout(resizeHandler, 300));
         setTimeout(() => setReady(true), 100);

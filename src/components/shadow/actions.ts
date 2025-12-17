@@ -105,7 +105,7 @@ export const addShadow = (
 };
 
 export const removeShadow = (shadowToRemoveId: string) => {
-    const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
+  const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
 
   if (removedShadow == undefined) {
     console.warn("Tried to remove shadow that doesn't exist: ", shadowToRemoveId);

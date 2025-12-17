@@ -1,4 +1,4 @@
-name: Page Deploy 
+name: Page Deploy
 
 on:
   workflow_dispatch:
@@ -18,13 +18,13 @@ on:
         required: true
       CLOUDFLARE_ACCOUNT_ID:
         required: true
-      
+
 permissions:
   contents: write
   deployments: write
 
 jobs:
-  deploy-page: 
+  deploy-page:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Bun
         run: npm install -g bun
-      
+
       - name: Install Dependencies
         run: bun install
 
@@ -52,4 +52,4 @@ jobs:
           branch: ${{ inputs.branch }}
           directory: ${{ vars.OUTPUT_DIRECTORY }} # e.g. 'dist'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: '3'
+          wranglerVersion: "3"

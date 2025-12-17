@@ -7,8 +7,8 @@ import { JSX } from "solid-js";
  * Based on: warmupDelayMs (max 500ms) + animationDuration (750ms)
  * Rounded to 1500ms for safety margin
  */
-const DEFAULT_SHADOW_WAIT_MS = 0 // 1500; // was 1500 for checking for visible, but we can 
-                                          // use 0 since we switched to checking if its in the documentx
+const DEFAULT_SHADOW_WAIT_MS = 0; // 1500; // was 1500 for checking for visible, but we can
+// use 0 since we switched to checking if its in the documentx
 
 /**
  * Type for render result from @solidjs/testing-library

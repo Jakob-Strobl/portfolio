@@ -32,33 +32,36 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   onMount(() => {
     setScrollYOffset(window.scrollY);
 
-    
     if (rect.fixed) {
-      window.addEventListener("scroll", () => {
-        const wasElastic = isElasticBouncing();
-        const isElastic = window.scrollY < 0;
-        if (isElastic !== wasElastic) {
-          setIsElasticBouncing(isElastic);
-        }
+      window.addEventListener(
+        "scroll",
+        () => {
+          const wasElastic = isElasticBouncing();
+          const isElastic = window.scrollY < 0;
+          if (isElastic !== wasElastic) {
+            setIsElasticBouncing(isElastic);
+          }
 
-        if (wasElastic && window.scrollY === 0) {
-          batch(() => {
-            setIsElasticBouncing(false);
-            const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
-            const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
-            rect.setPosition({ x: clientRect.x, y: clientY });
-            rect.setDimensions({ x: clientRect.width, y: clientRect.height });
-            rect.setShadowState("moving");
-          });
-        }
-      }, { passive: true})
+          if (wasElastic && window.scrollY === 0) {
+            batch(() => {
+              setIsElasticBouncing(false);
+              const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
+              const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
+              rect.setPosition({ x: clientRect.x, y: clientY });
+              rect.setDimensions({ x: clientRect.width, y: clientRect.height });
+              rect.setShadowState("moving");
+            });
+          }
+        },
+        { passive: true },
+      );
     } else {
       // skip resizing listener for fixed shadows
       // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
       window.addEventListener("resize", () => {
         setScrollYOffset(window.scrollY);
       });
-    } 
+    }
   });
 
   createRenderEffect(() => {

@@ -21,7 +21,7 @@ export function scaleAndCenterVec(dimensions: Accessor<Vec2>, position: Accessor
 
 export function aspectRatio(dimensions?: Vec2): number {
   if (dimensions == null) {
-    return 1.5; // default to 3:2 
+    return 1.5; // default to 3:2
   }
   return dimensions.x / dimensions.y;
 }

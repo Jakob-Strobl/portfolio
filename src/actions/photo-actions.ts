@@ -3,7 +3,7 @@ import { aspectRatio } from "./vector-actions";
 
 /**
  * Get the URI of the photo stored on Upload Thing via its key
- * @param uriKey 
+ * @param uriKey
  * @returns Fully qualified URI to the photo
  */
 export function getUriFromKey(uriKey: string): string {
