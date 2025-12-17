@@ -64,38 +64,22 @@ describe("Gallery Routes", () => {
   });
 
   describe("Photo Links", () => {
-    it("gallery photos link to full screen view", async () => {
+    it.each(
+      GALLERY_COLLECTIONS.flatMap((collection) =>
+        collection.photos.map((photo) => ({
+          collectionTitle: collection.title,
+          collectionDir: collection.dir,
+          photoUri: photo.uri,
+        })),
+      ),
+    )("$collectionTitle: photo $photoUri links to full screen view", async ({ collectionDir, photoUri }) => {
       const page = await renderGalleryPage();
 
-      // Get the first photo from one of the collections
-      const firstCollection = GALLERY_COLLECTIONS[0];
-      const firstPhoto = firstCollection.photos[0];
-
-      // Find a link containing the photo URI
-      const photoLink = page.container.querySelector(`a[href*="${firstPhoto.uri}"]`);
+      // Find a link with the expected href pattern
+      const expectedHref = `/gallery/collections/${collectionDir}/${photoUri}`;
+      const photoLink = page.container.querySelector(`a[href="${expectedHref}"]`);
 
       expect(photoLink).toBeInTheDocument();
-    });
-
-    it("photo links follow pattern /gallery/collections/{dir}/{uriKey}", async () => {
-      const page = await renderGalleryPage();
-
-      // Get all links
-      const links = page.container.querySelectorAll("a");
-      const photoLinks = Array.from(links).filter((link) =>
-        link.getAttribute("href")?.includes("/gallery/collections/"),
-      );
-
-      // Should have at least some photo links
-      expect(photoLinks.length).toBeGreaterThan(0);
-
-      // Verify at least one follows the pattern
-      const hasCorrectPattern = photoLinks.some((link) => {
-        const href = link.getAttribute("href");
-        return href?.match(/\/gallery\/collections\/[\w-]+\/[\w]+/);
-      });
-
-      expect(hasCorrectPattern).toBe(true);
     });
   });
 });
