@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store";
 import ShadowEl from "./shadow-el";
 import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
 import { clearRemovedShadows, forceRecalculateShadowClientRects, scaleAndCenterRect } from "./actions";
+import { isMobile } from "~/actions/device-actions";
 
 const [state, setState] = createStore<UmbraState>({
   shadows: [],
@@ -18,7 +19,7 @@ export interface UmbraProps {}
  */
 export default function Umbra(props: UmbraProps) {
   onMount(() => {
-    if (window.visualViewport) {
+    if (window.visualViewport && !isMobile()) {
       // Use visualViewport for modern browsers (catches window resize + Safari UI chrome)
       window.visualViewport.addEventListener(
         "resize",
