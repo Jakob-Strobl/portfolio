@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.3...v0.9.4) (2025-12-17)
+
+
+### Features
+
+* **umbra:** use visualViewport to handle niche resizes ([67582e9](https://github.com/Jakob-Strobl/portfolio/commit/67582e9ad694c533d3cbaa98aa061e0593e11cfc))
+
 ## [0.9.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.2...v0.9.3) (2025-12-16)
 
 
