@@ -18,10 +18,25 @@ export interface UmbraProps {}
  */
 export default function Umbra(props: UmbraProps) {
   onMount(() => {
-    window.addEventListener("resize", () => {
-      console.log("Window resized, updating shadow positions");
-      forceRecalculateShadowClientRects();
-    });
+    if (window.visualViewport) {
+      // Use visualViewport for modern browsers (catches window resize + Safari UI chrome)
+      window.visualViewport.addEventListener(
+        "resize",
+        () => {
+          forceRecalculateShadowClientRects();
+        },
+        { passive: true },
+      );
+    } else {
+      // Fallback for older browsers without visualViewport API
+      window.addEventListener(
+        "resize",
+        () => {
+          forceRecalculateShadowClientRects();
+        },
+        { passive: true },
+      );
+    }
   });
 
   createRenderEffect((prevShadows) => {
