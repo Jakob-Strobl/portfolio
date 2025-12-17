@@ -10,6 +10,9 @@ export default defineConfig({
   },
   resolve: {
     conditions: ["default"],
+    alias: {
+      "~/": new URL("./src/", import.meta.url).pathname,
+    },
   },
   test: {
     environment: "happy-dom",
