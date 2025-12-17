@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.5...v0.9.6) (2025-12-17)
+
+
+### Bug Fixes
+
+* **umbra:** turn off viewport resize on mobile ([9a65fa3](https://github.com/Jakob-Strobl/portfolio/commit/9a65fa36cbe3f3870bf8a81a34c1a2212c76ff1d))
+
 ## [0.9.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.4...v0.9.5) (2025-12-17)
 
 
