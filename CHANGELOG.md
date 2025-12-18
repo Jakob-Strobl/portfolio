@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.7](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.6...v0.9.7) (2025-12-18)
+
+
+### Features
+
+* **analytics:** replace cloudflare with posthog analytics ([a7f4a32](https://github.com/Jakob-Strobl/portfolio/commit/a7f4a32259454c375850cb4e8d4a2076ad3110b8))
+
 ## [0.9.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.5...v0.9.6) (2025-12-17)
 
 
