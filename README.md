@@ -13,14 +13,15 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.9.7-blue.svg" alt="Version 0.9.7" />
+  <a href="https://github.com/Jakob-Strobl/portfolio/releases">
+    <img src="https://img.shields.io/badge/version-0.9.7-blue.svg" alt="Version 0.9.7" />
+  </a>
   <a href="https://github.com/Jakob-Strobl/portfolio/actions/workflows/prod-page-deploy.yml">
     <img src="https://github.com/Jakob-Strobl/portfolio/actions/workflows/prod-page-deploy.yml/badge.svg" alt="Build Status" />
   </a>
   <a href="https://jstrobl.dev">
-    <img src="https://img.shields.io/badge/live-jstrobl.dev-brightgreen.svg" alt="Live Site" />
+    <img src="https://img.shields.io/badge/link-jstrobl.dev-9743df.svg" alt="Link to Site" />
   </a>
-  <img src="https://img.shields.io/badge/status-Live-9743df" alt="Status: Live" />
   <img src="https://img.shields.io/badge/license-Proprietary-lightgrey" alt="License: Proprietary" />
 </p>
 
@@ -70,14 +71,22 @@ bun run build
 
 ## Available Scripts
 
-| Command                | Description               |
-| ---------------------- | ------------------------- |
-| `bun run dev`          | Start development server  |
-| `bun run build`        | Production build          |
-| `bun run test`         | Run test suite            |
-| `bun run test-watch`   | Run tests in watch mode   |
-| `bun run pretty-check` | Check code formatting     |
-| `bun run prettify`     | Format code with Prettier |
+| Command                           | Description                                         |
+| --------------------------------- | --------------------------------------------------- |
+| `bun run dev`                     | Start development server                            |
+| `bun run build`                   | Production build                                    |
+| `bun run test`                    | Run test suite                                      |
+| `bun run test-watch`              | Run tests in watch mode                             |
+| `bun run pretty-check`            | Check code formatting                               |
+| `bun run prettify`                | Format code with Prettier                           |
+| `bun run cloudflare-step-deploy`  | Run tests, then build (used by Cloudflare Pages CI) |
+| `bun run cloudflare-deploy-local` | Build and deploy to Cloudflare Pages from local dev |
+
+### Cloudflare Deployment Scripts
+
+- **`cloudflare-step-deploy`**: Runs the full test suite first (`vitest run`), and only if tests pass, proceeds to build the project (`vinxi build`). This ensures no broken code is deployed. This was originally used for Cloudflare Pages CI.
+
+- **`cloudflare-deploy-local`**: Builds the project (`vinxi build`) and deploys directly to Cloudflare Pages using Wrangler CLI (`wrangler pages deploy`). Useful for local testing of the deployment process before pushing to CI/CD.
 
 ## Project Highlights
 
