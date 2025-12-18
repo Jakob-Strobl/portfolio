@@ -18,6 +18,12 @@ on:
         required: true
       CLOUDFLARE_ACCOUNT_ID:
         required: true
+      VITE_PUBLIC_POSTHOG_KEY:
+        required: true
+      VITE_PUBLIC_POSTHOG_HOST:
+        required: true
+      PRIVATE_POSTHOG_KEY:
+        required: false
 
 permissions:
   contents: write
@@ -42,6 +48,10 @@ jobs:
 
       - name: Build
         run: bun run cloudflare-step-deploy
+        env:
+          VITE_PUBLIC_POSTHOG_KEY: ${{ secrets.VITE_PUBLIC_POSTHOG_KEY }}
+          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.VITE_PUBLIC_POSTHOG_HOST }}
+          PRIVATE_POSTHOG_KEY: ${{ secrets.PRIVATE_POSTHOG_KEY }}
 
       - name: Publish
         uses: cloudflare/pages-action@v1
