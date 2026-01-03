@@ -1,4 +1,4 @@
-import { render } from "@solidjs/testing-library";
+import { render, fireEvent } from "@solidjs/testing-library";
 import { Route, MemoryRouter, createMemoryHistory } from "@solidjs/router";
 import SeoulFullPhoto from "../../src/routes/gallery/collections/korea-seoul/[uriKey]";
 import JejuFullPhoto from "../../src/routes/gallery/collections/korea-jeju/[uriKey]";
@@ -95,16 +95,37 @@ describe("Full Screen Photo", () => {
     });
 
     it("clicking thumbnail updates to that photo", async () => {
-      const firstPhoto = photos[0];
-      const targetPhoto = photos.length > 1 ? photos[1] : photos[0];
-      const page = await renderFullScreenPhoto(dir, firstPhoto.uri);
+      const page = await renderFullScreenPhoto(dir, photos[0].uri);
 
-      // Find links to target photo (second or first if only 1)
-      const links = page.container.querySelectorAll("a");
-      const targetPhotoLink = Array.from(links).find((link) => link.getAttribute("href")?.includes(targetPhoto.uri));
+      // Test first and last photo to ensure end iteration works
+      // Using a Set to handle cases where there is only 1 photo (0 and length-1 are same)
+      const indicesToTest = new Set([0, photos.length - 1]);
 
-      expect(targetPhotoLink).toBeDefined();
-      expect(targetPhotoLink?.getAttribute("href")).toContain(targetPhoto.uri);
+      for (const index of indicesToTest) {
+        const targetPhoto = photos[index];
+
+        // Find the thumbnail link for the target photo
+        // The thumbnail is wrapped in a container with data-photo-uri
+        const thumbnailContainer = page.container.querySelector(`[data-photo-uri="${targetPhoto.uri}"]`);
+        expect(thumbnailContainer).toBeInTheDocument();
+
+        const thumbnailLink = thumbnailContainer?.querySelector("a");
+        expect(thumbnailLink).not.toBeNull();
+
+        // Click the thumbnail
+        if (thumbnailLink) {
+          await fireEvent.click(thumbnailLink);
+          await waitForShadowAnimations();
+        }
+
+        // Verify the main photo has updated
+        // The main photo is an img that is not inside an anchor tag
+        const images = page.container.querySelectorAll("img");
+        const mainPhoto = Array.from(images).find((img) => !img.closest("a"));
+
+        expect(mainPhoto).toBeDefined();
+        expect(mainPhoto?.getAttribute("src")).toContain(targetPhoto.uri);
+      }
     });
   });
 
