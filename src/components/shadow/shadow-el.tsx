@@ -23,8 +23,8 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
 
-  // FIX: We get the value on load, so it lines up with the content. Once aligned it will scroll with content.
-  //      So this fixed the orignal `window.scrollY` in the transform. What was happening is everytime the rects state would change,
+  // NOTE: We get the value on load, so it lines up with the content. Once aligned it will scroll with content.
+  //      So this fixed the original `window.scrollY` in the transform. What was happening is everytime the rects state would change,
   //      it would also recalc the transform. I didn't realize since the expression is getting re-evaluated so is the value of window.scrollY
   const [scrollYOffset, setScrollYOffset]: Signal<number> = createSignal<number>(0);
   // FIX(IOS): On iOS when bouncing at top, scrollY goes negative which misaligns fixed shadows
