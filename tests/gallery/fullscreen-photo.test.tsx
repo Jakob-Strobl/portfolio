@@ -59,24 +59,20 @@ describe("Full Screen Photo", () => {
       expect(images.length).toBeGreaterThan(0);
     });
 
-    // TODO: Don't skip 
-    // TODO: Also iterate through and make sure end works
-    it.skipIf(photos.length < 2)("Next button links to next photo", async () => {
+    it("Next button links to next photo", async () => {
       const firstPhoto = photos[0];
-      const secondPhoto = photos[1];
+      const secondPhoto = photos.length > 1 ? photos[1] : photos[0];
       const page = await renderFullScreenPhoto(dir, firstPhoto.uri);
 
       const nextLink = page.getByRole("link", { name: /next/i });
       expect(nextLink).toBeInTheDocument();
 
-      // Should link to second photo
+      // Should link to second photo, or same photo if collection size < 2
       const href = nextLink.getAttribute("href");
       expect(href).toContain(secondPhoto.uri);
     });
   
-    // TODO: Don't skip 
-    // TODO: Also iterate through and make sure end works
-    it.skipIf(photos.length < 2)("last photo Next button wraps to first photo", async () => {
+    it("last photo Next button wraps to first photo", async () => {
       const lastPhoto = photos[photos.length - 1];
       const firstPhoto = photos[0];
       const page = await renderFullScreenPhoto(dir, lastPhoto.uri);
