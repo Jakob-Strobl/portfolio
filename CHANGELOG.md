@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.8](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.7...v0.9.8) (2026-01-05)
+
+
+### Bug Fixes
+
+* run bun install on cloud step deploy script ([e1a2da1](https://github.com/Jakob-Strobl/portfolio/commit/e1a2da121892b80843732d363400b533bc53565d))
+* **tests:** enable next button test in fullscreen photo ([19afcd7](https://github.com/Jakob-Strobl/portfolio/commit/19afcd705c1fa4aa50a987e1727414cef85a08f3))
+
 ## [0.9.7](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.6...v0.9.7) (2025-12-18)
 
 
