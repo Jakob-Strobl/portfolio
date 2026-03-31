@@ -64,7 +64,7 @@
   /* Custom screens */
   --breakpoint-xs: 30rem;
   --breakpoint-3xl: 112rem;
-  --breakpoint-4xl: 142ren;
+  --breakpoint-4xl: 142rem;
 }
 
 @layer base {
