@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.1...v0.10.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* **vinxi:** runtime warning by adding dependency ([ab13393](https://github.com/Jakob-Strobl/portfolio/commit/ab13393ca22d794773d7263dedd39e9c347b27f3))
+
 ## [0.10.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.0...v0.10.1) (2026-03-31)
 
 
