@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.0...v0.10.1) (2026-03-31)
+
+
+### Bug Fixes
+
+* add default export to entry-client.tsx ([9ccfa99](https://github.com/Jakob-Strobl/portfolio/commit/9ccfa995c7681183d889a5bd0f32bc802783410e))
+
 ## [0.10.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.8...v0.10.0) (2026-03-31)
 
 
