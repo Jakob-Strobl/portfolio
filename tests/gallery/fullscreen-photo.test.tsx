@@ -7,10 +7,9 @@ import GangneungFullPhoto from "../../src/routes/gallery/collections/korea-pacif
 import { waitForShadowAnimations } from "../helpers/test-utils";
 import { GALLERY_COLLECTIONS } from "../helpers/test-data";
 
-// Helper to render full screen photo page
-async function renderFullScreenPhoto(collectionDir: string, photoUri: string) {
+async function renderFullScreenPhoto(collectionDir: string, photoId: string) {
   const history = createMemoryHistory();
-  const route = `/gallery/collections/${collectionDir}/${photoUri}`;
+  const route = `/gallery/collections/${collectionDir}/${photoId}`;
   history.set({ value: route, replace: false, scroll: false, state: undefined });
 
   const page = render(() => (
@@ -26,35 +25,43 @@ async function renderFullScreenPhoto(collectionDir: string, photoUri: string) {
 }
 
 describe("Full Screen Photo", () => {
-  describe.each(GALLERY_COLLECTIONS)("Photo Display - $title", ({ title, dir, photos }) => {
+  describe.each(GALLERY_COLLECTIONS)("Photo Display - $title", ({ dir, photos }) => {
     it.each(photos)("renders full screen photo at correct route", async (photo) => {
-      const page = await renderFullScreenPhoto(dir, photo.uri);
+      const page = await renderFullScreenPhoto(dir, photo.id);
 
       expect(page.container).toBeInTheDocument();
     });
 
     it.each(photos)("photo displays in container", async (photo) => {
-      const page = await renderFullScreenPhoto(dir, photo.uri);
+      const page = await renderFullScreenPhoto(dir, photo.id);
 
-      // Check for images in the page
       const images = page.container.querySelectorAll("img");
       expect(images.length).toBeGreaterThan(0);
     });
 
     it.each(photos)("Gallery back button links to /gallery", async (photo) => {
-      const page = await renderFullScreenPhoto(dir, photo.uri);
+      const page = await renderFullScreenPhoto(dir, photo.id);
 
       const galleryLink = page.getByRole("link", { name: /gallery/i });
       expect(galleryLink).toBeInTheDocument();
       expect(galleryLink).toHaveAttribute("href", "/gallery");
     });
+
+    it.each(photos)("full photo serves original from R2", async (photo) => {
+      const page = await renderFullScreenPhoto(dir, photo.id);
+      const mainPhoto = Array.from(page.container.querySelectorAll("img")).find((img) => !img.closest("a"));
+      expect(mainPhoto).toBeDefined();
+      const src = mainPhoto?.getAttribute("src") ?? "";
+      expect(src).toContain(photo.r2Key);
+      expect(src).not.toContain("/cdn-cgi/image/");
+      expect(src).not.toContain("ufs.sh");
+    });
   });
 
-  describe.each(GALLERY_COLLECTIONS)("Collection Navigation - $title", ({ title, dir, photos }) => {
+  describe.each(GALLERY_COLLECTIONS)("Collection Navigation - $title", ({ dir, photos }) => {
     it.each(photos)("displays thumbnail strip for collection", async (photo) => {
-      const page = await renderFullScreenPhoto(dir, photo.uri);
+      const page = await renderFullScreenPhoto(dir, photo.id);
 
-      // Should have multiple images (main photo + thumbnails)
       const images = page.container.querySelectorAll("img");
       expect(images.length).toBeGreaterThan(0);
     });
@@ -62,81 +69,74 @@ describe("Full Screen Photo", () => {
     it("Next button links to next photo", async () => {
       const firstPhoto = photos[0];
       const secondPhoto = photos.length > 1 ? photos[1] : photos[0];
-      const page = await renderFullScreenPhoto(dir, firstPhoto.uri);
+      const page = await renderFullScreenPhoto(dir, firstPhoto.id);
 
       const nextLink = page.getByRole("link", { name: /next/i });
       expect(nextLink).toBeInTheDocument();
 
-      // Should link to second photo, or same photo if collection size < 2
       const href = nextLink.getAttribute("href");
-      expect(href).toContain(secondPhoto.uri);
+      expect(href).toContain(secondPhoto.id);
     });
-  
+
     it("last photo Next button wraps to first photo", async () => {
       const lastPhoto = photos[photos.length - 1];
       const firstPhoto = photos[0];
-      const page = await renderFullScreenPhoto(dir, lastPhoto.uri);
+      const page = await renderFullScreenPhoto(dir, lastPhoto.id);
 
       const nextLink = page.getByRole("link", { name: /next/i });
       expect(nextLink).toBeInTheDocument();
 
-      // Should wrap back to first photo
       const href = nextLink.getAttribute("href");
-      expect(href).toContain(firstPhoto.uri);
+      expect(href).toContain(firstPhoto.id);
     });
 
-    
     it.each(photos)("current photo has indicator dot", async (photo) => {
-      const page = await renderFullScreenPhoto(dir, photo.uri);
+      const page = await renderFullScreenPhoto(dir, photo.id);
 
-      // Look for elements with data-photo-uri attribute
-      const photoElements = page.container.querySelectorAll(`[data-photo-uri="${photo.uri}"]`);
+      const photoElements = page.container.querySelectorAll(`[data-photo-uri="${photo.id}"]`);
       expect(photoElements.length).toBeGreaterThan(0);
     });
 
     it("clicking thumbnail updates to that photo", async () => {
-      const page = await renderFullScreenPhoto(dir, photos[0].uri);
+      const page = await renderFullScreenPhoto(dir, photos[0].id);
 
-      // Test first and last photo to ensure end iteration works
-      // Using a Set to handle cases where there is only 1 photo (0 and length-1 are same)
       const indicesToTest = new Set([0, photos.length - 1]);
 
       for (const index of indicesToTest) {
         const targetPhoto = photos[index];
-
-        // Find the thumbnail link for the target photo
-        // The thumbnail is wrapped in a container with data-photo-uri
-        const thumbnailContainer = page.container.querySelector(`[data-photo-uri="${targetPhoto.uri}"]`);
+        const thumbnailContainer = page.container.querySelector(`[data-photo-uri="${targetPhoto.id}"]`);
         expect(thumbnailContainer).toBeInTheDocument();
 
         const thumbnailLink = thumbnailContainer?.querySelector("a");
         expect(thumbnailLink).not.toBeNull();
 
-        // Click the thumbnail
         if (thumbnailLink) {
           await fireEvent.click(thumbnailLink);
           await waitForShadowAnimations();
         }
 
-        // Verify the main photo has updated
-        // The main photo is an img that is not inside an anchor tag
         const images = page.container.querySelectorAll("img");
         const mainPhoto = Array.from(images).find((img) => !img.closest("a"));
 
         expect(mainPhoto).toBeDefined();
-        expect(mainPhoto?.getAttribute("src")).toContain(targetPhoto.uri);
+        expect(mainPhoto?.getAttribute("src")).toContain(targetPhoto.r2Key);
       }
     });
   });
 
-  describe.each(GALLERY_COLLECTIONS)("Photo Collection Data - $title", ({title, photos}) => {
+  describe.each(GALLERY_COLLECTIONS)("Photo Collection Data - $title", ({ title, photos }) => {
     it("$title collection has multiple photos", () => {
       expect(photos.length).toBeGreaterThan(0);
     });
 
-    it.each(photos)("$title photos have valid URI format", (photo) => {
-      expect(photo.uri).toBeDefined();
-      expect(photo.uri.length).toBeGreaterThan(0);
+    it.each(photos)("$title photos have valid ID format", (photo) => {
+      expect(photo.id).toBeDefined();
+      expect(photo.id.length).toBeGreaterThan(0);
+    });
+
+    it.each(photos)("$title photos have R2 keys", (photo) => {
+      expect(photo.r2Key).toBeDefined();
+      expect(photo.r2Key).toMatch(/^gallery\//);
     });
 
     it.each(photos)("$title photos have dimensions", (photo) => {
@@ -144,5 +144,14 @@ describe("Full Screen Photo", () => {
       expect(photo.dimensions?.x).toBeGreaterThan(0);
       expect(photo.dimensions?.y).toBeGreaterThan(0);
     });
+  });
+
+  it("unknown slug safely falls back to first photo in collection", async () => {
+    const collection = GALLERY_COLLECTIONS[0];
+    const page = await renderFullScreenPhoto(collection.dir, "does-not-exist");
+
+    const mainPhoto = Array.from(page.container.querySelectorAll("img")).find((img) => !img.closest("a"));
+    expect(mainPhoto).toBeDefined();
+    expect(mainPhoto?.getAttribute("src")).toContain(collection.photos[0].r2Key);
   });
 });

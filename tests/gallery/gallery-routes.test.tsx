@@ -1,13 +1,12 @@
-import { render } from "@solidjs/testing-library";
+import { render, fireEvent } from "@solidjs/testing-library";
 import { Route, MemoryRouter, createMemoryHistory } from "@solidjs/router";
 import Gallery from "../../src/routes/gallery/(gallery)";
 import { waitForShadowAnimations } from "../helpers/test-utils";
 import { GALLERY_COLLECTIONS, TIMELINE_TITLE_ATTR } from "../helpers/test-data";
 
-// Helper to render gallery page at /gallery route
-async function renderGalleryPage() {
+async function renderGalleryPage(route = "/gallery") {
   const history = createMemoryHistory();
-  history.set({ value: "/gallery", replace: false, scroll: false, state: undefined });
+  history.set({ value: route, replace: false, scroll: false, state: undefined });
 
   const page = render(() => (
     <MemoryRouter history={history}>
@@ -45,11 +44,9 @@ describe("Gallery Routes", () => {
     it("shows correct timeline headers", async () => {
       const page = await renderGalleryPage();
 
-      // Check for "2018-2019" timeline
       const timeline2018 = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2018-2019"]`);
       expect(timeline2018).toBeInTheDocument();
 
-      // Check for "2019" timeline (appears multiple times, just verify one exists)
       const timeline2019 = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2019"]`);
       expect(timeline2019).toBeInTheDocument();
     });
@@ -57,9 +54,21 @@ describe("Gallery Routes", () => {
     it("renders at least one photo per collection", async () => {
       const page = await renderGalleryPage();
 
-      // Count images - should have at least 4 (one per collection minimum)
       const images = page.container.querySelectorAll("img");
       expect(images.length).toBeGreaterThanOrEqual(4);
+    });
+
+    it("uses R2 image URLs (transforms applied in production only)", async () => {
+      const page = await renderGalleryPage();
+
+      const images = page.container.querySelectorAll("img");
+      expect(images.length).toBeGreaterThan(0);
+
+      for (const image of images) {
+        const src = image.getAttribute("src") ?? "";
+        expect(src).toContain("images.jstrobl.dev/gallery/");
+        expect(src).not.toContain("ufs.sh");
+      }
     });
   });
 
@@ -69,17 +78,42 @@ describe("Gallery Routes", () => {
         collection.photos.map((photo) => ({
           collectionTitle: collection.title,
           collectionDir: collection.dir,
-          photoUri: photo.uri,
+          photoId: photo.id,
         })),
       ),
-    )("$collectionTitle: photo $photoUri links to full screen view", async ({ collectionDir, photoUri }) => {
+    )("$collectionTitle: photo $photoId links to full screen view", async ({ collectionDir, photoId }) => {
       const page = await renderGalleryPage();
 
-      // Find a link with the expected href pattern
-      const expectedHref = `/gallery/collections/${collectionDir}/${photoUri}`;
+      const expectedHref = `/gallery/collections/${collectionDir}/${photoId}`;
       const photoLink = page.container.querySelector(`a[href="${expectedHref}"]`);
 
       expect(photoLink).toBeInTheDocument();
+    });
+  });
+
+  describe("Pagination", () => {
+    it("shows load-more button when page size is smaller than photo count", async () => {
+      const page = await renderGalleryPage("/gallery?pageSize=4");
+
+      const button = page.getByRole("button", { name: /load more photos/i });
+      expect(button).toBeInTheDocument();
+    });
+
+    it("clicking load-more appends additional photos without duplicates", async () => {
+      const page = await renderGalleryPage("/gallery?pageSize=4");
+
+      const linksBefore = page.container.querySelectorAll('a[href^="/gallery/collections/"]');
+      const uniqueBefore = new Set(Array.from(linksBefore).map((link) => link.getAttribute("href") ?? ""));
+      expect(uniqueBefore.size).toBe(4);
+
+      const button = page.getByRole("button", { name: /load more photos/i });
+      await fireEvent.click(button);
+      await waitForShadowAnimations();
+
+      const linksAfter = page.container.querySelectorAll('a[href^="/gallery/collections/"]');
+      const uniqueAfter = new Set(Array.from(linksAfter).map((link) => link.getAttribute("href") ?? ""));
+      expect(uniqueAfter.size).toBeGreaterThan(uniqueBefore.size);
+      expect(uniqueAfter.size).toBe(8);
     });
   });
 });

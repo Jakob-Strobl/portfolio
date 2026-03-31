@@ -1,0 +1,122 @@
+[
+  {
+    "id": "seoul-seoul-alley",
+    "name": "Seoul - Alley.jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 3200,
+      "y": 2096
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-alley.jpg"
+  },
+  {
+    "id": "seoul-seoul-city-mountain-scape",
+    "name": "Seoul - City Mountain Scape.jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 3200,
+      "y": 2133
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-city-mountain-scape.jpg"
+  },
+  {
+    "id": "seoul-seoul-cityscape",
+    "name": "Seoul - Cityscape.jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 2800,
+      "y": 1867
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-cityscape.jpg"
+  },
+  {
+    "id": "seoul-seoul-cool-bg",
+    "name": "Seoul - Cool Bg.jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 2560,
+      "y": 1707
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-cool-bg.jpg"
+  },
+  {
+    "id": "seoul-seoul-river",
+    "name": "Seoul - River .jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 2560,
+      "y": 3181
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-river.jpg"
+  },
+  {
+    "id": "seoul-seoul-city-wide",
+    "name": "Seoul - City Wide.jpg",
+    "collection": "korea-seoul",
+    "dimensions": {
+      "x": 4200,
+      "y": 1074
+    },
+    "r2Key": "gallery/korea-seoul/seoul-seoul-city-wide.jpg"
+  },
+  {
+    "id": "jeju-jeju-lighthouse-viewpoint",
+    "name": "Jeju - Lighthouse viewpoint.jpg",
+    "collection": "korea-jeju",
+    "dimensions": {
+      "x": 3000,
+      "y": 2000
+    },
+    "r2Key": "gallery/korea-jeju/jeju-jeju-lighthouse-viewpoint.jpg"
+  },
+  {
+    "id": "jeju-jeju-red-rock-ocean",
+    "name": "Jeju - Red Rock Ocean.jpg",
+    "collection": "korea-jeju",
+    "dimensions": {
+      "x": 3000,
+      "y": 1988
+    },
+    "r2Key": "gallery/korea-jeju/jeju-jeju-red-rock-ocean.jpg"
+  },
+  {
+    "id": "jeju-boat-off-the-coast-of-jeju",
+    "name": "Boat off the coast of Jeju",
+    "collection": "korea-jeju",
+    "dimensions": {
+      "x": 2560,
+      "y": 1716
+    },
+    "r2Key": "gallery/korea-jeju/jeju-boat-off-the-coast-of-jeju.jpg"
+  },
+  {
+    "id": "himeji-himeji-castle-panorama",
+    "name": "Himeji Castle Panorama",
+    "collection": "himeji",
+    "dimensions": {
+      "x": 2560,
+      "y": 1329
+    },
+    "r2Key": "gallery/himeji/himeji-himeji-castle-panorama.jpg"
+  },
+  {
+    "id": "pacific-coast-sunset-glimmer",
+    "name": "Sunset Glimmer",
+    "collection": "korea-pacific-coast",
+    "dimensions": {
+      "x": 2560,
+      "y": 3841
+    },
+    "r2Key": "gallery/korea-pacific-coast/pacific-coast-sunset-glimmer.jpg"
+  },
+  {
+    "id": "pacific-coast-pacific-shoreline",
+    "name": "Pacific Shoreline",
+    "collection": "korea-pacific-coast",
+    "dimensions": {
+      "x": 2560,
+      "y": 1701
+    },
+    "r2Key": "gallery/korea-pacific-coast/pacific-coast-pacific-shoreline.jpg"
+  }
+]
