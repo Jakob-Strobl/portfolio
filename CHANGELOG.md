@@ -6,6 +6,14 @@
 ### Bug Fixes
 
 * add default export to entry-client.tsx ([9ccfa99](https://github.com/Jakob-Strobl/portfolio/commit/9ccfa995c7681183d889a5bd0f32bc802783410e))
+* **vinxi:** resolve runtime warning by adding baseline-browser-mapping dependency ([ab13393](https://github.com/Jakob-Strobl/portfolio/commit/ab13393))
+* **css:** fix typo in 4xl breakpoint custom property (142ren → 142rem)
+
+
+### Maintenance
+
+* **deps:** upgrade all 25 dependencies to latest stable — including @solidjs/start 1.2→1.3, vite 7→8, tailwindcss 4.1→4.2, lucide-solid 0.x→1.x, vitest 4.0→4.1, wrangler 4.55→4.79 ([ee8bec7](https://github.com/Jakob-Strobl/portfolio/commit/ee8bec7))
+* remove dead `solid-start` devDependency and migration scripts ([cf707cd](https://github.com/Jakob-Strobl/portfolio/commit/cf707cd))
 
 ## [0.10.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.8...v0.10.0) (2026-03-31)
 
