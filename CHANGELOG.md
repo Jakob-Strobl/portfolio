@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.8...v0.10.0) (2026-03-31)
+
+
+### Features
+
+* **gallery:** migrate image hosting from UploadThing to Cloudflare R2 ([e0d7b26](https://github.com/Jakob-Strobl/portfolio/commit/e0d7b26d70cfb047a949d951213533bd62816635))
+
 ## [0.9.8](https://github.com/Jakob-Strobl/portfolio/compare/v0.9.7...v0.9.8) (2026-01-05)
 
 
