@@ -11,7 +11,7 @@ Images are stored in Cloudflare R2 and served through Image Transformations on `
 ## Variant Parameters
 
 | Variant | Fit        | Width | Height | Quality |
-|---------|------------|-------|--------|---------|
+| ------- | ---------- | ----- | ------ | ------- |
 | thumb   | cover      | 640   | 640    | 70      |
 | grid    | cover      | 1280  | 960    | 78      |
 | full    | scale-down | 2560  | 2560   | 82      |
@@ -23,23 +23,8 @@ The `full` variant skips transforms entirely and serves the original from R2.
 ## Required Environment Variables
 
 ### Runtime (Cloudflare Pages)
+
 - `VITE_PUBLIC_R2_IMAGES_DOMAIN` — R2 custom domain (default: `images.jstrobl.dev`)
-
-### Migration script only
-- `CLOUDFLARE_ACCOUNT_ID`
-- `R2_ACCESS_KEY_ID` — R2 API token access key
-- `R2_SECRET_ACCESS_KEY` — R2 API token secret key
-- `R2_BUCKET_NAME` — e.g. `portfolio-images`
-
-## One-time migration
-
-```bash
-bun add -d @aws-sdk/client-s3
-bun run migrate-images
-```
-
-The script downloads each image from UploadThing and uploads it to R2, then writes an updated
-catalog at `src/data/gallery/photo-catalog.json` and a migration report in `scripts/migration-reports/`.
 
 ## R2 object key structure
 
