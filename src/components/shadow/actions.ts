@@ -2,9 +2,7 @@ import { Accessor, batch, createEffect, createSignal } from "solid-js";
 import { ShadowOriginOptions, ShadowRect } from "./types";
 import { scaleAndCenterVec } from "../../actions/vector-actions";
 import { Rect } from "../../types/rect";
-import { isTest } from "../../actions/test-actions";
 import { setState, state } from "./umbra";
-import { isDev } from "solid-js/web";
 
 export function createRecalculateShadowClientRectsOn(...signals: Accessor<any>[]) {
   createEffect(() => {
@@ -33,6 +31,12 @@ function hasMeaningfulDelta(first: number, second: number) {
   return Math.abs(first - second) >= MEANINGFUL_GEOMETRY_DELTA;
 }
 
+function getShadowPosition(clientRect: DOMRect, fixed: boolean, scrollX: number, scrollY: number) {
+  return fixed
+    ? { x: clientRect.x, y: Math.max(0, clientRect.y) }
+    : { x: clientRect.x + scrollX, y: clientRect.y + scrollY };
+}
+
 export function isShadowSourceVisible(shadowedEl: HTMLElement) {
   if (!shadowedEl.isConnected) return false;
   if (
@@ -49,15 +53,15 @@ export function isShadowSourceVisible(shadowedEl: HTMLElement) {
  * in one source can move any following sibling without resizing that sibling.
  */
 export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition") {
+  if (typeof window === "undefined") return false;
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
   const measurements = state.shadows.map((shadow) => {
     const clientRect = shadow.shadowedEl.getBoundingClientRect();
     const position = shadow.position();
     const dimensions = shadow.dimensions();
     const visible = isShadowSourceVisible(shadow.shadowedEl);
-    const nextPosition = {
-      x: clientRect.x,
-      y: shadow.fixed ? Math.max(0, clientRect.y) : clientRect.y,
-    };
+    const nextPosition = getShadowPosition(clientRect, shadow.fixed, scrollX, scrollY);
     const nextDimensions = { x: clientRect.width, y: clientRect.height };
     const geometryChanged =
       hasMeaningfulDelta(position.x, nextPosition.x) ||
@@ -109,9 +113,7 @@ export const addShadow = (
     "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed" | "interactionActive" | "blurOnInteraction"
   >,
 ) => {
-  if (!isTest() && isDev) {
-    console.log("Adding shadow: ", shadowedEl, state.shadows.length, state.removedShadows.length);
-  }
+  if (typeof window === "undefined" || shadowedEl == null) return false;
 
   // Check any removed shadows to see if the removed shadows position can be used to start from
   // NOTE: Elements are unmounted from bottom up, and elements are mounted from top down
@@ -151,9 +153,10 @@ export const addShadow = (
   }
 
   const clientRect = shadowedEl.getBoundingClientRect();
+  const initialPosition = getShadowPosition(clientRect, shadowRectOptions.fixed, window.scrollX, window.scrollY);
   const [position, setPosition] = createSignal({
-    x: clientRect.x,
-    y: clientRect.y,
+    x: initialPosition.x,
+    y: initialPosition.y,
   });
   const [dimensions, setDimensions] = createSignal({
     x: clientRect.width,
@@ -187,15 +190,14 @@ export const addShadow = (
       shadows: [...state.shadows, shadowRect],
     };
   });
+  return true;
 };
 
 export const removeShadow = (shadowToRemoveId: string) => {
+  if (typeof window === "undefined") return false;
   const removedShadow = state.shadows.find((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
 
-  if (removedShadow == undefined) {
-    console.warn("Tried to remove shadow that doesn't exist: ", shadowToRemoveId);
-    return;
-  }
+  if (removedShadow == undefined) return false;
 
   const filteredShadows = state.shadows.filter((shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId);
 
@@ -203,19 +205,21 @@ export const removeShadow = (shadowToRemoveId: string) => {
     shadows: filteredShadows,
     removedShadows: [...state.removedShadows, removedShadow],
   });
+  return true;
 };
 
 export const hardRemoveShadow = (shadowToRemoveId: string | undefined) => {
-  if (shadowToRemoveId == undefined) {
-    console.warn("Tried to hard remove shadow with undefined id");
-    return;
-  }
+  if (typeof window === "undefined" || shadowToRemoveId == undefined) return false;
+
+  const hasShadow = state.removedShadows.some((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
+  if (!hasShadow) return false;
 
   const filteredRemovedShadows = state.removedShadows.filter(
     (shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId,
   );
 
   setState({ removedShadows: filteredRemovedShadows });
+  return true;
 };
 
 export const clearRemovedShadows = () => {

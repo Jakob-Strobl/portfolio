@@ -5,7 +5,12 @@ import { createSignal, type Setter } from "solid-js";
 
 import Shadow from "../../src/components/shadow/shadow";
 import Umbra, { setState, state } from "../../src/components/shadow/umbra";
-import { forceRecalculateShadowClientRects, synchronizeShadowClientRects } from "../../src/components/shadow/actions";
+import {
+  addShadow,
+  forceRecalculateShadowClientRects,
+  removeShadow,
+  synchronizeShadowClientRects,
+} from "../../src/components/shadow/actions";
 import type { ShadowRect, ShadowStates } from "../../src/components/shadow/types";
 
 class ResizeObserverMock {
@@ -222,6 +227,91 @@ describe("Umbra shadow geometry observer", () => {
     expect(forceRecalculateShadowClientRects()).toBe(true);
     expect(shadow.snapToSource()).toBe(false);
     expect(shadow.shadowState()).toBe("moving");
+    element.remove();
+  });
+
+  test("keeps non-fixed shadows in document coordinates through scrolling and repeated layout toggles", () => {
+    let scrollX = 25;
+    let scrollY = 400;
+    vi.spyOn(window, "scrollX", "get").mockImplementation(() => scrollX);
+    vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
+    const element = document.body.appendChild(document.createElement("div"));
+    element.dataset.shadow = "scrolling-card";
+    const layout = { x: -5, y: 600, width: 300, height: 120, visible: true };
+    mockLayout(element, layout);
+    const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
+
+    expect(
+      addShadow(element, "self", {
+        shadowState,
+        setShadowState,
+        warmupDelayMs: 0,
+        fixed: false,
+        interactionActive: () => false,
+        blurOnInteraction: false,
+      }),
+    ).toBe(true);
+    const shadow = state.shadows[0];
+    expect(shadow.position()).toEqual({ x: 20, y: 1000 });
+
+    // First expansion moves the project down while scroll anchoring also moves the viewport.
+    scrollY = 650;
+    layout.y = 750;
+    expect(synchronizeShadowClientRects("snap")).toBe(true);
+    expect(shadow.position().y).toBe(1400);
+
+    // Collapse and a second expansion use different scroll positions but resolve
+    // to the same document positions as the corresponding previous states.
+    scrollY = 300;
+    layout.y = 700;
+    synchronizeShadowClientRects("snap");
+    expect(shadow.position().y).toBe(1000);
+    scrollY = 720;
+    layout.y = 680;
+    synchronizeShadowClientRects("snap");
+    expect(shadow.position().y).toBe(1400);
+
+    // Horizontal document coordinates use the same current-scroll model.
+    scrollX = 40;
+    layout.x = -20;
+    expect(synchronizeShadowClientRects("snap")).toBe(false);
+    expect(shadow.position().x).toBe(20);
+    element.remove();
+  });
+
+  test("keeps fixed shadows viewport-relative and makes cleanup idempotent", () => {
+    let scrollX = 80;
+    let scrollY = 500;
+    vi.spyOn(window, "scrollX", "get").mockImplementation(() => scrollX);
+    vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
+    const element = document.body.appendChild(document.createElement("div"));
+    element.dataset.shadow = "fixed-card";
+    const layout = { x: 20, y: -15, width: 200, height: 60, visible: true };
+    mockLayout(element, layout);
+    const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
+    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    addShadow(element, "self", {
+      shadowState,
+      setShadowState,
+      warmupDelayMs: 0,
+      fixed: true,
+      interactionActive: () => false,
+      blurOnInteraction: false,
+    });
+    const shadow = state.shadows[0];
+    expect(shadow.position()).toEqual({ x: 20, y: 0 });
+
+    scrollX = 120;
+    scrollY = 700;
+    layout.y = 45;
+    synchronizeShadowClientRects("snap");
+    expect(shadow.position()).toEqual({ x: 20, y: 45 });
+
+    expect(removeShadow("fixed-card")).toBe(true);
+    expect(removeShadow("fixed-card")).toBe(false);
+    expect(state.removedShadows).toHaveLength(1);
+    expect(warning).not.toHaveBeenCalled();
     element.remove();
   });
 });

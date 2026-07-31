@@ -1,4 +1,4 @@
-import { batch, createMemo, createRenderEffect, createSignal, onMount, Signal } from "solid-js";
+import { batch, createMemo, createRenderEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { ShadowRect } from "./types";
 
 interface ShadowRectProps {
@@ -23,45 +23,29 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
 
-  // NOTE: We get the value on load, so it lines up with the content. Once aligned it will scroll with content.
-  //      So this fixed the original `window.scrollY` in the transform. What was happening is everytime the rects state would change,
-  //      it would also recalc the transform. I didn't realize since the expression is getting re-evaluated so is the value of window.scrollY
-  const [scrollYOffset, setScrollYOffset]: Signal<number> = createSignal<number>(0);
   // FIX(IOS): On iOS when bouncing at top, scrollY goes negative which misaligns fixed shadows
   const [isElasticBouncing, setIsElasticBouncing] = createSignal(false);
   onMount(() => {
-    setScrollYOffset(window.scrollY);
-
     if (rect.fixed) {
-      window.addEventListener(
-        "scroll",
-        () => {
-          const wasElastic = isElasticBouncing();
-          const isElastic = window.scrollY < 0;
-          if (isElastic !== wasElastic) {
-            setIsElasticBouncing(isElastic);
-          }
+      const handleScroll = () => {
+        const wasElastic = isElasticBouncing();
+        const isElastic = window.scrollY < 0;
+        if (isElastic !== wasElastic) setIsElasticBouncing(isElastic);
 
-          if (wasElastic && window.scrollY === 0) {
-            batch(() => {
-              setIsElasticBouncing(false);
-              const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
-              const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
-              rect.setPosition({ x: clientRect.x, y: clientY });
-              rect.setDimensions({ x: clientRect.width, y: clientRect.height });
-              rect.setSnapToSource(false);
-              rect.setShadowState("moving");
-            });
-          }
-        },
-        { passive: true },
-      );
-    } else {
-      // skip resizing listener for fixed shadows
-      // If we mount on a non-zero scrollY and user resizes it will be misaligned using the original scrollY as the "top"
-      window.addEventListener("resize", () => {
-        setScrollYOffset(window.scrollY);
-      });
+        if (wasElastic && window.scrollY === 0) {
+          batch(() => {
+            setIsElasticBouncing(false);
+            const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
+            const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
+            rect.setPosition({ x: clientRect.x, y: clientY });
+            rect.setDimensions({ x: clientRect.width, y: clientRect.height });
+            rect.setSnapToSource(false);
+            rect.setShadowState("moving");
+          });
+        }
+      };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      onCleanup(() => window.removeEventListener("scroll", handleScroll));
     }
   });
 
@@ -120,9 +104,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         height: `${statefulRect().dimensions.y}px`,
         top: 0,
         left: 0,
-        transform: `translate3d(${statefulRect().position.x}px, ${
-          statefulRect().position.y + (rect.fixed ? 0 : scrollYOffset())
-        }px, 0)`,
+        transform: `translate3d(${statefulRect().position.x}px, ${statefulRect().position.y}px, 0)`,
         opacity: isShadowCold(rect) ? 0 : 1,
         position: rect.fixed ? "fixed" : undefined,
       }}

@@ -63,11 +63,12 @@ export default function Shadow(props: ShadowProps) {
   const [focusWithin, setFocusWithin] = createSignal(false);
   const interactionActive = createMemo(() => pointerHovered() || focusWithin());
   let shadowEl: HTMLDivElement;
+  let registered = false;
 
   onMount(() => {
     // setTimeout(() => setReady(true), 0);
     // use onMount or createEffect to read after connected to DOM
-    addShadow(shadowEl, props.origin, {
+    registered = addShadow(shadowEl, props.origin, {
       shadowState,
       setShadowState,
       fixed: props.fixed ?? false,
@@ -78,6 +79,8 @@ export default function Shadow(props: ShadowProps) {
   });
 
   onCleanup(() => {
+    if (!registered) return;
+    registered = false;
     removeShadow(shadowId);
   });
 

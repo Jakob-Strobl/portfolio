@@ -67,15 +67,14 @@ export default function Umbra(props: UmbraProps) {
     });
   });
 
-  createRenderEffect((prevShadows) => {
-    state.shadows;
+  createRenderEffect(() => {
+    if (typeof window === "undefined") return;
+    const shadows = state.shadows;
     reconcileObservedElements();
     queueMicrotask(() => {
-      console.log("Clearing removed shadows");
       clearRemovedShadows();
     });
-    console.log("Umbra render effect - shadows: ", state.shadows, prevShadows);
-    return state.shadows;
+    return shadows;
   });
 
   return (
