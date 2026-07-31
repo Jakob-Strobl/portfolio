@@ -10,6 +10,7 @@ type BackgroundSettingsTriggerProps = {
   panelId: string;
   onOpenChange(isOpen: boolean): void;
   triggerRef?: (element: HTMLButtonElement) => void;
+  describedBy?: string;
 };
 
 type BackgroundSettingsPanelProps = {
@@ -68,6 +69,7 @@ export function BackgroundSettingsTrigger(props: BackgroundSettingsTriggerProps)
       aria-haspopup="dialog"
       aria-expanded={props.isOpen}
       aria-controls={props.panelId}
+      aria-describedby={props.describedBy}
       onClick={() => props.onOpenChange(!props.isOpen)}
     >
       <SlidersHorizontal aria-hidden="true" size={15} strokeWidth={1.75} />
