@@ -7,6 +7,7 @@ const vec3 FOG_COLOR = vec3(0.0745, 0.051, 0.1255);
 
 uniform float uTime;
 uniform float uIntensity;
+uniform float uHueOffset;
 
 in vec3 vWorldPosition;
 in float vCameraDepth;
@@ -15,7 +16,7 @@ out vec4 outColor;
 
 void main() {
     float hue = vWorldPosition.x * 0.012 + vWorldPosition.z * 0.006
-        + vWorldPosition.y * 0.16 + uTime * 0.008;
+        + vWorldPosition.y * 0.16 + uTime * 0.008 + uHueOffset;
     vec3 rainbow = 0.56 + 0.44 * cos(TAU * (hue + vec3(0.0, 0.33, 0.67)));
     vec3 surfaceNormal = normalize(cross(dFdx(vWorldPosition), dFdy(vWorldPosition)));
     float diffuseLight = 0.82 + 0.18 * abs(dot(surfaceNormal, normalize(vec3(-0.35, 0.8, 0.48))));

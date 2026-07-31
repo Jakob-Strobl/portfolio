@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import { createWaveParameters } from "../../src/backgrounds/wave-model";
+import { createWaveHueOffset, createWaveParameters } from "../../src/backgrounds/wave-model";
 
 describe("createWaveParameters", () => {
   test("is deterministic for a seed", () => {
@@ -42,5 +42,27 @@ describe("createWaveParameters", () => {
       expect(totalAmplitude).toBeLessThanOrEqual(0.72 + Number.EPSILON);
       expect(totalSteepness).toBeLessThanOrEqual(0.35 + Number.EPSILON);
     }
+  });
+});
+
+describe("createWaveHueOffset", () => {
+  test("is deterministic, normalized, and independent across seeds", () => {
+    const offset = createWaveHueOffset(123456);
+
+    expect(offset).toBe(createWaveHueOffset(123456));
+    expect(offset).toBeGreaterThanOrEqual(0);
+    expect(offset).toBeLessThan(1);
+    expect(createWaveHueOffset(-1)).toBe(createWaveHueOffset(0xffffffff));
+    expect(offset).not.toBe(createWaveHueOffset(654321));
+  });
+
+  test("distributes starting hues across the full rainbow", () => {
+    const offsets = Array.from({ length: 128 }, (_, seed) => createWaveHueOffset(seed));
+    const occupiedOctants = new Set(offsets.map((offset) => Math.floor(offset * 8)));
+
+    expect(new Set(offsets).size).toBe(offsets.length);
+    expect(occupiedOctants.size).toBe(8);
+    expect(Math.min(...offsets)).toBeLessThan(0.05);
+    expect(Math.max(...offsets)).toBeGreaterThan(0.95);
   });
 });

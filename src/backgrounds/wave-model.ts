@@ -44,6 +44,13 @@ export function createBackgroundSeed(): number {
   return Math.floor(Math.random() * 4294967296) >>> 0;
 }
 
+export function createWaveHueOffset(seed: number): number {
+  let value = normalizeSeed(seed) ^ 0xa511e9b3;
+  value = Math.imul(value ^ (value >>> 16), 0x85ebca6b);
+  value = Math.imul(value ^ (value >>> 13), 0xc2b2ae35);
+  return ((value ^ (value >>> 16)) >>> 0) / 4294967296;
+}
+
 export function createWaveParameters(seed: number): WaveParameters[] {
   const random = mulberry32(normalizeSeed(seed));
   const windAngle = random() * TAU;

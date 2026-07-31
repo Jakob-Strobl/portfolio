@@ -1,7 +1,7 @@
 import fragmentSource from "./waves.frag";
 import vertexSource from "./waves.vert";
 import type { BackgroundEffect, WavesBackgroundConfig } from "./types";
-import { createWaveParameters } from "./wave-model";
+import { createWaveHueOffset, createWaveParameters } from "./wave-model";
 import { createProgram, requireUniform } from "./webgl";
 
 const GRID_COLUMNS = 64;
@@ -16,6 +16,7 @@ type WaveUniforms = {
   angularFrequencies: WebGLUniformLocation;
   steepness: WebGLUniformLocation;
   phases: WebGLUniformLocation;
+  hueOffset: WebGLUniformLocation;
   intensity: WebGLUniformLocation;
   time: WebGLUniformLocation;
   aspectRatio: WebGLUniformLocation;
@@ -85,6 +86,7 @@ export function createWavesEffect(
     angularFrequencies: requireUniform(gl, program, "uAngularFrequencies[0]"),
     steepness: requireUniform(gl, program, "uWaveSteepness[0]"),
     phases: requireUniform(gl, program, "uWavePhases[0]"),
+    hueOffset: requireUniform(gl, program, "uHueOffset"),
     intensity: requireUniform(gl, program, "uIntensity"),
     time: requireUniform(gl, program, "uTime"),
     aspectRatio: requireUniform(gl, program, "uAspectRatio"),
@@ -140,6 +142,7 @@ export function createWavesEffect(
       uniforms.phases,
       waves.map((wave) => wave.phase),
     );
+    gl.uniform1f(uniforms.hueOffset, createWaveHueOffset(config.seed));
     gl.uniform1f(uniforms.intensity, clamp(config.intensity, 0, 1.5));
   }
 
