@@ -12,6 +12,9 @@ const RETIRE_DURATION_SECONDS = 2.4;
 const BOUNDARY_MARGIN = 0.09;
 const TAU = Math.PI * 2;
 const LIFECYCLE_PULSE_DURATION_SECONDS = 3.2;
+const LIFECYCLE_MOTION_STRENGTH = 0.8;
+const MIN_ANCHOR_MASS = 0.72;
+const MAX_ANCHOR_MASS = 1.42;
 
 export type TessellationAnchorState = "active" | "budding" | "retiring" | "dead";
 
@@ -29,6 +32,7 @@ export type TessellationAnchor = {
   hue: number;
   hueRate: number;
   brightness: number;
+  mass: number;
   glowPhase: number;
   glowFrequency: number;
   boundary: boolean;
@@ -116,6 +120,7 @@ function createAnchor(model: TessellationModel, x: number, y: number, boundary =
     hue: nextRandom(model),
     hueRate: randomRange(model, 0.0025, 0.008),
     brightness: randomRange(model, 0.72, 1),
+    mass: randomRange(model, MIN_ANCHOR_MASS, MAX_ANCHOR_MASS),
     glowPhase: nextRandom(model) * TAU,
     glowFrequency: randomRange(model, 0.075, 0.16),
     boundary,
@@ -197,7 +202,7 @@ export function createTessellationModel(seed: number, aspectRatio = 16 / 9): Tes
 
   addInteriorAnchors(model, interiorCount);
   addBoundaryAnchors(model, interiorCount);
-  model.nextEventAt = randomRange(model, 7, 12);
+  model.nextEventAt = randomRange(model, 5.5, 9);
   return model;
 }
 
@@ -369,13 +374,14 @@ export function getLifecyclePulseInfluence(
 
 export function getAnchorGlow(model: TessellationModel, anchor: TessellationAnchor) {
   const ambientWave = 0.5 + 0.5 * Math.sin(model.time * anchor.glowFrequency + anchor.glowPhase);
-  const ambient = 0.06 + ambientWave * (anchor.boundary ? 0.1 : 0.18);
+  const wake = smoothstep(ambientWave) ** 1.8;
+  const ambient = 0.012 + wake * (anchor.boundary ? 0.3 : 0.76);
   const pulseGlow = model.pulses.reduce(
     (strongest, pulse) =>
       Math.max(strongest, getLifecyclePulseInfluence(pulse, anchor.x, anchor.y, model.aspectRatio).glow),
     0,
   );
-  return clamp(ambient + pulseGlow * 0.38, 0.04, 0.62);
+  return clamp(ambient + pulseGlow * 0.62, 0.01, 1);
 }
 
 export function getAnchorHue(model: TessellationModel, anchor: TessellationAnchor) {
@@ -496,7 +502,7 @@ function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
 
   if (shouldBirth) birthAnchor(model);
   else if (count > TESSELLATION_MIN_INTERIOR_ANCHORS) retireAnchor(model);
-  model.nextEventAt = randomRange(model, 7, 12);
+  model.nextEventAt = randomRange(model, 5.5, 9);
 }
 
 function advanceMotionStep(
@@ -521,8 +527,13 @@ function advanceMotionStep(
     for (const pulse of model.pulses) {
       const influence = getLifecyclePulseInfluence(pulse, anchor.x, anchor.y, model.aspectRatio);
       if (influence.distance < 1e-5) continue;
-      lifecycleRippleX += (influence.dx / influence.distance / model.aspectRatio) * influence.motion * 0.018;
-      lifecycleRippleY += (influence.dy / influence.distance) * influence.motion * 0.018;
+      const inertia = 1 / anchor.mass;
+      lifecycleRippleX +=
+        (influence.dx / influence.distance / model.aspectRatio) *
+        influence.motion *
+        LIFECYCLE_MOTION_STRENGTH *
+        inertia;
+      lifecycleRippleY += (influence.dy / influence.distance) * influence.motion * LIFECYCLE_MOTION_STRENGTH * inertia;
     }
     acceleration.set(anchor.id, {
       x:

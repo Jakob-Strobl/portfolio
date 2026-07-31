@@ -50,7 +50,10 @@ void main() {
     }
 
     if (uPass == 1) {
-        float edge = 1.0 - smoothstep(0.48, 1.0, abs(vAuxiliary.x));
+        float edgeDistance = abs(vAuxiliary.x);
+        float edgeDerivative = max(fwidth(edgeDistance), 0.001);
+        float featherStart = clamp(0.58 - edgeDerivative, 0.32, 0.58);
+        float edge = 1.0 - smoothstep(featherStart, 1.0, edgeDistance);
         float edgeLife = clamp(vLife, 0.0, 1.0);
         vec3 edgeColor = mix(BACKGROUND_COLOR * 1.1, accent, 0.5 + pointerInfluence * 0.32);
         edgeColor *= 0.67 + glow * 0.36;
@@ -61,9 +64,11 @@ void main() {
     }
 
     vec3 purpleSurface = vec3(0.089, 0.051, 0.145);
-    float facetEnergy = glow * (0.13 + uIntensity * 0.035) + pointerInfluence * 0.012;
-    vec3 energizedSurface = mix(purpleSurface * 1.04, accent * 0.32 + purpleSurface * 0.76, facetEnergy);
-    vec3 color = mix(BACKGROUND_COLOR * 0.94, energizedSurface, 0.58);
+    vec3 restingSurface = mix(BACKGROUND_COLOR * 0.96, purpleSurface, 0.42);
+    float wake = smoothstep(0.08, 0.88, glow);
+    float facetEnergy = wake * (0.19 + uIntensity * 0.065) + pointerInfluence * 0.026;
+    vec3 energizedSurface = accent * 0.36 + purpleSurface * 0.72;
+    vec3 color = mix(restingSurface, energizedSurface, facetEnergy);
 
     outColor = vec4(color, uOpacity * mix(0.72, 1.0, life));
 }

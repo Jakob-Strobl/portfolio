@@ -22,12 +22,13 @@ import {
 } from "../../src/backgrounds/tessellation-model";
 
 function snapshotModel(model: ReturnType<typeof createTessellationModel>) {
-  return model.anchors.map(({ id, x, y, hue, brightness, boundary, state }) => ({
+  return model.anchors.map(({ id, x, y, hue, brightness, mass, boundary, state }) => ({
     id,
     x,
     y,
     hue,
     brightness,
+    mass,
     boundary,
     state,
   }));
@@ -44,8 +45,12 @@ describe("living tessellation model", () => {
     expect(snapshotModel(first)).not.toEqual(snapshotModel(different));
     expect(interior.length).toBeGreaterThanOrEqual(36);
     expect(interior.length).toBeLessThanOrEqual(42);
+    expect(interior.every((anchor) => anchor.mass >= 0.72 && anchor.mass <= 1.42)).toBe(true);
+    expect(new Set(interior.map((anchor) => anchor.mass)).size).toBeGreaterThan(1);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x < 0)).toBe(true);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x > 1)).toBe(true);
+    expect(first.nextEventAt).toBeGreaterThanOrEqual(5.5);
+    expect(first.nextEventAt).toBeLessThanOrEqual(9);
   });
 
   test("produces deterministic, nondegenerate Delaunay triangles with valid anchor ids", () => {
@@ -160,9 +165,10 @@ describe("living tessellation model", () => {
       samples.push(getAnchorGlow(model, anchor));
     }
 
-    expect(Math.max(...samples) - Math.min(...samples)).toBeGreaterThan(0.12);
-    expect(Math.min(...samples)).toBeGreaterThanOrEqual(0.04);
-    expect(Math.max(...samples)).toBeLessThanOrEqual(0.62);
+    expect(Math.max(...samples) - Math.min(...samples)).toBeGreaterThan(0.65);
+    expect(Math.min(...samples)).toBeLessThan(0.04);
+    expect(Math.max(...samples)).toBeGreaterThan(0.7);
+    expect(Math.max(...samples)).toBeLessThanOrEqual(1);
   });
 
   test("keeps hue continuous across the shader palette wrap boundary", () => {
@@ -197,6 +203,40 @@ describe("living tessellation model", () => {
     const distant = getLifecyclePulseInfluence(pulse, pulse.x + 1, pulse.y + 1, first.aspectRatio);
     expect(Math.abs(nearby.motion)).toBeGreaterThan(Math.abs(distant.motion));
     expect(nearby.glow).toBeGreaterThan(distant.glow);
+  });
+
+  test("lifecycle waves create a clearly perceptible but bounded displacement", () => {
+    const pulsing = createTessellationModel(490, 16 / 9);
+    const anchor = pulsing.anchors.find((candidate) => !candidate.boundary)!;
+    pulsing.pulses = [
+      {
+        x: anchor.x - 0.025 / pulsing.aspectRatio,
+        y: anchor.y,
+        age: 0,
+        duration: 3.2,
+        strength: 0.9,
+        phase: Math.PI / 2,
+      },
+    ];
+    const calm = structuredClone(pulsing);
+    calm.pulses = [];
+    const calmAnchorAtStart = calm.anchors.find((candidate) => candidate.id === anchor.id)!;
+    const initialGlowBoost = getAnchorGlow(pulsing, anchor) - getAnchorGlow(calm, calmAnchorAtStart);
+    expect(initialGlowBoost).toBeGreaterThan(0.25);
+
+    for (let index = 0; index < 45; index += 1) {
+      advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
+      advanceTessellationModel(calm, 1 / 60, { x: -2, y: -2 }, 1);
+    }
+
+    const pulsingAnchor = pulsing.anchors.find((candidate) => candidate.id === anchor.id)!;
+    const calmAnchor = calm.anchors.find((candidate) => candidate.id === anchor.id)!;
+    const displacementPixels = Math.hypot(
+      (pulsingAnchor.x - calmAnchor.x) * 800,
+      (pulsingAnchor.y - calmAnchor.y) * 800,
+    );
+    expect(displacementPixels).toBeGreaterThan(2);
+    expect(displacementPixels).toBeLessThan(24);
   });
 
   test("only requests topology work at the deliberate four-hertz cadence", () => {

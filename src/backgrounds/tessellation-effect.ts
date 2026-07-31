@@ -22,7 +22,8 @@ import vertexSource from "./tessellation.vert";
 import type { BackgroundEffect, TessellationBackgroundConfig } from "./types";
 import { createProgram, requireUniform } from "./webgl";
 
-const FLOATS_PER_VERTEX = 8;
+export const TESSELLATION_VERTEX_STRIDE = 8;
+const FLOATS_PER_VERTEX = TESSELLATION_VERTEX_STRIDE;
 const BYTES_PER_VERTEX = FLOATS_PER_VERTEX * Float32Array.BYTES_PER_ELEMENT;
 
 type TessellationUniforms = {
@@ -79,7 +80,7 @@ export function createTessellationPointVertices(model: TessellationModel) {
   const data = new Float32Array(anchors.length * FLOATS_PER_VERTEX);
 
   for (let index = 0; index < anchors.length; index += 1) {
-    writeVertex(data, index * FLOATS_PER_VERTEX, model, anchors[index], [1, 1, 1]);
+    writeVertex(data, index * FLOATS_PER_VERTEX, model, anchors[index], [0, anchors[index].mass, 0]);
   }
 
   return data;
@@ -117,7 +118,7 @@ export function createTessellationEdgeVertices(
       [second, 1],
       [first, 1],
     ] as const) {
-      writeVertex(data, offset, model, anchor, [side, normalX, normalY], opacity);
+      writeVertex(data, offset, model, anchor, [side, normalX * anchor.mass, normalY * anchor.mass], opacity);
       offset += FLOATS_PER_VERTEX;
     }
   }
@@ -256,7 +257,7 @@ export function createTessellationEffect(
       gl.useProgram(program);
       gl.uniform2f(uniforms.resolution, width, height);
       gl.uniform1f(uniforms.pointSize, Math.max(3, Math.min(6.5, height / 170)));
-      gl.uniform1f(uniforms.edgeHalfWidth, 1.05);
+      gl.uniform1f(uniforms.edgeHalfWidth, 1.4);
     },
     render(frame) {
       if (disposed) return;

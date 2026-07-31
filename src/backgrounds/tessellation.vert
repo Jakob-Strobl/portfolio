@@ -28,5 +28,5 @@ void main() {
         position += aAuxiliary.yz * aAuxiliary.x * uEdgeHalfWidth / uResolution;
     }
     gl_Position = vec4(position * 2.0 - 1.0, 0.0, 1.0);
-    gl_PointSize = uPass == 2 ? uPointSize : 1.0;
+    gl_PointSize = uPass == 2 ? uPointSize * aAuxiliary.y : 1.0;
 }
