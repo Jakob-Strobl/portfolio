@@ -2,12 +2,24 @@
 
 precision highp float;
 
-const vec2 POSITIONS[3] = vec2[3](
-    vec2(-1.0, -1.0),
-    vec2(3.0, -1.0),
-    vec2(-1.0, 3.0)
-);
+layout(location = 0) in vec2 aPosition;
+layout(location = 1) in vec2 aColor;
+layout(location = 2) in vec3 aBarycentric;
+layout(location = 3) in float aLife;
+
+uniform float uPointSize;
+uniform bool uPointPass;
+
+out vec2 vPosition;
+out vec2 vColor;
+out vec3 vBarycentric;
+out float vLife;
 
 void main() {
-    gl_Position = vec4(POSITIONS[gl_VertexID], 0.0, 1.0);
+    vPosition = aPosition;
+    vColor = aColor;
+    vBarycentric = aBarycentric;
+    vLife = aLife;
+    gl_Position = vec4(aPosition * 2.0 - 1.0, 0.0, 1.0);
+    gl_PointSize = uPointPass ? uPointSize : 1.0;
 }
