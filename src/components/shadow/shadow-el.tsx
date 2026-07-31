@@ -98,13 +98,21 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
 
     return rect.origin;
   });
+  const blurActive = createMemo(
+    () => rect.blurOnInteraction && rect.visible() && rect.shadowState() === "warm" && rect.interactionActive(),
+  );
 
   return (
     <div
       class={`
         absolute -z-10 rounded-lg
-        bg-night-black fade-in-bg
-        ${rect.snapToSource() ? "transition-none" : `transition-all duration-[${animationDurationMs}ms] ease-out`}
+        bg-night-black/60
+        ${blurActive() ? "backdrop-blur-md" : ""}
+        ${
+          rect.snapToSource()
+            ? "transition-none"
+            : "transition-[width,height,transform,opacity,background-color] duration-[750ms] ease-out"
+        }
       `}
       style={{
         display: rect.visible() ? undefined : "none",
@@ -115,7 +123,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         transform: `translate3d(${statefulRect().position.x}px, ${
           statefulRect().position.y + (rect.fixed ? 0 : scrollYOffset())
         }px, 0)`,
-        opacity: isShadowCold(rect) ? 0 : 0.6,
+        opacity: isShadowCold(rect) ? 0 : 1,
         position: rect.fixed ? "fixed" : undefined,
       }}
     ></div>

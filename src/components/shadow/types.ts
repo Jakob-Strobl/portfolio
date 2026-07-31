@@ -51,6 +51,8 @@ export type ShadowRect = {
   setVisible: Setter<boolean>;
   snapToSource: Accessor<boolean>;
   setSnapToSource: Setter<boolean>;
+  interactionActive: Accessor<boolean>;
+  blurOnInteraction: boolean;
   shadowedEl: HTMLDivElement;
   origin: Rect;
   warmupDelayMs: number;
@@ -70,6 +72,8 @@ export const ZERO_RECT: ShadowRect = {
   setVisible: () => {},
   snapToSource: () => false,
   setSnapToSource: () => {},
+  interactionActive: () => false,
+  blurOnInteraction: false,
   // @ts-expect-error This is a special case constant where the value of shadowedEl never matters (any field really)
   shadowedEl: null,
   isCold: () => true,

@@ -1,4 +1,4 @@
-import { children, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
+import { children, createMemo, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
 import type { JSX, Signal } from "solid-js";
 import { addShadow, removeShadow } from "./actions";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
@@ -35,6 +35,9 @@ interface ShadowProps {
    */
   fixed?: boolean;
 
+  /** Add a backdrop blur to the detached shadow while this card is hovered or focused. */
+  blurOnInteraction?: boolean;
+
   dataset?: {
     [name: DataAttributeKey]: string | undefined;
   };
@@ -56,6 +59,9 @@ export default function Shadow(props: ShadowProps) {
   const [shadowState, setShadowState] = createSignal<ShadowStartingStates>(
     props.warmupDelayMs === undefined ? "ready" : "fade-in",
   ) as Signal<ShadowStates>;
+  const [pointerHovered, setPointerHovered] = createSignal(false);
+  const [focusWithin, setFocusWithin] = createSignal(false);
+  const interactionActive = createMemo(() => pointerHovered() || focusWithin());
   let shadowEl: HTMLDivElement;
 
   onMount(() => {
@@ -66,6 +72,8 @@ export default function Shadow(props: ShadowProps) {
       setShadowState,
       fixed: props.fixed ?? false,
       warmupDelayMs: props.warmupDelayMs ?? 0,
+      interactionActive,
+      blurOnInteraction: props.blurOnInteraction ?? false,
     });
   });
 
@@ -77,8 +85,16 @@ export default function Shadow(props: ShadowProps) {
     <div
       class={`
         w-full h-[inherit] border-[1px] transition-colors duration-300 rounded-lg
-        ${shadowState() === "warm" ? "border-white/6 hover:border-white/14" : "border-white/0 hover:border-white/0"} 
+        ${shadowState() === "warm" ? (interactionActive() ? "border-white/14" : "border-white/6") : "border-white/0"}
       `}
+      onPointerEnter={(event) => event.pointerType !== "touch" && setPointerHovered(true)}
+      onPointerLeave={(event) => event.pointerType !== "touch" && setPointerHovered(false)}
+      onFocusIn={() => setFocusWithin(true)}
+      onFocusOut={(event) => {
+        const nextFocusedElement = event.relatedTarget;
+        if (nextFocusedElement instanceof Node && event.currentTarget.contains(nextFocusedElement)) return;
+        setFocusWithin(false);
+      }}
       {...props.dataset}
     >
       <div

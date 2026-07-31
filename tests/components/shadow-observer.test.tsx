@@ -68,6 +68,8 @@ function createShadowRect(element: HTMLDivElement, layout: MutableLayout, writeL
     setVisible: wrapSetter("visible", setVisibleSignal),
     snapToSource,
     setSnapToSource: wrapSetter("snap", setSnapToSourceSignal),
+    interactionActive: () => false,
+    blurOnInteraction: false,
     shadowState,
     setShadowState: wrapSetter("state", setShadowStateSignal),
     origin: { position: { x: layout.x, y: layout.y }, dimensions: { x: layout.width, y: layout.height } },
