@@ -1,7 +1,8 @@
 import Dice5 from "lucide-solid/icons/dice-5";
+import Save from "lucide-solid/icons/save";
 import SlidersHorizontal from "lucide-solid/icons/sliders-horizontal";
 import X from "lucide-solid/icons/x";
-import { createEffect, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 
 import { BACKGROUND_CONTROL_RANGES, useBackground } from "~/providers/background";
 
@@ -79,9 +80,14 @@ export function BackgroundSettingsTrigger(props: BackgroundSettingsTriggerProps)
 
 export function BackgroundSettingsPanel(props: BackgroundSettingsPanelProps) {
   const background = useBackground();
+  const [saveMessage, setSaveMessage] = createSignal("");
   const panelTitleId = `${props.id}-title`;
   const speedId = `${props.id}-speed`;
   const intensityId = `${props.id}-intensity`;
+
+  function savePreferences() {
+    setSaveMessage(background.savePreferences() ? "Saved for future sessions." : "Could not save preferences.");
+  }
 
   return (
     <div
@@ -113,13 +119,18 @@ export function BackgroundSettingsPanel(props: BackgroundSettingsPanelProps) {
           <span class="mb-1.5 block text-xs font-medium text-gray-200">Effect</span>
           <select
             class="w-full rounded-md border border-white/15 bg-night-900 px-2.5 py-2 text-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
-            value={background.kind()}
-            onChange={(event) => background.setKind(event.currentTarget.value as "waves" | "tessellation")}
+            value={background.effectPreference()}
+            onChange={(event) =>
+              background.setEffectPreference(event.currentTarget.value as "random" | "waves" | "tessellation")
+            }
           >
+            <option value="random">Random - {background.kind() === "waves" ? "Waves" : "Tessellation"}</option>
             <option value="waves">Waves</option>
             <option value="tessellation">Tessellation</option>
           </select>
         </label>
+
+        <p class="-mt-2 text-xs leading-relaxed text-gray-300/75">Random selects a new effect on each session.</p>
 
         <button
           type="button"
@@ -199,10 +210,27 @@ export function BackgroundSettingsPanel(props: BackgroundSettingsPanelProps) {
           </label>
         </div>
 
-        <p class="text-[0.7rem] leading-relaxed text-gray-300/65">
-          Auto follows the display when charging and limits motion to 30 FPS on battery. Without battery status, pointer
-          type provides a lightweight desktop/mobile hint. Reduced motion always stays static.
+        <p class="-mt-2 text-xs leading-relaxed text-gray-300/75">
+          Auto uses 30 FPS on mobile and battery power. Choose Low quality or 30 FPS for older devices, heat, or longer
+          battery life. Reduced motion stays static.
         </p>
+
+        <button
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-md border border-night-400/50 bg-night-700/25 px-3 py-2 text-sm text-white transition-colors hover:border-night-300 hover:bg-night-700/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+          onClick={savePreferences}
+        >
+          <Save aria-hidden="true" size={16} />
+          Save for future sessions
+        </button>
+        <p class="-mt-2 text-xs leading-relaxed text-gray-300/75">
+          Saving preserves all settings except seeds. Seeds are regenerated each session.
+        </p>
+        <Show when={saveMessage()}>
+          <p role="status" class="text-center text-xs text-night-300">
+            {saveMessage()}
+          </p>
+        </Show>
       </div>
     </div>
   );
