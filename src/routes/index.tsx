@@ -37,10 +37,10 @@ export default function Home() {
             </Show>
           </div>
           <div class="flex items-center gap-2 text-gray-300">
-            <p class="flex items-baseline">
+            <p class="group flex items-baseline rounded-md py-0.5 pr-1 pl-1.5 transition-colors duration-200 hover:bg-white/10 focus-within:bg-white/10">
               <span class="text-xs">v</span>
               <a
-                class="group inline-flex items-center rounded-md px-1 py-0.5 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+                class="inline-flex items-center transition-colors duration-200 group-hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
                 target="_blank"
                 href="https://github.com/Jakob-Strobl/portfolio/releases"
               >
@@ -48,7 +48,7 @@ export default function Home() {
                 <span class="inline-flex w-4 justify-end">
                   <ExternalLink
                     aria-hidden="true"
-                    class="opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    class="opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
                     size={12}
                   />
                 </span>
