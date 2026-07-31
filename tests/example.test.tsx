@@ -1,21 +1,29 @@
-import { render } from "@solidjs/testing-library";
-import { version } from "../package.json";
-import IsomorphicBackground from "../src/components/background";
-import Home from "../src/routes";
-import { isTest } from "../src/actions/test-actions";
+import { fireEvent, render } from "@solidjs/testing-library";
 import { Route, Router } from "@solidjs/router";
 
+import { version } from "../package.json";
+import { isTest } from "../src/actions/test-actions";
+import IsomorphicBackground from "../src/components/background";
+import { BackgroundProvider } from "../src/providers/background";
+import Home from "../src/routes";
+
 test("smoke test", async () => {
-  const page = render(() => <IsomorphicBackground />);
+  const page = render(() => (
+    <BackgroundProvider>
+      <IsomorphicBackground />
+    </BackgroundProvider>
+  ));
   expect(page.container.querySelector("div")).toBeVisible();
   expect(page.container.querySelector("div")).toHaveClass("fixed");
 });
 
 test("app smoke test", async () => {
   const page = render(() => (
-    <Router>
-      <Route path="/" component={Home} />
-    </Router>
+    <BackgroundProvider>
+      <Router>
+        <Route path="/" component={Home} />
+      </Router>
+    </BackgroundProvider>
   ));
   page.getByText("Jakob Strobl");
 
@@ -30,9 +38,11 @@ test("app smoke test", async () => {
 
 test("version number from package.json renders in page", async () => {
   const page = render(() => (
-    <Router>
-      <Route path="/" component={Home} />
-    </Router>
+    <BackgroundProvider>
+      <Router>
+        <Route path="/" component={Home} />
+      </Router>
+    </BackgroundProvider>
   ));
 
   const versionNumber = page.getByText(version);
@@ -45,6 +55,25 @@ test("version number from package.json renders in page", async () => {
 
   expect(versionNumber).toBeDefined();
   expect(versionNumber).toBeVisible();
+});
+
+test("background settings replace the home menu and restore it when closed", async () => {
+  const page = render(() => (
+    <BackgroundProvider>
+      <Router>
+        <Route path="/" component={Home} />
+      </Router>
+    </BackgroundProvider>
+  ));
+
+  expect(page.getByRole("link", { name: "Experience" })).toBeInTheDocument();
+  await fireEvent.click(page.getByRole("button", { name: "Background settings" }));
+
+  expect(page.queryByRole("link", { name: "Experience" })).not.toBeInTheDocument();
+  expect(page.getByRole("dialog", { name: "Background" })).toBeInTheDocument();
+
+  await fireEvent.click(page.getByRole("button", { name: "Close background settings" }));
+  expect(page.getByRole("link", { name: "Experience" })).toBeInTheDocument();
 });
 
 test("Test action: isTest returns true", () => {

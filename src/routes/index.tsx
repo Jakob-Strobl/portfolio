@@ -1,9 +1,20 @@
-import Menu from "../components/menu";
-import { onMount, createSignal } from "solid-js";
 import ExternalLink from "lucide-solid/icons/external-link";
+import { createSignal, onMount, Show } from "solid-js";
+
+import { BackgroundSettingsPanel, BackgroundSettingsTrigger } from "~/components/background-settings";
+
+import Menu from "../components/menu";
 
 export default function Home() {
   const [isReady, setReady] = createSignal(false);
+  const [isSettingsOpen, setSettingsOpen] = createSignal(false);
+  const settingsPanelId = "home-background-settings";
+  let settingsTriggerEl: HTMLButtonElement | undefined;
+
+  function closeSettings() {
+    setSettingsOpen(false);
+    queueMicrotask(() => settingsTriggerEl?.focus());
+  }
 
   onMount(() => {
     setTimeout(() => setReady(true), 0);
@@ -20,17 +31,36 @@ export default function Home() {
           }}
         >
           <h1 class="font-medium text-white text-5xl">Jakob Strobl</h1>
-          <Menu></Menu>
-          <p class="text-gray-300 group flex items-baseline">
-            <span class="text-xs">v</span>
-            <a class="relative" target="_blank" href="https://github.com/Jakob-Strobl/portfolio/releases">
-              {process.env.PROJECT_VERSION}{" "}
-              <ExternalLink
-                class="absolute top-1/4 left-full ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                size={12}
-              ></ExternalLink>
-            </a>
-          </p>
+          <div class="w-full">
+            <Show when={isSettingsOpen()} fallback={<Menu />}>
+              <BackgroundSettingsPanel id={settingsPanelId} onClose={closeSettings} />
+            </Show>
+          </div>
+          <div class="flex items-center gap-2 text-gray-300">
+            <p class="flex items-baseline">
+              <span class="text-xs">v</span>
+              <a
+                class="group inline-flex items-center rounded-md px-1 py-0.5 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+                target="_blank"
+                href="https://github.com/Jakob-Strobl/portfolio/releases"
+              >
+                <span>{process.env.PROJECT_VERSION}</span>
+                <span class="inline-flex w-4 justify-end">
+                  <ExternalLink
+                    aria-hidden="true"
+                    class="opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    size={12}
+                  />
+                </span>
+              </a>
+            </p>
+            <BackgroundSettingsTrigger
+              isOpen={isSettingsOpen()}
+              panelId={settingsPanelId}
+              onOpenChange={setSettingsOpen}
+              triggerRef={(element) => (settingsTriggerEl = element)}
+            />
+          </div>
         </div>
       </div>
     </>

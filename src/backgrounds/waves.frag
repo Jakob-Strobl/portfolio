@@ -1,41 +1,39 @@
-precision mediump float;
-        
-const vec3 cameraPos = vec3(0.0, 1.0, 10.0);
-// https://keiwando.com/color-picker/
-const vec3 fogColor = vec3(0.0745,0.05098,0.12549);
-uniform float sineTime; 
+#version 300 es
 
-varying vec3 vPos;
+precision highp float;
 
-// Functions rgb2hsv() and hsv2rgb() are from http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl
-vec3 rgb2hsv(vec3 c) {
-    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+const float TAU = 6.2831853;
+const vec3 FOG_COLOR = vec3(0.0745, 0.051, 0.1255);
 
-    float d = q.x - min(q.w, q.y);
-    float e = 1.0e-10;
-    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
-}
+uniform float uTime;
+uniform float uIntensity;
 
-vec3 hsv2rgb(vec3 c) {
-    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
+in vec3 vWorldPosition;
+in float vCameraDepth;
 
-float fogAmount(vec3 position) {
-    return 1.0 - exp(-length(position - cameraPos) * 0.25);
-}
-
-vec3 addFog(vec3 color) {
-    return mix(color, fogColor, fogAmount(vPos));
-}
+out vec4 outColor;
 
 void main() {
-    vec3 color = vec3(0.0, 0.0, 1.0);
-    color.b += vPos.y;
-    vec3 hsv = rgb2hsv(color);
-    hsv.r = (hsv.r + sineTime + (vPos.x / 50.0)) / 1.0;
-    gl_FragColor = vec4(addFog(hsv2rgb(hsv)), 1.0);
+    float hue = vWorldPosition.x * 0.012 + vWorldPosition.z * 0.006
+        + vWorldPosition.y * 0.16 + uTime * 0.008;
+    vec3 rainbow = 0.56 + 0.44 * cos(TAU * (hue + vec3(0.0, 0.33, 0.67)));
+    vec3 surfaceNormal = normalize(cross(dFdx(vWorldPosition), dFdy(vWorldPosition)));
+    float diffuseLight = 0.82 + 0.18 * abs(dot(surfaceNormal, normalize(vec3(-0.35, 0.8, 0.48))));
+    rainbow *= diffuseLight;
+
+    float normalizedIntensity = clamp((uIntensity - 0.5) / 0.85, 0.0, 1.0);
+    float crest = smoothstep(
+        mix(-1.9, -2.15, normalizedIntensity),
+        mix(-1.6, -1.82, normalizedIntensity),
+        vWorldPosition.y
+    );
+    float spatialBands = 0.5 + 0.5 * sin(
+        vWorldPosition.x * 0.14 + vWorldPosition.z * 0.105
+            + sin(vWorldPosition.x * 0.055 - vWorldPosition.z * 0.035) * 0.8
+    );
+    float spatialMask = smoothstep(mix(0.72, 0.5, normalizedIntensity), 0.94, spatialBands);
+    float colorPresence = crest * mix(0.12, 1.0, spatialMask);
+    float distanceVisibility = 1.0 - smoothstep(13.0, 66.0, vCameraDepth);
+
+    outColor = vec4(mix(FOG_COLOR, rainbow, colorPresence * distanceVisibility), 1.0);
 }

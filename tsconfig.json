@@ -15,7 +15,6 @@
     "types": [
       "vite/client",
       "@solidjs/start/env",
-      "three",
       "vite-plugin-glsl/ext",
       "@testing-library/jest-dom",
       "vitest/globals"

@@ -5,6 +5,19 @@ import Contact from "../../src/routes/contact";
 import { waitForShadowAnimations } from "../helpers/test-utils";
 import { EXTERNAL_LINKS, NAV_LINKS } from "../helpers/test-data";
 import { version } from "../../package.json";
+import { BackgroundProvider } from "../../src/providers/background";
+
+async function renderHomePage() {
+  const page = render(() => (
+    <BackgroundProvider>
+      <Router>
+        <Route path="/" component={Home} />
+      </Router>
+    </BackgroundProvider>
+  ));
+  await waitForShadowAnimations();
+  return page;
+}
 
 // Helper to render Contact page at /contact route
 async function renderContactPage() {
@@ -23,47 +36,27 @@ async function renderContactPage() {
 describe("External Links", () => {
   describe("Home Page Links", () => {
     it("renders home page", async () => {
-      const page = render(() => (
-        <Router>
-          <Route path="/" component={Home} />
-        </Router>
-      ));
-      await waitForShadowAnimations();
+      const page = await renderHomePage();
 
       expect(page.getByText("Jakob Strobl")).toBeInTheDocument();
     });
 
     it("displays version number", async () => {
-      const page = render(() => (
-        <Router>
-          <Route path="/" component={Home} />
-        </Router>
-      ));
-      await waitForShadowAnimations();
+      const page = await renderHomePage();
 
       const versionText = page.getByText(version);
       expect(versionText).toBeInTheDocument();
     });
 
     it("version links to GitHub releases", async () => {
-      const page = render(() => (
-        <Router>
-          <Route path="/" component={Home} />
-        </Router>
-      ));
-      await waitForShadowAnimations();
+      const page = await renderHomePage();
 
       const releasesLink = page.container.querySelector(`a[href="${EXTERNAL_LINKS.github.releases}"]`);
       expect(releasesLink).toBeInTheDocument();
     });
 
     it("GitHub releases link opens in new tab", async () => {
-      const page = render(() => (
-        <Router>
-          <Route path="/" component={Home} />
-        </Router>
-      ));
-      await waitForShadowAnimations();
+      const page = await renderHomePage();
 
       const releasesLink = page.container.querySelector(`a[href="${EXTERNAL_LINKS.github.releases}"]`);
       expect(releasesLink).toHaveAttribute("target", "_blank");
@@ -125,12 +118,7 @@ describe("External Links", () => {
 
   describe("Menu Navigation Links", () => {
     it("all menu links point to correct routes", async () => {
-      const page = render(() => (
-        <Router>
-          <Route path="/" component={Home} />
-        </Router>
-      ));
-      await waitForShadowAnimations();
+      const page = await renderHomePage();
 
       const experienceLink = page.getByRole("link", { name: "Experience" });
       const contactLink = page.getByRole("link", { name: "Contact" });
