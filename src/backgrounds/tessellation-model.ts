@@ -18,6 +18,11 @@ const LIFECYCLE_HOME_SHIFT_RATE = 0.0075;
 const LIFECYCLE_SPATIAL_FREQUENCY = 10;
 const MIN_ANCHOR_MASS = 0.72;
 const MAX_ANCHOR_MASS = 1.42;
+const FACET_RELIEF_SCALE = 0.014;
+const FACET_LIGHT_X = -0.4243;
+const FACET_LIGHT_Y = 0.4949;
+const FACET_LIGHT_Z = 0.7576;
+const FACET_LIGHT_RESPONSE = 4;
 
 export type TessellationAnchorState = "active" | "budding" | "retiring" | "dead";
 
@@ -36,6 +41,7 @@ export type TessellationAnchor = {
   hueRate: number;
   brightness: number;
   mass: number;
+  relief: number;
   glowPhase: number;
   glowFrequency: number;
   boundary: boolean;
@@ -114,9 +120,17 @@ function randomRange(model: TessellationModel, minimum: number, maximum: number)
   return minimum + nextRandom(model) * (maximum - minimum);
 }
 
+function getAnchorRelief(seed: number, id: number) {
+  let value = normalizeSeed(seed) ^ Math.imul(id + 1, 0x9e3779b1);
+  value = Math.imul(value ^ (value >>> 16), 0x85ebca6b);
+  value = Math.imul(value ^ (value >>> 13), 0xc2b2ae35);
+  return (((value ^ (value >>> 16)) >>> 0) / 4294967296) * 2 - 1;
+}
+
 function createAnchor(model: TessellationModel, x: number, y: number, boundary = false): TessellationAnchor {
+  const id = model.nextAnchorId++;
   return {
-    id: model.nextAnchorId++,
+    id,
     x,
     y,
     baseX: x,
@@ -130,6 +144,7 @@ function createAnchor(model: TessellationModel, x: number, y: number, boundary =
     hueRate: randomRange(model, 0.0025, 0.008),
     brightness: randomRange(model, 0.72, 1),
     mass: randomRange(model, MIN_ANCHOR_MASS, MAX_ANCHOR_MASS),
+    relief: getAnchorRelief(model.seed, id),
     glowPhase: nextRandom(model) * TAU,
     glowFrequency: randomRange(model, 0.075, 0.16),
     boundary,
@@ -351,6 +366,40 @@ export function getTessellationSpatialStyle(seed: number, x: number, y: number):
     strength,
     hue: seedHue + x * 0.11 + y * 0.08 + hueField * 0.24,
   };
+}
+
+/**
+ * Produces a shallow, flat-shaded relief value for one facet. Anchor relief is
+ * persistent, while aspect-corrected live positions keep the lighting attached
+ * to the moving mesh instead of to topology IDs.
+ */
+export function getTessellationFacetLight(
+  anchors: readonly [TessellationAnchor, TessellationAnchor, TessellationAnchor],
+  aspectRatio: number,
+) {
+  const [a, b, c] = anchors;
+  const ux = (b.x - a.x) * aspectRatio;
+  const uy = b.y - a.y;
+  const uz = (b.relief - a.relief) * FACET_RELIEF_SCALE;
+  const vx = (c.x - a.x) * aspectRatio;
+  const vy = c.y - a.y;
+  const vz = (c.relief - a.relief) * FACET_RELIEF_SCALE;
+  let normalX = uy * vz - uz * vy;
+  let normalY = uz * vx - ux * vz;
+  let normalZ = ux * vy - uy * vx;
+
+  // Triangulation is normally counter-clockwise. Keeping the relief normal on
+  // the viewer-facing hemisphere also makes this helper safe for test fixtures.
+  if (normalZ < 0) {
+    normalX *= -1;
+    normalY *= -1;
+    normalZ *= -1;
+  }
+  const normalLength = Math.hypot(normalX, normalY, normalZ);
+  if (normalLength < 1e-8) return 0;
+  const directionalLight = (normalX * FACET_LIGHT_X + normalY * FACET_LIGHT_Y + normalZ * FACET_LIGHT_Z) / normalLength;
+
+  return clamp((directionalLight - FACET_LIGHT_Z) * FACET_LIGHT_RESPONSE, -1, 1);
 }
 
 export function canStartTessellationTransition(hasActiveTransition: boolean) {

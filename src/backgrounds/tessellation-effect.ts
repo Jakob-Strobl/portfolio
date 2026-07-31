@@ -9,6 +9,7 @@ import {
   getAnchorGlow,
   getAnchorHue,
   getAnchorLife,
+  getTessellationFacetLight,
   getTessellationFillTransitionOpacities,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
@@ -71,7 +72,8 @@ export function createTessellationTriangleVertices(
     const centroidX = (anchors[0]!.x + anchors[1]!.x + anchors[2]!.x) / 3;
     const centroidY = (anchors[0]!.y + anchors[1]!.y + anchors[2]!.y) / 3;
     const style = getTessellationSpatialStyle(model.seed, centroidX * model.aspectRatio, centroidY);
-    const auxiliary = [style.strength, style.hue, 0] as const;
+    const facetLight = getTessellationFacetLight([anchors[0]!, anchors[1]!, anchors[2]!], model.aspectRatio);
+    const auxiliary = [style.strength, style.hue, facetLight] as const;
     writeVertex(data, offset, model, anchors[0]!, auxiliary);
     writeVertex(data, offset + FLOATS_PER_VERTEX, model, anchors[1]!, auxiliary);
     writeVertex(data, offset + FLOATS_PER_VERTEX * 2, model, anchors[2]!, auxiliary);

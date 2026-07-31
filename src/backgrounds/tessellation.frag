@@ -5,6 +5,7 @@ precision highp int;
 
 const float TAU = 6.2831853;
 const vec3 BACKGROUND_COLOR = vec3(0.0745, 0.051, 0.1255);
+const vec2 LIGHT_DIRECTION = vec2(-0.6508, 0.7593);
 
 uniform vec2 uResolution;
 uniform vec2 uPointer;
@@ -43,6 +44,14 @@ void main() {
         float halo = (1.0 - smoothstep(0.2, 1.0, radius)) * 0.22;
         float saturation = 0.5 + pointerInfluence * 0.38;
         vec3 pointColor = mix(BACKGROUND_COLOR * 1.15, accent, saturation) * (0.78 + glow * 0.55);
+        float sphereZ = sqrt(max(0.0, 1.0 - radius * radius));
+        vec3 socketNormal = normalize(vec3(point, sphereZ));
+        vec3 socketLight = normalize(vec3(LIGHT_DIRECTION, 1.16));
+        float socketFacing = dot(socketNormal, socketLight);
+        float highlight = exp(-dot(point - LIGHT_DIRECTION * 0.34, point - LIGHT_DIRECTION * 0.34) * 16.0);
+        float contactRim = smoothstep(0.58, 0.98, radius);
+        pointColor *= 0.94 + max(socketFacing, 0.0) * 0.075 - max(-socketFacing, 0.0) * 0.055 - contactRim * 0.13;
+        pointColor += vec3(0.31, 0.25, 0.42) * highlight * 0.12;
         float alpha = (circle + halo) * life * uOpacity * (0.48 + uIntensity * 0.22);
         if (alpha < 0.01) discard;
         outColor = vec4(pointColor, alpha);
@@ -57,6 +66,14 @@ void main() {
         float edgeLife = clamp(vLife, 0.0, 1.0);
         vec3 edgeColor = mix(BACKGROUND_COLOR * 1.1, accent, 0.5 + pointerInfluence * 0.32);
         edgeColor *= 0.67 + glow * 0.36;
+        vec2 edgeNormal = normalize(vAuxiliary.yz);
+        vec2 bevelNormal = edgeNormal * sign(vAuxiliary.x);
+        float lightFacing = dot(bevelNormal, LIGHT_DIRECTION);
+        float bevel = smoothstep(0.30, 0.64, edgeDistance) * (1.0 - smoothstep(0.76, 0.96, edgeDistance));
+        float bevelHighlight = max(lightFacing, 0.0) * bevel;
+        float bevelShadow = max(-lightFacing, 0.0) * bevel;
+        edgeColor = mix(edgeColor, BACKGROUND_COLOR * 0.46, bevelShadow * 0.34);
+        edgeColor += vec3(0.29, 0.23, 0.40) * bevelHighlight * 0.16;
         float alpha = edge * edgeLife * uOpacity * (0.48 + uIntensity * 0.17 + pointerInfluence * 0.2);
         if (alpha < 0.005) discard;
         outColor = vec4(edgeColor, alpha);
@@ -72,6 +89,7 @@ void main() {
     float facetEnergy = wake * (0.19 + uIntensity * 0.065) + pointerInfluence * 0.026;
     vec3 energizedSurface = accent * 0.36 + purpleSurface * 0.72;
     vec3 color = mix(restingSurface, energizedSurface, facetEnergy);
+    color *= 1.0 + vAuxiliary.z * 0.03;
 
     outColor = vec4(color, uOpacity);
 }

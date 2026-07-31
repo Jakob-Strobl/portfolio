@@ -12,6 +12,7 @@ import {
   getAnchorLife,
   getLifecyclePulseInfluence,
   getTessellationFillTransitionOpacities,
+  getTessellationFacetLight,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
   isTessellationTransitionComplete,
@@ -26,13 +27,14 @@ import {
 } from "../../src/backgrounds/tessellation-model";
 
 function snapshotModel(model: ReturnType<typeof createTessellationModel>) {
-  return model.anchors.map(({ id, x, y, hue, brightness, mass, boundary, state }) => ({
+  return model.anchors.map(({ id, x, y, hue, brightness, mass, relief, boundary, state }) => ({
     id,
     x,
     y,
     hue,
     brightness,
     mass,
+    relief,
     boundary,
     state,
   }));
@@ -51,6 +53,8 @@ describe("living tessellation model", () => {
     expect(interior.length).toBeLessThanOrEqual(42);
     expect(interior.every((anchor) => anchor.mass >= 0.72 && anchor.mass <= 1.42)).toBe(true);
     expect(new Set(interior.map((anchor) => anchor.mass)).size).toBeGreaterThan(1);
+    expect(interior.every((anchor) => anchor.relief >= -1 && anchor.relief <= 1)).toBe(true);
+    expect(new Set(interior.map((anchor) => anchor.relief)).size).toBeGreaterThan(1);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x < 0)).toBe(true);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x > 1)).toBe(true);
     expect(first.nextEventAt).toBeGreaterThanOrEqual(5.5);
@@ -241,6 +245,38 @@ describe("living tessellation model", () => {
     expect(selected.length / styles.length).toBeGreaterThan(0.07);
     expect(selected.length / styles.length).toBeLessThan(0.4);
     expect(selected.every((style) => style.strength > 0.01 && style.strength <= 0.21)).toBe(true);
+  });
+
+  test("derives deterministic bounded directional light from persistent anchor relief", () => {
+    const model = createTessellationModel(704, 16 / 9);
+    const duplicate = createTessellationModel(704, 16 / 9);
+    const anchorsById = new Map(model.anchors.map((anchor) => [anchor.id, anchor]));
+    const duplicateById = new Map(duplicate.anchors.map((anchor) => [anchor.id, anchor]));
+    const triangles = triangulateTessellation(model.anchors);
+    const lights = triangles.map((triangle) =>
+      getTessellationFacetLight(
+        triangle.map((id) => anchorsById.get(id)!) as [
+          (typeof model.anchors)[number],
+          (typeof model.anchors)[number],
+          (typeof model.anchors)[number],
+        ],
+        model.aspectRatio,
+      ),
+    );
+    const duplicateLights = triangles.map((triangle) =>
+      getTessellationFacetLight(
+        triangle.map((id) => duplicateById.get(id)!) as [
+          (typeof duplicate.anchors)[number],
+          (typeof duplicate.anchors)[number],
+          (typeof duplicate.anchors)[number],
+        ],
+        duplicate.aspectRatio,
+      ),
+    );
+
+    expect(lights).toEqual(duplicateLights);
+    expect(lights.every((light) => light >= -1 && light <= 1)).toBe(true);
+    expect(Math.max(...lights) - Math.min(...lights)).toBeGreaterThan(0.5);
   });
 
   test("emits bounded deterministic lifecycle pulses that ripple through nearby anchors", () => {

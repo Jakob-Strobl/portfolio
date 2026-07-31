@@ -6,6 +6,7 @@ import {
 } from "../../src/backgrounds/tessellation-effect";
 import {
   createTessellationModel,
+  getTessellationFacetLight,
   getTessellationSpatialStyle,
   triangulateTessellation,
 } from "../../src/backgrounds/tessellation-model";
@@ -32,7 +33,7 @@ describe("living tessellation vertex packing", () => {
     expect(secondEndpointNormalScale).toBeGreaterThan(firstEndpointNormalScale);
   });
 
-  test("packs one stable stained-glass style uniformly across a selected facet", () => {
+  test("packs one stable stained-glass style and flat light uniformly across a selected facet", () => {
     const model = createTessellationModel(704);
     const anchorsById = new Map(model.anchors.map((anchor) => [anchor.id, anchor]));
     const triangle = triangulateTessellation(model.anchors).find((candidate) => {
@@ -48,11 +49,13 @@ describe("living tessellation vertex packing", () => {
       (anchors[0].y + anchors[1].y + anchors[2].y) / 3,
     );
     const vertices = createTessellationTriangleVertices(model, [triangle]);
+    const facetLight = getTessellationFacetLight([anchors[0], anchors[1], anchors[2]], model.aspectRatio);
 
     for (let vertex = 0; vertex < 3; vertex += 1) {
       const offset = vertex * TESSELLATION_VERTEX_STRIDE;
       expect(vertices[offset + 4]).toBeCloseTo(style.strength);
       expect(vertices[offset + 5]).toBeCloseTo(style.hue);
+      expect(vertices[offset + 6]).toBeCloseTo(facetLight);
     }
   });
 });
