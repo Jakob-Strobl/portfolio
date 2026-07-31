@@ -13,13 +13,11 @@ uniform int uPass;
 uniform vec2 uResolution;
 uniform float uEdgeHalfWidth;
 
-out vec2 vPosition;
 out vec2 vColor;
 out vec3 vAuxiliary;
 out float vLife;
 
 void main() {
-    vPosition = aPosition;
     vColor = aColor;
     vAuxiliary = aAuxiliary;
     vLife = aLife;

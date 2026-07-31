@@ -41,6 +41,7 @@ export type TessellationAnchor = {
   hueRate: number;
   brightness: number;
   mass: number;
+  luminosity: number;
   relief: number;
   glowPhase: number;
   glowFrequency: number;
@@ -132,8 +133,27 @@ function getAnchorRelief(seed: number, id: number) {
   return (((value ^ (value >>> 16)) >>> 0) / 4294967296) * 2 - 1;
 }
 
+function getAnchorLuminosity(seed: number, id: number, mass: number) {
+  let value = normalizeSeed(seed) ^ 0x7f4a7c15 ^ Math.imul(id + 1, 0x6c8e9cf5);
+  value = Math.imul(value ^ (value >>> 15), 0x85ebca6b);
+  value = Math.imul(value ^ (value >>> 13), 0xc2b2ae35);
+  const randomLuminosity = ((value ^ (value >>> 16)) >>> 0) / 4294967296;
+  const normalizedMass = clamp((mass - MIN_ANCHOR_MASS) / (MAX_ANCHOR_MASS - MIN_ANCHOR_MASS), 0, 1);
+  const luminosityField = randomLuminosity * 0.78 + normalizedMass * 0.22;
+  return smoothstep((luminosityField - 0.74) / 0.18);
+}
+
 function createAnchor(model: TessellationModel, x: number, y: number, boundary = false): TessellationAnchor {
   const id = model.nextAnchorId++;
+  const phaseX = nextRandom(model) * TAU;
+  const phaseY = nextRandom(model) * TAU;
+  const frequency = randomRange(model, 0.12, 0.24);
+  const hue = nextRandom(model);
+  const hueRate = randomRange(model, 0.0025, 0.008);
+  const brightness = randomRange(model, 0.72, 1);
+  const mass = randomRange(model, MIN_ANCHOR_MASS, MAX_ANCHOR_MASS);
+  const glowPhase = nextRandom(model) * TAU;
+  const glowFrequency = randomRange(model, 0.075, 0.16);
   return {
     id,
     x,
@@ -142,16 +162,17 @@ function createAnchor(model: TessellationModel, x: number, y: number, boundary =
     baseY: y,
     velocityX: 0,
     velocityY: 0,
-    phaseX: nextRandom(model) * TAU,
-    phaseY: nextRandom(model) * TAU,
-    frequency: randomRange(model, 0.12, 0.24),
-    hue: nextRandom(model),
-    hueRate: randomRange(model, 0.0025, 0.008),
-    brightness: randomRange(model, 0.72, 1),
-    mass: randomRange(model, MIN_ANCHOR_MASS, MAX_ANCHOR_MASS),
+    phaseX,
+    phaseY,
+    frequency,
+    hue,
+    hueRate,
+    brightness,
+    mass,
+    luminosity: getAnchorLuminosity(model.seed, id, mass),
     relief: getAnchorRelief(model.seed, id),
-    glowPhase: nextRandom(model) * TAU,
-    glowFrequency: randomRange(model, 0.075, 0.16),
+    glowPhase,
+    glowFrequency,
     boundary,
     state: "active",
     stateAge: 0,
@@ -625,22 +646,12 @@ function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
   model.nextEventAt = randomRange(model, 5.5, 9);
 }
 
-function advanceMotionStep(
-  model: TessellationModel,
-  deltaSeconds: number,
-  pointer: Readonly<{ x: number; y: number }>,
-  intensity: number,
-) {
+function advanceMotionStep(model: TessellationModel, deltaSeconds: number) {
   model.time += deltaSeconds;
   const movable = model.anchors.filter((anchor) => !anchor.boundary && anchor.state !== "dead");
   const acceleration = new Map<number, { x: number; y: number }>();
 
   for (const anchor of movable) {
-    const dx = (anchor.x - pointer.x) * model.aspectRatio;
-    const dy = anchor.y - pointer.y;
-    const distance = Math.sqrt(dx * dx + dy * dy) + 1e-5;
-    const pointerInfluence = Math.exp(-(distance * distance) / 0.055) * intensity;
-    const ripple = Math.sin(distance * 25 - model.time * 1.7 + anchor.phaseX) * pointerInfluence;
     let lifecycleRippleX = 0;
     let lifecycleRippleY = 0;
 
@@ -668,12 +679,10 @@ function advanceMotionStep(
       x:
         Math.sin(model.time * anchor.frequency + anchor.phaseX) * 0.006 +
         (anchor.baseX - anchor.x) * 0.12 +
-        (dx / distance / model.aspectRatio) * ripple * 0.008 +
         lifecycleRippleX,
       y:
         Math.cos(model.time * anchor.frequency * 0.83 + anchor.phaseY) * 0.006 +
         (anchor.baseY - anchor.y) * 0.12 +
-        (dy / distance) * ripple * 0.008 +
         lifecycleRippleY,
     });
   }
@@ -728,17 +737,12 @@ function advanceMotionStep(
   updateLifecycle(model, deltaSeconds);
 }
 
-export function advanceTessellationModel(
-  model: TessellationModel,
-  deltaSeconds: number,
-  pointer: Readonly<{ x: number; y: number }>,
-  intensity: number,
-) {
+export function advanceTessellationModel(model: TessellationModel, deltaSeconds: number) {
   let remaining = clamp(deltaSeconds, 0, 0.1);
 
   while (remaining > 0) {
     const step = Math.min(remaining, 1 / 60);
-    advanceMotionStep(model, step, pointer, clamp(intensity, 0.5, 1.35));
+    advanceMotionStep(model, step);
     remaining -= step;
   }
 }

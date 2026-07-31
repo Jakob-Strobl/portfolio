@@ -1,3 +1,4 @@
+import fragmentSource from "../../src/backgrounds/tessellation.frag";
 import {
   createTessellationEdgeVertices,
   createTessellationPointVertices,
@@ -27,6 +28,7 @@ describe("living tessellation vertex packing", () => {
     });
 
     expect(points[5]).toBeCloseTo(anchors[0].mass);
+    expect(points[6]).toBeCloseTo(anchors[0].luminosity);
     const firstEndpointNormalScale = Math.hypot(edges[5], edges[6]);
     const secondEndpointOffset = TESSELLATION_VERTEX_STRIDE;
     const secondEndpointNormalScale = Math.hypot(edges[secondEndpointOffset + 5], edges[secondEndpointOffset + 6]);
@@ -49,6 +51,29 @@ describe("living tessellation vertex packing", () => {
 
     expect(points[7]).toBeCloseTo(getAnchorLife(anchors[0]));
     expect(edges[7]).toBeCloseTo(getAnchorLife(anchors[0]));
+  });
+
+  test("isolates anchor luminosity from edge and fill packing", () => {
+    const model = createTessellationModel(162);
+    const topology = triangulateTessellation(model.anchors).slice(0, 4);
+    const initialTriangles = createTessellationTriangleVertices(model, topology);
+    const initialEdges = createTessellationEdgeVertices(model, undefined, topology, 800, 600, {
+      outgoing: 0,
+      incoming: 1,
+    });
+    const initialPoints = createTessellationPointVertices(model);
+
+    for (const anchor of model.anchors) anchor.luminosity = 1 - anchor.luminosity;
+
+    expect(createTessellationTriangleVertices(model, topology)).toEqual(initialTriangles);
+    expect(createTessellationEdgeVertices(model, undefined, topology, 800, 600, { outgoing: 0, incoming: 1 })).toEqual(
+      initialEdges,
+    );
+    expect(createTessellationPointVertices(model)).not.toEqual(initialPoints);
+  });
+
+  test("contains no tessellation pointer response in the fragment shader", () => {
+    expect(fragmentSource.toLowerCase()).not.toContain("pointer");
   });
 
   test("packs one stable stained-glass style and flat light uniformly across a selected facet", () => {

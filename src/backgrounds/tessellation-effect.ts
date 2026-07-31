@@ -32,7 +32,6 @@ const BYTES_PER_VERTEX = FLOATS_PER_VERTEX * Float32Array.BYTES_PER_ELEMENT;
 
 type TessellationUniforms = {
   resolution: WebGLUniformLocation;
-  pointer: WebGLUniformLocation;
   time: WebGLUniformLocation;
   intensity: WebGLUniformLocation;
   opacity: WebGLUniformLocation;
@@ -91,7 +90,11 @@ export function createTessellationPointVertices(model: TessellationModel) {
   const data = new Float32Array(anchors.length * FLOATS_PER_VERTEX);
 
   for (let index = 0; index < anchors.length; index += 1) {
-    writeVertex(data, index * FLOATS_PER_VERTEX, model, anchors[index], [0, anchors[index].mass, 0]);
+    writeVertex(data, index * FLOATS_PER_VERTEX, model, anchors[index], [
+      0,
+      anchors[index].mass,
+      anchors[index].luminosity,
+    ]);
   }
 
   return data;
@@ -154,7 +157,6 @@ export function createTessellationEffect(
 
   const uniforms: TessellationUniforms = {
     resolution: requireUniform(gl, program, "uResolution"),
-    pointer: requireUniform(gl, program, "uPointer"),
     time: requireUniform(gl, program, "uTime"),
     intensity: requireUniform(gl, program, "uIntensity"),
     opacity: requireUniform(gl, program, "uOpacity"),
@@ -277,7 +279,7 @@ export function createTessellationEffect(
     render(frame) {
       if (disposed) return;
       const motionDelta = frame.deltaSeconds * values.speed;
-      advanceTessellationModel(model, motionDelta, frame.pointer, values.intensity);
+      advanceTessellationModel(model, motionDelta);
       const topologyCadence = consumeTopologyTime(topologyTime, frame.deltaSeconds);
       topologyTime = topologyCadence.remainingSeconds;
       if (topologyCadence.shouldRebuild) rebuildTopology();
@@ -286,7 +288,6 @@ export function createTessellationEffect(
 
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
-      gl.uniform2f(uniforms.pointer, frame.pointer.x, frame.pointer.y);
       gl.uniform1f(uniforms.time, model.time);
       gl.uniform1f(uniforms.intensity, values.intensity);
       gl.bindVertexArray(vertexArray);

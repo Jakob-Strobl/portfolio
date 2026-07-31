@@ -28,13 +28,14 @@ import {
 } from "../../src/backgrounds/tessellation-model";
 
 function snapshotModel(model: ReturnType<typeof createTessellationModel>) {
-  return model.anchors.map(({ id, x, y, hue, brightness, mass, relief, boundary, state }) => ({
+  return model.anchors.map(({ id, x, y, hue, brightness, mass, luminosity, relief, boundary, state }) => ({
     id,
     x,
     y,
     hue,
     brightness,
     mass,
+    luminosity,
     relief,
     boundary,
     state,
@@ -85,14 +86,43 @@ describe("living tessellation model", () => {
     const second = createTessellationModel(413, 1.2);
 
     for (let index = 0; index < 120; index += 1) {
-      advanceTessellationModel(first, 1 / 60, { x: 0.35, y: 0.62 }, 1);
+      advanceTessellationModel(first, 1 / 60);
     }
     for (let index = 0; index < 60; index += 1) {
-      advanceTessellationModel(second, 1 / 30, { x: 0.35, y: 0.62 }, 1);
+      advanceTessellationModel(second, 1 / 30);
     }
 
     expect(snapshotModel(first)).toEqual(snapshotModel(second));
     expect(snapshotModel(first)).not.toEqual(snapshotModel(createTessellationModel(413, 1.2)));
+    expect(advanceTessellationModel).toHaveLength(2);
+  });
+
+  test("assigns sparse deterministic luminosity with only mild positive mass correlation", () => {
+    const models = Array.from({ length: 20 }, (_, index) => createTessellationModel(100 + index));
+    const duplicate = createTessellationModel(100);
+    const anchors = models.flatMap((model) => model.anchors.filter((anchor) => !anchor.boundary));
+    const luminous = anchors.filter((anchor) => anchor.luminosity > 0.05);
+    const meanMass = anchors.reduce((sum, anchor) => sum + anchor.mass, 0) / anchors.length;
+    const meanLuminosity = anchors.reduce((sum, anchor) => sum + anchor.luminosity, 0) / anchors.length;
+    const covariance =
+      anchors.reduce((sum, anchor) => sum + (anchor.mass - meanMass) * (anchor.luminosity - meanLuminosity), 0) /
+      anchors.length;
+    const massDeviation = Math.sqrt(
+      anchors.reduce((sum, anchor) => sum + (anchor.mass - meanMass) ** 2, 0) / anchors.length,
+    );
+    const luminosityDeviation = Math.sqrt(
+      anchors.reduce((sum, anchor) => sum + (anchor.luminosity - meanLuminosity) ** 2, 0) / anchors.length,
+    );
+    const correlation = covariance / (massDeviation * luminosityDeviation);
+
+    expect(models[0].anchors.map(({ id, luminosity }) => ({ id, luminosity }))).toEqual(
+      duplicate.anchors.map(({ id, luminosity }) => ({ id, luminosity })),
+    );
+    expect(anchors.every((anchor) => anchor.luminosity >= 0 && anchor.luminosity <= 1)).toBe(true);
+    expect(luminous.length / anchors.length).toBeGreaterThanOrEqual(0.1);
+    expect(luminous.length / anchors.length).toBeLessThanOrEqual(0.18);
+    expect(correlation).toBeGreaterThan(0.05);
+    expect(correlation).toBeLessThan(0.5);
   });
 
   test("keeps a bounded living population through births and retirements", () => {
@@ -103,7 +133,7 @@ describe("living tessellation model", () => {
     let sawRetirementPulseAtTrigger = false;
 
     for (let index = 0; index < 3_600; index += 1) {
-      advanceTessellationModel(model, 1 / 30, { x: 0.5, y: 0.5 }, 1);
+      advanceTessellationModel(model, 1 / 30);
       sawBuddingAnchor ||= model.anchors.some((anchor) => anchor.state === "budding");
       sawRetiringAnchor ||= model.anchors.some((anchor) => anchor.state === "retiring");
       sawBirthPulseAtTrigger ||=
@@ -318,8 +348,8 @@ describe("living tessellation model", () => {
     const second = createTessellationModel(915);
 
     while (first.pulses.length === 0) {
-      advanceTessellationModel(first, 0.1, { x: 0.5, y: 0.5 }, 1);
-      advanceTessellationModel(second, 0.1, { x: 0.5, y: 0.5 }, 1);
+      advanceTessellationModel(first, 0.1);
+      advanceTessellationModel(second, 0.1);
     }
 
     expect(first.pulses).toEqual(second.pulses);
@@ -355,23 +385,23 @@ describe("living tessellation model", () => {
     const perFrameHomeShift: number[] = [];
     for (let index = 0; index < 12; index += 1) {
       const previousBaseX = anchor.baseX;
-      advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
-      advanceTessellationModel(calm, 1 / 60, { x: -2, y: -2 }, 1);
+      advanceTessellationModel(pulsing, 1 / 60);
+      advanceTessellationModel(calm, 1 / 60);
       perFrameHomeShift.push((anchor.baseX - previousBaseX) * pulsing.aspectRatio * 800);
     }
     expect(perFrameHomeShift.every((shift) => shift > 0)).toBe(true);
     expect(Math.max(...perFrameHomeShift)).toBeLessThan(0.08);
 
     for (let index = 0; index < 150; index += 1) {
-      advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
-      advanceTessellationModel(calm, 1 / 60, { x: -2, y: -2 }, 1);
+      advanceTessellationModel(pulsing, 1 / 60);
+      advanceTessellationModel(calm, 1 / 60);
     }
 
     const baseAfterPulse = { x: anchor.baseX, y: anchor.baseY };
     const permanentShiftPixels =
       Math.hypot((baseAfterPulse.x - initialBase.x) * pulsing.aspectRatio, baseAfterPulse.y - initialBase.y) * 800;
     expect(pulsing.pulses).toHaveLength(0);
-    advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
+    advanceTessellationModel(pulsing, 1 / 60);
     expect({ x: anchor.baseX, y: anchor.baseY }).toEqual(baseAfterPulse);
     expect(permanentShiftPixels).toBeGreaterThan(0.5);
     expect(permanentShiftPixels).toBeLessThan(4);
