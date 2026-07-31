@@ -1,11 +1,16 @@
 import fragmentSource from "./tessellation.frag";
 import {
   advanceTessellationModel,
+  canStartTessellationTransition,
   consumeTopologyTime,
+  createTessellationTransitionEdges,
   createTessellationModel,
   createTessellationValues,
+  getAnchorGlow,
+  getAnchorHue,
   getAnchorLife,
   getTessellationTransitionWeights,
+  isTessellationTransitionComplete,
   pruneDeadTessellationAnchors,
   shouldResetTessellationAspect,
   tessellationTopologySignature,
@@ -26,8 +31,9 @@ type TessellationUniforms = {
   time: WebGLUniformLocation;
   intensity: WebGLUniformLocation;
   opacity: WebGLUniformLocation;
-  pointPass: WebGLUniformLocation;
+  pass: WebGLUniformLocation;
   pointSize: WebGLUniformLocation;
+  edgeHalfWidth: WebGLUniformLocation;
 };
 
 function writeVertex(
@@ -35,16 +41,17 @@ function writeVertex(
   offset: number,
   model: TessellationModel,
   anchor: TessellationModel["anchors"][number],
-  barycentric: readonly [number, number, number],
+  auxiliary: readonly [number, number, number],
+  lifeMultiplier = 1,
 ) {
   data[offset] = anchor.x;
   data[offset + 1] = anchor.y;
-  data[offset + 2] = (anchor.hue + model.time * anchor.hueRate) % 1;
-  data[offset + 3] = anchor.brightness;
-  data[offset + 4] = barycentric[0];
-  data[offset + 5] = barycentric[1];
-  data[offset + 6] = barycentric[2];
-  data[offset + 7] = getAnchorLife(anchor);
+  data[offset + 2] = getAnchorHue(model, anchor);
+  data[offset + 3] = getAnchorGlow(model, anchor) * anchor.brightness;
+  data[offset + 4] = auxiliary[0];
+  data[offset + 5] = auxiliary[1];
+  data[offset + 6] = auxiliary[2];
+  data[offset + 7] = getAnchorLife(anchor) * lifeMultiplier;
 }
 
 export function createTessellationTriangleVertices(
@@ -78,6 +85,46 @@ export function createTessellationPointVertices(model: TessellationModel) {
   return data;
 }
 
+export function createTessellationEdgeVertices(
+  model: TessellationModel,
+  previousTopology: readonly TessellationTriangle[] | undefined,
+  currentTopology: readonly TessellationTriangle[],
+  width: number,
+  height: number,
+  weights: Readonly<{ outgoing: number; incoming: number }>,
+) {
+  const edges = createTessellationTransitionEdges(previousTopology, currentTopology, weights);
+  const anchorsById = new Map(model.anchors.map((anchor) => [anchor.id, anchor]));
+  const data = new Float32Array(edges.length * 6 * FLOATS_PER_VERTEX);
+  let offset = 0;
+
+  for (const { edge, opacity } of edges) {
+    const first = anchorsById.get(edge[0]);
+    const second = anchorsById.get(edge[1]);
+    if (first == null || second == null || opacity <= 0.001) continue;
+    const dx = (second.x - first.x) * width;
+    const dy = (second.y - first.y) * height;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    if (length < 0.01) continue;
+    const normalX = -dy / length;
+    const normalY = dx / length;
+
+    for (const [anchor, side] of [
+      [first, -1],
+      [second, -1],
+      [second, 1],
+      [first, -1],
+      [second, 1],
+      [first, 1],
+    ] as const) {
+      writeVertex(data, offset, model, anchor, [side, normalX, normalY], opacity);
+      offset += FLOATS_PER_VERTEX;
+    }
+  }
+
+  return offset === data.length ? data : data.slice(0, offset);
+}
+
 export function createTessellationEffect(
   gl: WebGL2RenderingContext,
   initialConfig: TessellationBackgroundConfig,
@@ -99,8 +146,9 @@ export function createTessellationEffect(
     time: requireUniform(gl, program, "uTime"),
     intensity: requireUniform(gl, program, "uIntensity"),
     opacity: requireUniform(gl, program, "uOpacity"),
-    pointPass: requireUniform(gl, program, "uPointPass"),
+    pass: requireUniform(gl, program, "uPass"),
     pointSize: requireUniform(gl, program, "uPointSize"),
+    edgeHalfWidth: requireUniform(gl, program, "uEdgeHalfWidth"),
   };
 
   gl.bindVertexArray(vertexArray);
@@ -150,6 +198,7 @@ export function createTessellationEffect(
   }
 
   function rebuildTopology() {
+    if (!canStartTessellationTransition(previousTopology != null)) return;
     const nextTopology = triangulateTessellation(model.anchors);
     if (tessellationTopologySignature(nextTopology) === tessellationTopologySignature(currentTopology)) return;
     previousTopology = currentTopology;
@@ -161,17 +210,24 @@ export function createTessellationEffect(
 
   function renderMesh() {
     const transition = getTessellationTransitionWeights(transitionTime);
-    gl.uniform1i(uniforms.pointPass, 0);
+    gl.uniform1i(uniforms.pass, 0);
 
     if (previousTopology != null && transition.outgoing > 0.001) {
       uploadAndDraw(createTessellationTriangleVertices(model, previousTopology), gl.TRIANGLES, transition.outgoing);
     }
     uploadAndDraw(createTessellationTriangleVertices(model, currentTopology), gl.TRIANGLES, transition.incoming);
 
-    gl.uniform1i(uniforms.pointPass, 1);
+    gl.uniform1i(uniforms.pass, 1);
+    uploadAndDraw(
+      createTessellationEdgeVertices(model, previousTopology, currentTopology, width, height, transition),
+      gl.TRIANGLES,
+      1,
+    );
+
+    gl.uniform1i(uniforms.pass, 2);
     uploadAndDraw(createTessellationPointVertices(model), gl.POINTS, 1);
 
-    if (previousTopology != null && transition.incoming >= 0.999) {
+    if (previousTopology != null && isTessellationTransitionComplete(transitionTime)) {
       previousTopology = undefined;
       const retainedIds = new Set(currentTopology.flat());
       pruneDeadTessellationAnchors(model, retainedIds);
@@ -200,6 +256,7 @@ export function createTessellationEffect(
       gl.useProgram(program);
       gl.uniform2f(uniforms.resolution, width, height);
       gl.uniform1f(uniforms.pointSize, Math.max(3, Math.min(6.5, height / 170)));
+      gl.uniform1f(uniforms.edgeHalfWidth, 1.05);
     },
     render(frame) {
       if (disposed) return;

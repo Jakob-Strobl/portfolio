@@ -5,11 +5,13 @@ export const TESSELLATION_MIN_INTERIOR_ANCHORS = 32;
 export const TESSELLATION_MAX_INTERIOR_ANCHORS = 48;
 export const TESSELLATION_TOPOLOGY_INTERVAL_SECONDS = 0.25;
 export const TESSELLATION_TRANSITION_SECONDS = 0.45;
+export const TESSELLATION_MAX_LIFECYCLE_PULSES = 3;
 
 const BIRTH_DURATION_SECONDS = 1.8;
 const RETIRE_DURATION_SECONDS = 2.4;
 const BOUNDARY_MARGIN = 0.09;
 const TAU = Math.PI * 2;
+const LIFECYCLE_PULSE_DURATION_SECONDS = 3.2;
 
 export type TessellationAnchorState = "active" | "budding" | "retiring" | "dead";
 
@@ -27,6 +29,8 @@ export type TessellationAnchor = {
   hue: number;
   hueRate: number;
   brightness: number;
+  glowPhase: number;
+  glowFrequency: number;
   boundary: boolean;
   state: TessellationAnchorState;
   stateAge: number;
@@ -36,6 +40,16 @@ export type TessellationAnchor = {
 };
 
 export type TessellationTriangle = readonly [number, number, number];
+export type TessellationEdge = readonly [number, number];
+
+export type TessellationLifecyclePulse = {
+  x: number;
+  y: number;
+  age: number;
+  duration: number;
+  strength: number;
+  phase: number;
+};
 
 export type TessellationModel = {
   seed: number;
@@ -46,6 +60,7 @@ export type TessellationModel = {
   nextEventAt: number;
   aspectRatio: number;
   anchors: TessellationAnchor[];
+  pulses: TessellationLifecyclePulse[];
 };
 
 export type TessellationValues = {
@@ -101,6 +116,8 @@ function createAnchor(model: TessellationModel, x: number, y: number, boundary =
     hue: nextRandom(model),
     hueRate: randomRange(model, 0.0025, 0.008),
     brightness: randomRange(model, 0.72, 1),
+    glowPhase: nextRandom(model) * TAU,
+    glowFrequency: randomRange(model, 0.075, 0.16),
     boundary,
     state: "active",
     stateAge: 0,
@@ -174,6 +191,7 @@ export function createTessellationModel(seed: number, aspectRatio = 16 / 9): Tes
     nextEventAt: 0,
     aspectRatio: clamp(aspectRatio, 0.5, 2.5),
     anchors: [],
+    pulses: [],
   };
   const interiorCount = 36 + Math.floor(nextRandom(model) * 7);
 
@@ -275,6 +293,95 @@ export function getTessellationTransitionWeights(elapsedSeconds: number) {
   return { outgoing: 1 - incoming, incoming };
 }
 
+export function isTessellationTransitionComplete(elapsedSeconds: number) {
+  return elapsedSeconds >= TESSELLATION_TRANSITION_SECONDS;
+}
+
+export function canStartTessellationTransition(hasActiveTransition: boolean) {
+  return !hasActiveTransition;
+}
+
+function edgeKey(first: number, second: number) {
+  return first < second ? `${first}:${second}` : `${second}:${first}`;
+}
+
+export function createTessellationEdges(triangles: readonly TessellationTriangle[]): TessellationEdge[] {
+  const edges = new Map<string, TessellationEdge>();
+
+  for (const [a, b, c] of triangles) {
+    for (const [first, second] of [
+      [a, b],
+      [b, c],
+      [c, a],
+    ] as const) {
+      const edge: TessellationEdge = first < second ? [first, second] : [second, first];
+      edges.set(edgeKey(first, second), edge);
+    }
+  }
+
+  return [...edges.values()].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+}
+
+export function createTessellationTransitionEdges(
+  previous: readonly TessellationTriangle[] | undefined,
+  current: readonly TessellationTriangle[],
+  weights: Readonly<{ outgoing: number; incoming: number }>,
+) {
+  const currentEdges = createTessellationEdges(current);
+  if (previous == null) return currentEdges.map((edge) => ({ edge, opacity: 1 }));
+  const previousEdges = createTessellationEdges(previous);
+  const previousKeys = new Set(previousEdges.map(([a, b]) => edgeKey(a, b)));
+  const currentKeys = new Set(currentEdges.map(([a, b]) => edgeKey(a, b)));
+
+  return [
+    ...previousEdges
+      .filter(([a, b]) => !currentKeys.has(edgeKey(a, b)))
+      .map((edge) => ({ edge, opacity: weights.outgoing })),
+    ...currentEdges.map((edge) => ({
+      edge,
+      opacity: previousKeys.has(edgeKey(edge[0], edge[1])) ? 1 : weights.incoming,
+    })),
+  ];
+}
+
+export function getLifecyclePulseInfluence(
+  pulse: TessellationLifecyclePulse,
+  x: number,
+  y: number,
+  aspectRatio: number,
+) {
+  const dx = (x - pulse.x) * aspectRatio;
+  const dy = y - pulse.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const progress = clamp(pulse.age / pulse.duration, 0, 1);
+  const wavefront = 0.025 + progress * 0.72;
+  const envelope = Math.exp(-(((distance - wavefront) / 0.13) ** 2)) * (1 - smoothstep(progress));
+  const oscillation = Math.sin((distance - wavefront) * 34 + pulse.phase);
+
+  return {
+    dx,
+    dy,
+    distance,
+    motion: envelope * oscillation * pulse.strength,
+    glow: envelope * (0.55 + oscillation * 0.25) * pulse.strength,
+  };
+}
+
+export function getAnchorGlow(model: TessellationModel, anchor: TessellationAnchor) {
+  const ambientWave = 0.5 + 0.5 * Math.sin(model.time * anchor.glowFrequency + anchor.glowPhase);
+  const ambient = 0.06 + ambientWave * (anchor.boundary ? 0.1 : 0.18);
+  const pulseGlow = model.pulses.reduce(
+    (strongest, pulse) =>
+      Math.max(strongest, getLifecyclePulseInfluence(pulse, anchor.x, anchor.y, model.aspectRatio).glow),
+    0,
+  );
+  return clamp(ambient + pulseGlow * 0.38, 0.04, 0.62);
+}
+
+export function getAnchorHue(model: TessellationModel, anchor: TessellationAnchor) {
+  return anchor.hue + model.time * anchor.hueRate;
+}
+
 export function consumeTopologyTime(accumulatedSeconds: number, deltaSeconds: number) {
   const total = Math.max(0, accumulatedSeconds) + Math.max(0, deltaSeconds);
   return {
@@ -298,6 +405,20 @@ export function tessellationTopologySignature(triangles: readonly TessellationTr
 
 function countInteriorAnchors(model: TessellationModel) {
   return model.anchors.filter((anchor) => !anchor.boundary && anchor.state !== "dead").length;
+}
+
+function emitLifecyclePulse(model: TessellationModel, x: number, y: number, strength: number) {
+  model.pulses.push({
+    x,
+    y,
+    age: 0,
+    duration: LIFECYCLE_PULSE_DURATION_SECONDS,
+    strength,
+    phase: nextRandom(model) * TAU,
+  });
+  if (model.pulses.length > TESSELLATION_MAX_LIFECYCLE_PULSES) {
+    model.pulses.splice(0, model.pulses.length - TESSELLATION_MAX_LIFECYCLE_PULSES);
+  }
 }
 
 function birthAnchor(model: TessellationModel) {
@@ -324,6 +445,7 @@ function birthAnchor(model: TessellationModel) {
   anchor.originY = originY;
   anchor.state = "budding";
   model.anchors.push(anchor);
+  emitLifecyclePulse(model, originX, originY, 0.9);
 }
 
 function retireAnchor(model: TessellationModel) {
@@ -344,9 +466,13 @@ function retireAnchor(model: TessellationModel) {
   anchor.state = "retiring";
   anchor.stateAge = 0;
   anchor.retirementTargetId = target.id;
+  emitLifecyclePulse(model, anchor.x, anchor.y, 0.72);
 }
 
 function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
+  for (const pulse of model.pulses) pulse.age += deltaSeconds;
+  model.pulses = model.pulses.filter((pulse) => pulse.age < pulse.duration);
+
   for (const anchor of model.anchors) {
     if (anchor.state !== "budding" && anchor.state !== "retiring") continue;
     anchor.stateAge += deltaSeconds;
@@ -389,15 +515,26 @@ function advanceMotionStep(
     const distance = Math.sqrt(dx * dx + dy * dy) + 1e-5;
     const pointerInfluence = Math.exp(-(distance * distance) / 0.055) * intensity;
     const ripple = Math.sin(distance * 25 - model.time * 1.7 + anchor.phaseX) * pointerInfluence;
+    let lifecycleRippleX = 0;
+    let lifecycleRippleY = 0;
+
+    for (const pulse of model.pulses) {
+      const influence = getLifecyclePulseInfluence(pulse, anchor.x, anchor.y, model.aspectRatio);
+      if (influence.distance < 1e-5) continue;
+      lifecycleRippleX += (influence.dx / influence.distance / model.aspectRatio) * influence.motion * 0.018;
+      lifecycleRippleY += (influence.dy / influence.distance) * influence.motion * 0.018;
+    }
     acceleration.set(anchor.id, {
       x:
         Math.sin(model.time * anchor.frequency + anchor.phaseX) * 0.006 +
         (anchor.baseX - anchor.x) * 0.12 +
-        (dx / distance / model.aspectRatio) * ripple * 0.008,
+        (dx / distance / model.aspectRatio) * ripple * 0.008 +
+        lifecycleRippleX,
       y:
         Math.cos(model.time * anchor.frequency * 0.83 + anchor.phaseY) * 0.006 +
         (anchor.baseY - anchor.y) * 0.12 +
-        (dy / distance) * ripple * 0.008,
+        (dy / distance) * ripple * 0.008 +
+        lifecycleRippleY,
     });
   }
 

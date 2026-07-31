@@ -1,6 +1,7 @@
 #version 300 es
 
 precision highp float;
+precision highp int;
 
 const float TAU = 6.2831853;
 const vec3 BACKGROUND_COLOR = vec3(0.0745, 0.051, 0.1255);
@@ -10,11 +11,11 @@ uniform vec2 uPointer;
 uniform float uTime;
 uniform float uIntensity;
 uniform float uOpacity;
-uniform bool uPointPass;
+uniform int uPass;
 
 in vec2 vPosition;
 in vec2 vColor;
-in vec3 vBarycentric;
+in vec3 vAuxiliary;
 in float vLife;
 
 out vec4 outColor;
@@ -32,31 +33,37 @@ void main() {
     float ripple = sin(pointerDistance * 28.0 - uTime * 1.65) * pointerInfluence;
     float hue = vColor.x + uTime * 0.004 + ripple * 0.025;
     vec3 accent = rainbow(hue);
-    float brightness = vColor.y;
+    float glow = vColor.y;
     float life = smoothstep(0.02, 0.95, vLife);
 
-    if (uPointPass) {
+    if (uPass == 2) {
         vec2 point = gl_PointCoord * 2.0 - 1.0;
         float radius = length(point);
         float circle = 1.0 - smoothstep(0.5, 1.0, radius);
         float halo = (1.0 - smoothstep(0.2, 1.0, radius)) * 0.22;
         float saturation = 0.5 + pointerInfluence * 0.38;
-        vec3 pointColor = mix(BACKGROUND_COLOR * 1.15, accent, saturation) * (0.7 + brightness * 0.42);
+        vec3 pointColor = mix(BACKGROUND_COLOR * 1.15, accent, saturation) * (0.78 + glow * 0.55);
         float alpha = (circle + halo) * life * uOpacity * (0.48 + uIntensity * 0.22);
         if (alpha < 0.01) discard;
         outColor = vec4(pointColor, alpha);
         return;
     }
 
-    float closestEdge = min(vBarycentric.x, min(vBarycentric.y, vBarycentric.z));
-    float edgeDerivative = max(fwidth(closestEdge), 0.0001);
-    float edge = 1.0 - smoothstep(edgeDerivative * 0.45, edgeDerivative * 1.55, closestEdge);
-    float edgeStrength = (0.34 + uIntensity * 0.2 + pointerInfluence * 0.3) * life;
-    vec3 fill = BACKGROUND_COLOR * (0.92 + brightness * 0.035);
-    fill += (accent - BACKGROUND_COLOR) * (0.012 + pointerInfluence * 0.008) * life;
-    vec3 edgeColor = mix(BACKGROUND_COLOR * 1.08, accent, 0.46 + pointerInfluence * 0.34);
-    edgeColor *= 0.64 + brightness * 0.28;
-    vec3 color = mix(fill, edgeColor, edge * edgeStrength);
+    if (uPass == 1) {
+        float edge = 1.0 - smoothstep(0.48, 1.0, abs(vAuxiliary.x));
+        float edgeLife = clamp(vLife, 0.0, 1.0);
+        vec3 edgeColor = mix(BACKGROUND_COLOR * 1.1, accent, 0.5 + pointerInfluence * 0.32);
+        edgeColor *= 0.67 + glow * 0.36;
+        float alpha = edge * edgeLife * uOpacity * (0.48 + uIntensity * 0.17 + pointerInfluence * 0.2);
+        if (alpha < 0.005) discard;
+        outColor = vec4(edgeColor, alpha);
+        return;
+    }
+
+    vec3 purpleSurface = vec3(0.089, 0.051, 0.145);
+    float facetEnergy = glow * (0.13 + uIntensity * 0.035) + pointerInfluence * 0.012;
+    vec3 energizedSurface = mix(purpleSurface * 1.04, accent * 0.32 + purpleSurface * 0.76, facetEnergy);
+    vec3 color = mix(BACKGROUND_COLOR * 0.94, energizedSurface, 0.58);
 
     outColor = vec4(color, uOpacity * mix(0.72, 1.0, life));
 }

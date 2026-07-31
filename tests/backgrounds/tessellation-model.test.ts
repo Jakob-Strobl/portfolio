@@ -1,11 +1,19 @@
 import {
   advanceTessellationModel,
+  canStartTessellationTransition,
   consumeTopologyTime,
+  createTessellationEdges,
   createTessellationModel,
+  createTessellationTransitionEdges,
   createTessellationValues,
+  getAnchorGlow,
+  getAnchorHue,
   getAnchorLife,
+  getLifecyclePulseInfluence,
   getTessellationTransitionWeights,
+  isTessellationTransitionComplete,
   TESSELLATION_MAX_INTERIOR_ANCHORS,
+  TESSELLATION_MAX_LIFECYCLE_PULSES,
   TESSELLATION_MIN_INTERIOR_ANCHORS,
   TESSELLATION_TOPOLOGY_INTERVAL_SECONDS,
   TESSELLATION_TRANSITION_SECONDS,
@@ -85,6 +93,7 @@ describe("living tessellation model", () => {
       const livingCount = model.anchors.filter((anchor) => !anchor.boundary && anchor.state !== "dead").length;
       expect(livingCount).toBeGreaterThanOrEqual(TESSELLATION_MIN_INTERIOR_ANCHORS);
       expect(livingCount).toBeLessThanOrEqual(TESSELLATION_MAX_INTERIOR_ANCHORS);
+      expect(model.pulses.length).toBeLessThanOrEqual(TESSELLATION_MAX_LIFECYCLE_PULSES);
     }
 
     expect(sawBuddingAnchor).toBe(true);
@@ -112,6 +121,82 @@ describe("living tessellation model", () => {
       outgoing: 0,
       incoming: 1,
     });
+    expect(isTessellationTransitionComplete(TESSELLATION_TRANSITION_SECONDS - 0.001)).toBe(false);
+    expect(isTessellationTransitionComplete(TESSELLATION_TRANSITION_SECONDS)).toBe(true);
+    expect(canStartTessellationTransition(true)).toBe(false);
+    expect(canStartTessellationTransition(false)).toBe(true);
+  });
+
+  test("deduplicates shared edges and keeps unchanged connections fully stable during transitions", () => {
+    const previous = [
+      [1, 2, 3],
+      [2, 4, 3],
+    ] as const;
+    const current = [
+      [1, 2, 4],
+      [1, 4, 3],
+    ] as const;
+    const previousEdges = createTessellationEdges(previous);
+    const transitionalEdges = createTessellationTransitionEdges(previous, current, {
+      outgoing: 0.75,
+      incoming: 0.25,
+    });
+
+    expect(previousEdges).toHaveLength(5);
+    expect(new Set(previousEdges.map((edge) => edge.join(":"))).size).toBe(previousEdges.length);
+    expect(transitionalEdges.find(({ edge }) => edge[0] === 1 && edge[1] === 2)?.opacity).toBe(1);
+    expect(transitionalEdges.find(({ edge }) => edge[0] === 2 && edge[1] === 3)?.opacity).toBe(0.75);
+    expect(transitionalEdges.find(({ edge }) => edge[0] === 1 && edge[1] === 4)?.opacity).toBe(0.25);
+  });
+
+  test("gives anchors slow individual glow cycles", () => {
+    const model = createTessellationModel(610);
+    const anchor = model.anchors.find((candidate) => !candidate.boundary)!;
+    const samples: number[] = [];
+    model.pulses = [];
+
+    for (let time = 0; time <= 100; time += 2) {
+      model.time = time;
+      samples.push(getAnchorGlow(model, anchor));
+    }
+
+    expect(Math.max(...samples) - Math.min(...samples)).toBeGreaterThan(0.12);
+    expect(Math.min(...samples)).toBeGreaterThanOrEqual(0.04);
+    expect(Math.max(...samples)).toBeLessThanOrEqual(0.62);
+  });
+
+  test("keeps hue continuous across the shader palette wrap boundary", () => {
+    const model = createTessellationModel(27);
+    const anchor = model.anchors.find((candidate) => !candidate.boundary)!;
+    anchor.hue = 0.99;
+    anchor.hueRate = 0.01;
+    model.time = 0.9;
+    const beforeWrap = getAnchorHue(model, anchor);
+    model.time = 1.1;
+    const afterWrap = getAnchorHue(model, anchor);
+
+    expect(beforeWrap).toBeCloseTo(0.999);
+    expect(afterWrap).toBeCloseTo(1.001);
+    expect(afterWrap - beforeWrap).toBeCloseTo(0.002);
+  });
+
+  test("emits bounded deterministic lifecycle pulses that ripple through nearby anchors", () => {
+    const first = createTessellationModel(915);
+    const second = createTessellationModel(915);
+
+    while (first.pulses.length === 0) {
+      advanceTessellationModel(first, 0.1, { x: 0.5, y: 0.5 }, 1);
+      advanceTessellationModel(second, 0.1, { x: 0.5, y: 0.5 }, 1);
+    }
+
+    expect(first.pulses).toEqual(second.pulses);
+    expect(first.pulses.length).toBeLessThanOrEqual(TESSELLATION_MAX_LIFECYCLE_PULSES);
+    const pulse = first.pulses[0];
+    const wavefrontX = pulse.x + (0.025 + (pulse.age / pulse.duration) * 0.72) / first.aspectRatio;
+    const nearby = getLifecyclePulseInfluence(pulse, wavefrontX, pulse.y, first.aspectRatio);
+    const distant = getLifecyclePulseInfluence(pulse, pulse.x + 1, pulse.y + 1, first.aspectRatio);
+    expect(Math.abs(nearby.motion)).toBeGreaterThan(Math.abs(distant.motion));
+    expect(nearby.glow).toBeGreaterThan(distant.glow);
   });
 
   test("only requests topology work at the deliberate four-hertz cadence", () => {
