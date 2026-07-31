@@ -58,7 +58,7 @@ Real-time procedurally generated ocean waves powered by custom GLSL vertex and f
 ## Quick Start
 
 ```bash
-# Prerequisites: Bun, Node >= 20 (LTS)
+# Prerequisites: Bun, Node >= 24
 # Install dependencies
 bun install
 # Start development server
@@ -84,9 +84,9 @@ bun run build
 
 ### Cloudflare Deployment Scripts
 
-- **`cloudflare-step-deploy`**: Runs the full test suite first (`vitest run`), and only if tests pass, proceeds to build the project (`vinxi build`). This ensures no broken code is deployed. This was originally used for Cloudflare Pages CI.
+- **`cloudflare-step-deploy`**: Runs the full test suite first (`vitest run`), and only if tests pass, proceeds to build the project (`vite build`). This ensures no broken code is deployed. This is used by Cloudflare Pages CI.
 
-- **`cloudflare-deploy-local`**: Builds the project (`vinxi build`) and deploys directly to Cloudflare Pages using Wrangler CLI (`wrangler pages deploy`). Useful for local testing of the deployment process before pushing to CI/CD.
+- **`cloudflare-deploy-local`**: Builds the project (`vite build`) and deploys the generated `dist` directory directly to Cloudflare Pages using Wrangler CLI (`wrangler pages deploy`). Useful for local testing of the deployment process before pushing to CI/CD.
 
 ## Project Highlights
 

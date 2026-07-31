@@ -9,11 +9,12 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,
+    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "types": [
       "vite/client",
-      "vinxi/types/client",
+      "@solidjs/start/env",
       "three",
       "vite-plugin-glsl/ext",
       "@testing-library/jest-dom",
@@ -23,5 +24,6 @@
     "paths": {
       "~/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["dist", ".output", "node_modules"]
 }

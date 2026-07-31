@@ -6,7 +6,10 @@ import { photoCollection } from "./+photos";
 
 export default function FullPhoto() {
   const params = useParams();
-  const photoResource = () => getPhotoBySlug("korea-pacific-coast", params.uriKey) ?? photoCollection[0];
+  const photoResource = () =>
+    params.uriKey == null
+      ? photoCollection[0]
+      : (getPhotoBySlug("korea-pacific-coast", params.uriKey) ?? photoCollection[0]);
 
   return (
     <FullPhotoLayout

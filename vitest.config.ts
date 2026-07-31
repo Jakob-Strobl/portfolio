@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import glsl from "vite-plugin-glsl";
 import solid from "vite-plugin-solid";
-import Package from "./package.json";
+import Package from "./package.json" with { type: "json" };
 
 export default defineConfig({
   plugins: [solid(), glsl()],

@@ -46,10 +46,7 @@ const contentValues = ["start", "end", "center", "between", "around", "evenly", 
 type ContentClass = `content-${(typeof contentValues)[number]}`;
 
 export type WithVariants<T extends string> =
-  | T
-  | `${Breakpoint}:${T}`
-  | `${Variant}:${T}`
-  | `${Breakpoint}:${Variant}:${T}`;
+  T | `${Breakpoint}:${T}` | `${Variant}:${T}` | `${Breakpoint}:${Variant}:${T}`;
 
 export type GapClass = WithVariants<`gap-${GapScale}`>;
 export type FlexAlignClass = WithVariants<JustifyClass | ItemsClass | ContentClass>;

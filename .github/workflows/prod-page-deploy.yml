@@ -38,7 +38,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/iron # node LTS v20.XX
+          node-version: 24
 
       - name: Install Bun
         run: npm install -g bun
@@ -54,12 +54,9 @@ jobs:
           PRIVATE_POSTHOG_KEY: ${{ secrets.PRIVATE_POSTHOG_KEY }}
 
       - name: Publish
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ vars.PAGES_PROJECT_NAME }} # e.g. 'my-project'
-          branch: ${{ inputs.branch }}
-          directory: ${{ vars.OUTPUT_DIRECTORY }} # e.g. 'dist'
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: "3"
+          command: pages deploy ${{ vars.OUTPUT_DIRECTORY }} --project-name=${{ vars.PAGES_PROJECT_NAME }} --branch=${{ inputs.branch }}
+          wranglerVersion: "4"
