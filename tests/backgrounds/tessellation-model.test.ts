@@ -1,5 +1,6 @@
 import {
   advanceTessellationModel,
+  canAdoptTessellationTopology,
   canStartTessellationTransition,
   consumeTopologyTime,
   createTessellationEdges,
@@ -10,11 +11,14 @@ import {
   getAnchorHue,
   getAnchorLife,
   getLifecyclePulseInfluence,
+  getTessellationFillTransitionOpacities,
+  getTessellationSpatialStyle,
   getTessellationTransitionWeights,
   isTessellationTransitionComplete,
   TESSELLATION_MAX_INTERIOR_ANCHORS,
   TESSELLATION_MAX_LIFECYCLE_PULSES,
   TESSELLATION_MIN_INTERIOR_ANCHORS,
+  TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS,
   TESSELLATION_TOPOLOGY_INTERVAL_SECONDS,
   TESSELLATION_TRANSITION_SECONDS,
   shouldResetTessellationAspect,
@@ -90,11 +94,19 @@ describe("living tessellation model", () => {
     const model = createTessellationModel(77, 16 / 9);
     let sawBuddingAnchor = false;
     let sawRetiringAnchor = false;
+    let sawBirthPulseAtTrigger = false;
+    let sawRetirementPulseAtTrigger = false;
 
     for (let index = 0; index < 3_600; index += 1) {
       advanceTessellationModel(model, 1 / 30, { x: 0.5, y: 0.5 }, 1);
       sawBuddingAnchor ||= model.anchors.some((anchor) => anchor.state === "budding");
       sawRetiringAnchor ||= model.anchors.some((anchor) => anchor.state === "retiring");
+      sawBirthPulseAtTrigger ||=
+        model.anchors.some((anchor) => anchor.state === "budding") &&
+        model.pulses.some((pulse) => pulse.direction === 1);
+      sawRetirementPulseAtTrigger ||=
+        model.anchors.some((anchor) => anchor.state === "retiring") &&
+        model.pulses.some((pulse) => pulse.direction === -1);
       const livingCount = model.anchors.filter((anchor) => !anchor.boundary && anchor.state !== "dead").length;
       expect(livingCount).toBeGreaterThanOrEqual(TESSELLATION_MIN_INTERIOR_ANCHORS);
       expect(livingCount).toBeLessThanOrEqual(TESSELLATION_MAX_INTERIOR_ANCHORS);
@@ -103,6 +115,8 @@ describe("living tessellation model", () => {
 
     expect(sawBuddingAnchor).toBe(true);
     expect(sawRetiringAnchor).toBe(true);
+    expect(sawBirthPulseAtTrigger).toBe(true);
+    expect(sawRetirementPulseAtTrigger).toBe(true);
   });
 
   test("fades lifecycle endpoints and topology transitions smoothly", () => {
@@ -130,6 +144,20 @@ describe("living tessellation model", () => {
     expect(isTessellationTransitionComplete(TESSELLATION_TRANSITION_SECONDS)).toBe(true);
     expect(canStartTessellationTransition(true)).toBe(false);
     expect(canStartTessellationTransition(false)).toBe(true);
+    expect(canAdoptTessellationTopology(false, TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS - 0.01)).toBe(false);
+    expect(canAdoptTessellationTopology(true, TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS)).toBe(false);
+    expect(canAdoptTessellationTopology(false, TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS)).toBe(true);
+
+    for (const elapsed of [0, TESSELLATION_TRANSITION_SECONDS * 0.25, TESSELLATION_TRANSITION_SECONDS * 0.5, 1]) {
+      const fill = getTessellationFillTransitionOpacities(true, getTessellationTransitionWeights(elapsed));
+      const sourceOverCoverage = fill.current + fill.previous * (1 - fill.current);
+      expect(fill.previous).toBe(1);
+      expect(sourceOverCoverage).toBe(1);
+    }
+    expect(getTessellationFillTransitionOpacities(false, { outgoing: 1, incoming: 0 })).toEqual({
+      previous: 0,
+      current: 1,
+    });
   });
 
   test("deduplicates shared edges and keeps unchanged connections fully stable during transitions", () => {
@@ -186,6 +214,35 @@ describe("living tessellation model", () => {
     expect(afterWrap - beforeWrap).toBeCloseTo(0.002);
   });
 
+  test("selects stained-glass facets from a sparse continuous seeded spatial field", () => {
+    const model = createTessellationModel(704);
+    const triangles = triangulateTessellation(model.anchors);
+    const anchorsById = new Map(model.anchors.map((anchor) => [anchor.id, anchor]));
+    const centroids = triangles.map((triangle) => {
+      const anchors = triangle.map((id) => anchorsById.get(id)!);
+      return {
+        x: (anchors[0].x + anchors[1].x + anchors[2].x) / 3,
+        y: (anchors[0].y + anchors[1].y + anchors[2].y) / 3,
+      };
+    });
+    const styles = centroids.map(({ x, y }) => getTessellationSpatialStyle(model.seed, x * model.aspectRatio, y));
+    const selected = styles.filter((style) => style.selected);
+    const sample = centroids[0];
+    const nearby = { x: sample.x + 0.002, y: sample.y + 0.002 };
+    const sampleStyle = getTessellationSpatialStyle(model.seed, sample.x * model.aspectRatio, sample.y);
+    const nearbyStyle = getTessellationSpatialStyle(model.seed, nearby.x * model.aspectRatio, nearby.y);
+
+    expect(sampleStyle).toEqual(getTessellationSpatialStyle(model.seed, sample.x * model.aspectRatio, sample.y));
+    expect(sampleStyle).not.toEqual(
+      getTessellationSpatialStyle(model.seed + 1, sample.x * model.aspectRatio, sample.y),
+    );
+    expect(Math.abs(sampleStyle.strength - nearbyStyle.strength)).toBeLessThan(0.015);
+    expect(Math.abs(sampleStyle.hue - nearbyStyle.hue)).toBeLessThan(0.015);
+    expect(selected.length / styles.length).toBeGreaterThan(0.07);
+    expect(selected.length / styles.length).toBeLessThan(0.4);
+    expect(selected.every((style) => style.strength > 0.01 && style.strength <= 0.21)).toBe(true);
+  });
+
   test("emits bounded deterministic lifecycle pulses that ripple through nearby anchors", () => {
     const first = createTessellationModel(915);
     const second = createTessellationModel(915);
@@ -205,38 +262,70 @@ describe("living tessellation model", () => {
     expect(nearby.glow).toBeGreaterThan(distant.glow);
   });
 
-  test("lifecycle waves create a clearly perceptible but bounded displacement", () => {
+  test("smoothly accumulates a softer permanent home shift as the lifecycle wave passes", () => {
     const pulsing = createTessellationModel(490, 16 / 9);
     const anchor = pulsing.anchors.find((candidate) => !candidate.boundary)!;
+    const initialBase = { x: anchor.baseX, y: anchor.baseY };
     pulsing.pulses = [
       {
-        x: anchor.x - 0.025 / pulsing.aspectRatio,
+        x: anchor.x - 0.25 / pulsing.aspectRatio,
         y: anchor.y,
-        age: 0,
+        age: 1,
         duration: 3.2,
         strength: 0.9,
-        phase: Math.PI / 2,
+        direction: 1,
       },
     ];
     const calm = structuredClone(pulsing);
     calm.pulses = [];
-    const calmAnchorAtStart = calm.anchors.find((candidate) => candidate.id === anchor.id)!;
-    const initialGlowBoost = getAnchorGlow(pulsing, anchor) - getAnchorGlow(calm, calmAnchorAtStart);
+    const calmAnchor = calm.anchors.find((candidate) => candidate.id === anchor.id)!;
+    const initialGlowBoost = getAnchorGlow(pulsing, anchor) - getAnchorGlow(calm, calmAnchor);
     expect(initialGlowBoost).toBeGreaterThan(0.25);
 
-    for (let index = 0; index < 45; index += 1) {
+    const perFrameHomeShift: number[] = [];
+    for (let index = 0; index < 12; index += 1) {
+      const previousBaseX = anchor.baseX;
+      advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
+      advanceTessellationModel(calm, 1 / 60, { x: -2, y: -2 }, 1);
+      perFrameHomeShift.push((anchor.baseX - previousBaseX) * pulsing.aspectRatio * 800);
+    }
+    expect(perFrameHomeShift.every((shift) => shift > 0)).toBe(true);
+    expect(Math.max(...perFrameHomeShift)).toBeLessThan(0.08);
+
+    for (let index = 0; index < 150; index += 1) {
       advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
       advanceTessellationModel(calm, 1 / 60, { x: -2, y: -2 }, 1);
     }
 
-    const pulsingAnchor = pulsing.anchors.find((candidate) => candidate.id === anchor.id)!;
-    const calmAnchor = calm.anchors.find((candidate) => candidate.id === anchor.id)!;
-    const displacementPixels = Math.hypot(
-      (pulsingAnchor.x - calmAnchor.x) * 800,
-      (pulsingAnchor.y - calmAnchor.y) * 800,
-    );
-    expect(displacementPixels).toBeGreaterThan(2);
-    expect(displacementPixels).toBeLessThan(24);
+    const baseAfterPulse = { x: anchor.baseX, y: anchor.baseY };
+    const permanentShiftPixels =
+      Math.hypot((baseAfterPulse.x - initialBase.x) * pulsing.aspectRatio, baseAfterPulse.y - initialBase.y) * 800;
+    expect(pulsing.pulses).toHaveLength(0);
+    advanceTessellationModel(pulsing, 1 / 60, { x: -2, y: -2 }, 1);
+    expect({ x: anchor.baseX, y: anchor.baseY }).toEqual(baseAfterPulse);
+    expect(permanentShiftPixels).toBeGreaterThan(0.5);
+    expect(permanentShiftPixels).toBeLessThan(4);
+    expect(Math.hypot((anchor.x - calmAnchor.x) * pulsing.aspectRatio, anchor.y - calmAnchor.y) * 800).toBeLessThan(5);
+  });
+
+  test("uses a low-frequency lifecycle wave with few directional reversals", () => {
+    const model = createTessellationModel(61, 1);
+    const pulse = {
+      x: 0.5,
+      y: 0.5,
+      age: 1,
+      duration: 3.2,
+      strength: 0.9,
+      direction: 1 as const,
+    };
+    const motions: number[] = [];
+
+    for (let offset = -0.3; offset <= 0.3; offset += 0.01) {
+      motions.push(getLifecyclePulseInfluence(pulse, pulse.x + 0.25 + offset, pulse.y, model.aspectRatio).motion);
+    }
+    const meaningfulSigns = motions.filter((motion) => Math.abs(motion) > 0.01).map((motion) => Math.sign(motion));
+    const reversals = meaningfulSigns.slice(1).filter((sign, index) => sign !== meaningfulSigns[index]).length;
+    expect(reversals).toBeLessThanOrEqual(2);
   });
 
   test("only requests topology work at the deliberate four-hertz cadence", () => {

@@ -1,7 +1,7 @@
 import fragmentSource from "./tessellation.frag";
 import {
   advanceTessellationModel,
-  canStartTessellationTransition,
+  canAdoptTessellationTopology,
   consumeTopologyTime,
   createTessellationTransitionEdges,
   createTessellationModel,
@@ -9,6 +9,8 @@ import {
   getAnchorGlow,
   getAnchorHue,
   getAnchorLife,
+  getTessellationFillTransitionOpacities,
+  getTessellationSpatialStyle,
   getTessellationTransitionWeights,
   isTessellationTransitionComplete,
   pruneDeadTessellationAnchors,
@@ -66,9 +68,13 @@ export function createTessellationTriangleVertices(
   for (const triangle of triangles) {
     const anchors = triangle.map((anchorId) => anchorsById.get(anchorId));
     if (anchors.some((anchor) => anchor == null)) continue;
-    writeVertex(data, offset, model, anchors[0]!, [1, 0, 0]);
-    writeVertex(data, offset + FLOATS_PER_VERTEX, model, anchors[1]!, [0, 1, 0]);
-    writeVertex(data, offset + FLOATS_PER_VERTEX * 2, model, anchors[2]!, [0, 0, 1]);
+    const centroidX = (anchors[0]!.x + anchors[1]!.x + anchors[2]!.x) / 3;
+    const centroidY = (anchors[0]!.y + anchors[1]!.y + anchors[2]!.y) / 3;
+    const style = getTessellationSpatialStyle(model.seed, centroidX * model.aspectRatio, centroidY);
+    const auxiliary = [style.strength, style.hue, 0] as const;
+    writeVertex(data, offset, model, anchors[0]!, auxiliary);
+    writeVertex(data, offset + FLOATS_PER_VERTEX, model, anchors[1]!, auxiliary);
+    writeVertex(data, offset + FLOATS_PER_VERTEX * 2, model, anchors[2]!, auxiliary);
     offset += FLOATS_PER_VERTEX * 3;
   }
 
@@ -177,6 +183,7 @@ export function createTessellationEffect(
   let previousTopology: TessellationTriangle[] | undefined;
   let topologyTime = 0;
   let transitionTime = Number.POSITIVE_INFINITY;
+  let topologyDwellTime = 0;
   let width = 1;
   let height = 1;
   let hasMeasuredViewport = false;
@@ -188,6 +195,7 @@ export function createTessellationEffect(
     previousTopology = undefined;
     topologyTime = 0;
     transitionTime = Number.POSITIVE_INFINITY;
+    topologyDwellTime = 0;
   }
 
   function uploadAndDraw(data: Float32Array, mode: number, opacity: number) {
@@ -199,24 +207,26 @@ export function createTessellationEffect(
   }
 
   function rebuildTopology() {
-    if (!canStartTessellationTransition(previousTopology != null)) return;
+    if (!canAdoptTessellationTopology(previousTopology != null, topologyDwellTime)) return;
     const nextTopology = triangulateTessellation(model.anchors);
     if (tessellationTopologySignature(nextTopology) === tessellationTopologySignature(currentTopology)) return;
     previousTopology = currentTopology;
     currentTopology = nextTopology;
     transitionTime = 0;
+    topologyDwellTime = 0;
     const retainedIds = new Set([...previousTopology.flat(), ...currentTopology.flat()]);
     pruneDeadTessellationAnchors(model, retainedIds);
   }
 
   function renderMesh() {
     const transition = getTessellationTransitionWeights(transitionTime);
+    const fillOpacity = getTessellationFillTransitionOpacities(previousTopology != null, transition);
     gl.uniform1i(uniforms.pass, 0);
 
-    if (previousTopology != null && transition.outgoing > 0.001) {
-      uploadAndDraw(createTessellationTriangleVertices(model, previousTopology), gl.TRIANGLES, transition.outgoing);
+    if (previousTopology != null) {
+      uploadAndDraw(createTessellationTriangleVertices(model, previousTopology), gl.TRIANGLES, fillOpacity.previous);
     }
-    uploadAndDraw(createTessellationTriangleVertices(model, currentTopology), gl.TRIANGLES, transition.incoming);
+    uploadAndDraw(createTessellationTriangleVertices(model, currentTopology), gl.TRIANGLES, fillOpacity.current);
 
     gl.uniform1i(uniforms.pass, 1);
     uploadAndDraw(
@@ -267,6 +277,7 @@ export function createTessellationEffect(
       topologyTime = topologyCadence.remainingSeconds;
       if (topologyCadence.shouldRebuild) rebuildTopology();
       transitionTime += frame.deltaSeconds;
+      topologyDwellTime += frame.deltaSeconds;
 
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);

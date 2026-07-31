@@ -5,6 +5,7 @@ export const TESSELLATION_MIN_INTERIOR_ANCHORS = 32;
 export const TESSELLATION_MAX_INTERIOR_ANCHORS = 48;
 export const TESSELLATION_TOPOLOGY_INTERVAL_SECONDS = 0.25;
 export const TESSELLATION_TRANSITION_SECONDS = 0.45;
+export const TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS = 0.8;
 export const TESSELLATION_MAX_LIFECYCLE_PULSES = 3;
 
 const BIRTH_DURATION_SECONDS = 1.8;
@@ -12,7 +13,9 @@ const RETIRE_DURATION_SECONDS = 2.4;
 const BOUNDARY_MARGIN = 0.09;
 const TAU = Math.PI * 2;
 const LIFECYCLE_PULSE_DURATION_SECONDS = 3.2;
-const LIFECYCLE_MOTION_STRENGTH = 0.8;
+const LIFECYCLE_ACCELERATION = 0.065;
+const LIFECYCLE_HOME_SHIFT_RATE = 0.0075;
+const LIFECYCLE_SPATIAL_FREQUENCY = 10;
 const MIN_ANCHOR_MASS = 0.72;
 const MAX_ANCHOR_MASS = 1.42;
 
@@ -52,7 +55,13 @@ export type TessellationLifecyclePulse = {
   age: number;
   duration: number;
   strength: number;
-  phase: number;
+  direction: -1 | 1;
+};
+
+export type TessellationTriangleStyle = {
+  selected: boolean;
+  strength: number;
+  hue: number;
 };
 
 export type TessellationModel = {
@@ -298,12 +307,58 @@ export function getTessellationTransitionWeights(elapsedSeconds: number) {
   return { outgoing: 1 - incoming, incoming };
 }
 
+export function getTessellationFillTransitionOpacities(
+  hasPreviousTopology: boolean,
+  weights: Readonly<{ outgoing: number; incoming: number }>,
+) {
+  return hasPreviousTopology ? { previous: 1, current: weights.incoming } : { previous: 0, current: 1 };
+}
+
 export function isTessellationTransitionComplete(elapsedSeconds: number) {
   return elapsedSeconds >= TESSELLATION_TRANSITION_SECONDS;
 }
 
+function hashSpatial(seed: number, x: number, y: number, salt: number) {
+  let value = (normalizeSeed(seed) ^ salt) >>> 0;
+  value = Math.imul(value ^ Math.imul(x, 0x9e3779b1), 0x85ebca6b);
+  value = Math.imul(value ^ Math.imul(y, 0xc2b2ae35), 0x27d4eb2f);
+  return ((value ^ (value >>> 16)) >>> 0) / 4294967296;
+}
+
+function spatialNoise(seed: number, x: number, y: number, scale: number, salt: number) {
+  const scaledX = x * scale;
+  const scaledY = y * scale;
+  const cellX = Math.floor(scaledX);
+  const cellY = Math.floor(scaledY);
+  const localX = smoothstep(scaledX - cellX);
+  const localY = smoothstep(scaledY - cellY);
+  const top = hashSpatial(seed, cellX, cellY, salt) * (1 - localX) + hashSpatial(seed, cellX + 1, cellY, salt) * localX;
+  const bottom =
+    hashSpatial(seed, cellX, cellY + 1, salt) * (1 - localX) + hashSpatial(seed, cellX + 1, cellY + 1, salt) * localX;
+  return top * (1 - localY) + bottom * localY;
+}
+
+export function getTessellationSpatialStyle(seed: number, x: number, y: number): TessellationTriangleStyle {
+  const selectionField =
+    spatialNoise(seed, x, y, 2.4, 0x51ed270b) * 0.72 + spatialNoise(seed, x, y, 5.2, 0xa24baed4) * 0.28;
+  const selection = smoothstep((selectionField - 0.62) / 0.2);
+  const strength = selection * 0.21;
+  const seedHue = normalizeSeed(seed) / 4294967296;
+  const hueField = spatialNoise(seed, x, y, 1.8, 0x9fb21c65);
+
+  return {
+    selected: strength > 0.01,
+    strength,
+    hue: seedHue + x * 0.11 + y * 0.08 + hueField * 0.24,
+  };
+}
+
 export function canStartTessellationTransition(hasActiveTransition: boolean) {
   return !hasActiveTransition;
+}
+
+export function canAdoptTessellationTopology(hasActiveTransition: boolean, dwellSeconds: number) {
+  return !hasActiveTransition && dwellSeconds >= TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS;
 }
 
 function edgeKey(first: number, second: number) {
@@ -361,14 +416,14 @@ export function getLifecyclePulseInfluence(
   const progress = clamp(pulse.age / pulse.duration, 0, 1);
   const wavefront = 0.025 + progress * 0.72;
   const envelope = Math.exp(-(((distance - wavefront) / 0.13) ** 2)) * (1 - smoothstep(progress));
-  const oscillation = Math.sin((distance - wavefront) * 34 + pulse.phase);
+  const oscillation = Math.cos((distance - wavefront) * LIFECYCLE_SPATIAL_FREQUENCY);
 
   return {
     dx,
     dy,
     distance,
     motion: envelope * oscillation * pulse.strength,
-    glow: envelope * (0.55 + oscillation * 0.25) * pulse.strength,
+    glow: envelope * 0.8 * pulse.strength,
   };
 }
 
@@ -413,14 +468,14 @@ function countInteriorAnchors(model: TessellationModel) {
   return model.anchors.filter((anchor) => !anchor.boundary && anchor.state !== "dead").length;
 }
 
-function emitLifecyclePulse(model: TessellationModel, x: number, y: number, strength: number) {
+function emitLifecyclePulse(model: TessellationModel, x: number, y: number, strength: number, direction: -1 | 1) {
   model.pulses.push({
     x,
     y,
     age: 0,
     duration: LIFECYCLE_PULSE_DURATION_SECONDS,
     strength,
-    phase: nextRandom(model) * TAU,
+    direction,
   });
   if (model.pulses.length > TESSELLATION_MAX_LIFECYCLE_PULSES) {
     model.pulses.splice(0, model.pulses.length - TESSELLATION_MAX_LIFECYCLE_PULSES);
@@ -451,7 +506,7 @@ function birthAnchor(model: TessellationModel) {
   anchor.originY = originY;
   anchor.state = "budding";
   model.anchors.push(anchor);
-  emitLifecyclePulse(model, originX, originY, 0.9);
+  emitLifecyclePulse(model, originX, originY, 0.9, 1);
 }
 
 function retireAnchor(model: TessellationModel) {
@@ -472,7 +527,7 @@ function retireAnchor(model: TessellationModel) {
   anchor.state = "retiring";
   anchor.stateAge = 0;
   anchor.retirementTargetId = target.id;
-  emitLifecyclePulse(model, anchor.x, anchor.y, 0.72);
+  emitLifecyclePulse(model, anchor.x, anchor.y, 0.72, -1);
 }
 
 function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
@@ -527,13 +582,22 @@ function advanceMotionStep(
     for (const pulse of model.pulses) {
       const influence = getLifecyclePulseInfluence(pulse, anchor.x, anchor.y, model.aspectRatio);
       if (influence.distance < 1e-5) continue;
-      const inertia = 1 / anchor.mass;
-      lifecycleRippleX +=
-        (influence.dx / influence.distance / model.aspectRatio) *
-        influence.motion *
-        LIFECYCLE_MOTION_STRENGTH *
-        inertia;
-      lifecycleRippleY += (influence.dy / influence.distance) * influence.motion * LIFECYCLE_MOTION_STRENGTH * inertia;
+      const inertia = 1 / Math.sqrt(anchor.mass);
+      const directionX = influence.dx / influence.distance / model.aspectRatio;
+      const directionY = influence.dy / influence.distance;
+      const signedMotion = influence.motion * pulse.direction * inertia;
+      lifecycleRippleX += directionX * signedMotion * LIFECYCLE_ACCELERATION;
+      lifecycleRippleY += directionY * signedMotion * LIFECYCLE_ACCELERATION;
+      anchor.baseX = clamp(
+        anchor.baseX + directionX * signedMotion * LIFECYCLE_HOME_SHIFT_RATE * deltaSeconds,
+        0.028,
+        0.972,
+      );
+      anchor.baseY = clamp(
+        anchor.baseY + directionY * signedMotion * LIFECYCLE_HOME_SHIFT_RATE * deltaSeconds,
+        0.028,
+        0.972,
+      );
     }
     acceleration.set(anchor.id, {
       x:

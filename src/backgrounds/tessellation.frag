@@ -65,10 +65,13 @@ void main() {
 
     vec3 purpleSurface = vec3(0.089, 0.051, 0.145);
     vec3 restingSurface = mix(BACKGROUND_COLOR * 0.96, purpleSurface, 0.42);
+    vec3 stainedAccent = rainbow(vAuxiliary.y);
+    vec3 stainedSurface = stainedAccent * 0.27 + purpleSurface * 0.79;
+    restingSurface = mix(restingSurface, stainedSurface, vAuxiliary.x);
     float wake = smoothstep(0.08, 0.88, glow);
     float facetEnergy = wake * (0.19 + uIntensity * 0.065) + pointerInfluence * 0.026;
     vec3 energizedSurface = accent * 0.36 + purpleSurface * 0.72;
     vec3 color = mix(restingSurface, energizedSurface, facetEnergy);
 
-    outColor = vec4(color, uOpacity * mix(0.72, 1.0, life));
+    outColor = vec4(color, uOpacity);
 }
