@@ -49,6 +49,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
               const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
               rect.setPosition({ x: clientRect.x, y: clientY });
               rect.setDimensions({ x: clientRect.width, y: clientRect.height });
+              rect.setSnapToSource(false);
               rect.setShadowState("moving");
             });
           }
@@ -103,9 +104,10 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       class={`
         absolute -z-10 rounded-lg
         bg-night-black fade-in-bg
-        transition-all duration-[${animationDurationMs}ms] ease-out
+        ${rect.snapToSource() ? "transition-none" : `transition-all duration-[${animationDurationMs}ms] ease-out`}
       `}
       style={{
+        display: rect.visible() ? undefined : "none",
         width: `${statefulRect().dimensions.x}px`,
         height: `${statefulRect().dimensions.y}px`,
         top: 0,

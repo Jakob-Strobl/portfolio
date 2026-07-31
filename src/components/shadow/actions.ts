@@ -1,4 +1,4 @@
-import { Accessor, createEffect, createSignal } from "solid-js";
+import { Accessor, batch, createEffect, createSignal } from "solid-js";
 import { ShadowOriginOptions, ShadowRect } from "./types";
 import { scaleAndCenterVec } from "../../actions/vector-actions";
 import { Rect } from "../../types/rect";
@@ -23,6 +23,82 @@ export function createRecalculateShadowClientRectsOn(...signals: Accessor<any>[]
  */
 export function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0): Rect {
   return scaleAndCenterVec(shadowRect.dimensions, shadowRect.position, scale);
+}
+
+const MEANINGFUL_GEOMETRY_DELTA = 0.25;
+
+type ShadowSyncMode = "snap" | "transition";
+
+function hasMeaningfulDelta(first: number, second: number) {
+  return Math.abs(first - second) >= MEANINGFUL_GEOMETRY_DELTA;
+}
+
+export function isShadowSourceVisible(shadowedEl: HTMLElement) {
+  if (!shadowedEl.isConnected) return false;
+  if (
+    typeof shadowedEl.checkVisibility === "function" &&
+    !shadowedEl.checkVisibility({ checkVisibilityCSS: true, contentVisibilityAuto: true })
+  ) {
+    return false;
+  }
+  return Array.from(shadowedEl.getClientRects()).some((rect) => rect.width > 0 && rect.height > 0);
+}
+
+/**
+ * Synchronizes every detached shadow after first measuring every source. A resize
+ * in one source can move any following sibling without resizing that sibling.
+ */
+export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition") {
+  const measurements = state.shadows.map((shadow) => {
+    const clientRect = shadow.shadowedEl.getBoundingClientRect();
+    const position = shadow.position();
+    const dimensions = shadow.dimensions();
+    const visible = isShadowSourceVisible(shadow.shadowedEl);
+    const nextPosition = {
+      x: clientRect.x,
+      y: shadow.fixed ? Math.max(0, clientRect.y) : clientRect.y,
+    };
+    const nextDimensions = { x: clientRect.width, y: clientRect.height };
+    const geometryChanged =
+      hasMeaningfulDelta(position.x, nextPosition.x) ||
+      hasMeaningfulDelta(position.y, nextPosition.y) ||
+      hasMeaningfulDelta(dimensions.x, nextDimensions.x) ||
+      hasMeaningfulDelta(dimensions.y, nextDimensions.y);
+
+    return {
+      shadow,
+      nextPosition,
+      nextDimensions,
+      visible,
+      geometryChanged,
+      visibilityChanged: shadow.visible() !== visible,
+    };
+  });
+  const changedMeasurements = measurements.filter(
+    ({ geometryChanged, visibilityChanged }) => geometryChanged || visibilityChanged,
+  );
+
+  if (changedMeasurements.length === 0) return false;
+
+  batch(() => {
+    for (const measurement of changedMeasurements) {
+      const { shadow } = measurement;
+      if (measurement.geometryChanged) {
+        shadow.setPosition(measurement.nextPosition);
+        shadow.setDimensions(measurement.nextDimensions);
+      }
+      if (measurement.visibilityChanged) shadow.setVisible(measurement.visible);
+
+      if (mode === "snap") {
+        if (!shadow.snapToSource()) shadow.setSnapToSource(true);
+      } else if (measurement.geometryChanged) {
+        if (shadow.snapToSource()) shadow.setSnapToSource(false);
+        if (shadow.shadowState() !== "moving") shadow.setShadowState("moving");
+      }
+    }
+  });
+
+  return true;
 }
 
 export const addShadow = (
@@ -80,6 +156,8 @@ export const addShadow = (
     x: clientRect.width,
     y: clientRect.height,
   });
+  const [visible, setVisible] = createSignal(isShadowSourceVisible(shadowedEl));
+  const [snapToSource, setSnapToSource] = createSignal(false);
 
   // If relativeStartingShadow is undefined, center and scale up from element we are shadowing
   let originRect =
@@ -94,6 +172,10 @@ export const addShadow = (
     setPosition,
     dimensions,
     setDimensions,
+    visible,
+    setVisible,
+    snapToSource,
+    setSnapToSource,
     origin: originRect,
   };
 
@@ -138,13 +220,5 @@ export const clearRemovedShadows = () => {
 };
 
 export const forceRecalculateShadowClientRects = () => {
-  state.shadows.forEach((shadow) => {
-    const clientRect = shadow.shadowedEl.getBoundingClientRect();
-    const clampedClientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
-    shadow.setPosition({ x: clientRect.x, y: shadow.fixed ? clampedClientY : clientRect.y });
-    shadow.setDimensions({ x: clientRect.width, y: clientRect.height });
-    shadow.setShadowState("moving"); // removes borders until the transition after the recalculated rects is "warm"
-  });
-
-  setState({ shadows: [...state.shadows] });
+  return synchronizeShadowClientRects("transition");
 };

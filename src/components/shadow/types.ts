@@ -47,6 +47,10 @@ export type ShadowRect = {
   setPosition: Setter<Vec2>;
   dimensions: Accessor<Vec2>;
   setDimensions: Setter<Vec2>;
+  visible: Accessor<boolean>;
+  setVisible: Setter<boolean>;
+  snapToSource: Accessor<boolean>;
+  setSnapToSource: Setter<boolean>;
   shadowedEl: HTMLDivElement;
   origin: Rect;
   warmupDelayMs: number;
@@ -62,6 +66,10 @@ export const ZERO_RECT: ShadowRect = {
   setPosition: () => {},
   dimensions: () => ({ x: 0, y: 0 }),
   setDimensions: () => {},
+  visible: () => false,
+  setVisible: () => {},
+  snapToSource: () => false,
+  setSnapToSource: () => {},
   // @ts-expect-error This is a special case constant where the value of shadowedEl never matters (any field really)
   shadowedEl: null,
   isCold: () => true,
