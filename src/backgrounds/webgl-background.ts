@@ -1,8 +1,21 @@
 import { createAnimationLoop } from "./animation-loop";
-import type { BackgroundConfig, BackgroundEffect, BackgroundEffectFactory } from "./types";
+import {
+  DEFAULT_BACKGROUND_PREFERENCES,
+  observeBackgroundPerformanceHints,
+  resolveBackgroundFrameMode,
+  resolveBackgroundResolutionScale,
+  type BackgroundPerformanceObserver,
+  type BackgroundFrameMode,
+} from "./performance-policy";
+import type {
+  BackgroundConfig,
+  BackgroundEffect,
+  BackgroundEffectFactory,
+  BackgroundRuntimePreferences,
+} from "./types";
 
 export type WebGlBackgroundHost = {
-  update(config: BackgroundConfig): void;
+  update(config: BackgroundConfig, preferences?: BackgroundRuntimePreferences): void;
   resize(): void;
   dispose(): void;
 };
@@ -30,6 +43,7 @@ export function createWebGlBackgroundHost(
   canvas: HTMLCanvasElement,
   factory: BackgroundEffectFactory<BackgroundConfig>,
   initialConfig: BackgroundConfig,
+  initialPreferences: BackgroundRuntimePreferences = DEFAULT_BACKGROUND_PREFERENCES,
 ): WebGlBackgroundHost | undefined {
   const context = canvas.getContext("webgl2", {
     alpha: false,
@@ -37,7 +51,7 @@ export function createWebGlBackgroundHost(
     depth: false,
     desynchronized: true,
     failIfMajorPerformanceCaveat: true,
-    powerPreference: "high-performance",
+    powerPreference: "default",
     preserveDrawingBuffer: false,
     stencil: false,
   });
@@ -48,24 +62,30 @@ export function createWebGlBackgroundHost(
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   let config = initialConfig;
+  let preferences = initialPreferences;
   let effect: BackgroundEffect<BackgroundConfig> | undefined;
+  let performanceObserver: BackgroundPerformanceObserver | undefined;
   let disposed = false;
-  let startedAt: number | undefined;
+  let contextLost = false;
+  let elapsedSeconds = 0;
   let previousTimestamp: number | undefined;
+  let resolutionScale = 1;
+  let frameMode: BackgroundFrameMode = "display";
   let pointerX = 0.5;
   let pointerY = 0.5;
   let pointerTargetX = 0.5;
   let pointerTargetY = 0.5;
 
   const loop = createAnimationLoop((timestamp) => {
-    startedAt ??= timestamp;
-    const deltaSeconds = previousTimestamp == null ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.1);
+    const deltaSeconds =
+      frameMode === "static" || previousTimestamp == null ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.1);
     previousTimestamp = timestamp;
+    elapsedSeconds += deltaSeconds;
     const pointerFollow = 1 - Math.exp(-POINTER_FOLLOW_RATE * deltaSeconds);
     pointerX += (pointerTargetX - pointerX) * pointerFollow;
     pointerY += (pointerTargetY - pointerY) * pointerFollow;
     effect?.render({
-      elapsedSeconds: (timestamp - startedAt) / 1000,
+      elapsedSeconds,
       deltaSeconds,
       pointer: { x: pointerX, y: pointerY },
     });
@@ -74,19 +94,44 @@ export function createWebGlBackgroundHost(
   function resize() {
     if (disposed) return;
     const { width, height } = getViewportDimensions();
+    const renderWidth = Math.max(1, Math.round(width * resolutionScale));
+    const renderHeight = Math.max(1, Math.round(height * resolutionScale));
 
-    if (canvas.width !== width) canvas.width = width;
-    if (canvas.height !== height) canvas.height = height;
-    gl.viewport(0, 0, width, height);
-    effect?.resize(width, height);
+    if (canvas.width !== renderWidth) canvas.width = renderWidth;
+    if (canvas.height !== renderHeight) canvas.height = renderHeight;
+    gl.viewport(0, 0, renderWidth, renderHeight);
+    effect?.resize(renderWidth, renderHeight);
+    loop.invalidate();
   }
 
   function initializeEffect() {
     effect = factory(gl, config);
     resize();
-    startedAt = undefined;
+    elapsedSeconds = 0;
     previousTimestamp = undefined;
-    effect.render({ elapsedSeconds: 0, deltaSeconds: 0, pointer: { x: pointerX, y: pointerY } });
+  }
+
+  function applyPerformancePolicy() {
+    if (disposed || performanceObserver == null) return;
+    const hints = performanceObserver.snapshot();
+    const nextResolutionScale = resolveBackgroundResolutionScale(preferences.quality, hints.coarsePointer);
+    const nextFrameMode = resolveBackgroundFrameMode(preferences.frameRate, hints);
+
+    if (frameMode !== nextFrameMode) previousTimestamp = undefined;
+    frameMode = nextFrameMode;
+    loop.setMode(nextFrameMode);
+    if (resolutionScale !== nextResolutionScale) {
+      resolutionScale = nextResolutionScale;
+      resize();
+    } else {
+      loop.invalidate();
+    }
+  }
+
+  function startIfVisible() {
+    if (disposed || contextLost || document.hidden || effect == null) return;
+    previousTimestamp = undefined;
+    loop.start();
   }
 
   function showFallback() {
@@ -103,16 +148,19 @@ export function createWebGlBackgroundHost(
 
   function handleContextLost(event: Event) {
     event.preventDefault();
+    contextLost = true;
     loop.stop();
+    previousTimestamp = undefined;
     effect = undefined;
   }
 
   function handleContextRestored() {
     if (disposed) return;
+    contextLost = false;
 
     try {
       initializeEffect();
-      loop.start();
+      startIfVisible();
     } catch (error) {
       console.error("Background: Failed to restore WebGL context", error);
       effect = undefined;
@@ -120,23 +168,42 @@ export function createWebGlBackgroundHost(
     }
   }
 
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      loop.stop();
+      previousTimestamp = undefined;
+      return;
+    }
+
+    startIfVisible();
+  }
+
+  performanceObserver = observeBackgroundPerformanceHints(applyPerformancePolicy);
+  applyPerformancePolicy();
+
   try {
     initializeEffect();
   } catch (error) {
     console.error("Background: Failed to initialize WebGL effect", error);
     showFallback();
+    performanceObserver.dispose();
+    performanceObserver = undefined;
     return undefined;
   }
 
   window.addEventListener("resize", resize, { passive: true });
   window.visualViewport?.addEventListener("resize", resize, { passive: true });
   window.addEventListener("pointermove", handlePointerMove, { passive: true });
+  document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost);
   canvas.addEventListener("webglcontextrestored", handleContextRestored);
-  loop.start();
+  startIfVisible();
 
   return {
-    update(nextConfig) {
+    update(nextConfig, nextPreferences = preferences) {
+      preferences = nextPreferences;
+      applyPerformancePolicy();
+
       if (nextConfig.kind !== config.kind) {
         effect?.dispose();
         effect = undefined;
@@ -144,9 +211,12 @@ export function createWebGlBackgroundHost(
 
         try {
           initializeEffect();
+          loop.invalidate();
+          startIfVisible();
         } catch (error) {
           console.error("Background: Failed to switch WebGL effect", error);
           effect = undefined;
+          loop.stop();
           showFallback();
         }
         return;
@@ -154,6 +224,7 @@ export function createWebGlBackgroundHost(
 
       config = nextConfig;
       effect?.update(nextConfig);
+      loop.invalidate();
     },
     resize,
     dispose() {
@@ -163,8 +234,11 @@ export function createWebGlBackgroundHost(
       window.removeEventListener("resize", resize);
       window.visualViewport?.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", handlePointerMove);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       canvas.removeEventListener("webglcontextlost", handleContextLost);
       canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+      performanceObserver?.dispose();
+      performanceObserver = undefined;
       effect?.dispose();
       effect = undefined;
     },

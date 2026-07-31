@@ -1,7 +1,13 @@
 import { createRenderEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 import { createBackgroundEffect } from "./background-effect";
-import type { BackgroundConfig, BackgroundKind } from "./types";
+import type {
+  BackgroundConfig,
+  BackgroundFrameRatePreference,
+  BackgroundKind,
+  BackgroundQuality,
+  BackgroundRuntimePreferences,
+} from "./types";
 import { createBackgroundSeed } from "./wave-model";
 import { createWebGlBackgroundHost, type WebGlBackgroundHost } from "./webgl-background";
 
@@ -10,6 +16,8 @@ export interface WavesBackgroundProps {
   seed?: number;
   speed?: number;
   intensity?: number;
+  quality?: BackgroundQuality;
+  frameRate?: BackgroundFrameRatePreference;
 }
 
 export default function WebGlBackground(props: WavesBackgroundProps) {
@@ -25,15 +33,21 @@ export default function WebGlBackground(props: WavesBackgroundProps) {
     intensity: props.intensity ?? 1,
   });
 
+  const getPreferences = (): BackgroundRuntimePreferences => ({
+    quality: props.quality ?? "auto",
+    frameRate: props.frameRate ?? "auto",
+  });
+
   createRenderEffect(() => {
     const config = getConfig();
-    host?.update(config);
+    const preferences = getPreferences();
+    host?.update(config, preferences);
   });
 
   onMount(() => {
     if (canvasEl == null) return;
 
-    host = createWebGlBackgroundHost(canvasEl, createBackgroundEffect, getConfig());
+    host = createWebGlBackgroundHost(canvasEl, createBackgroundEffect, getConfig(), getPreferences());
     setReady(true);
   });
 

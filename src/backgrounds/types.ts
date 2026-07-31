@@ -1,10 +1,13 @@
 export type BackgroundKind = "waves" | "tessellation";
 
-export type BackgroundQuality = "auto" | "low" | "high";
-
-export type BackgroundMotion = "auto" | "full" | "reduced";
+export type BackgroundQuality = "auto" | "low";
 
 export type BackgroundFrameRatePreference = "auto" | "30" | "display";
+
+export type BackgroundRuntimePreferences = {
+  quality: BackgroundQuality;
+  frameRate: BackgroundFrameRatePreference;
+};
 
 export type WavesBackgroundConfig = {
   kind: "waves";

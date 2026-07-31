@@ -198,7 +198,8 @@ export function BackgroundSettingsPanel(props: BackgroundSettingsPanelProps) {
         </div>
 
         <p class="text-[0.7rem] leading-relaxed text-gray-300/65">
-          Auto will balance smoothness and power use when adaptive frame scheduling is available.
+          Auto follows the display when charging and limits motion to 30 FPS on battery. Without battery status, pointer
+          type provides a lightweight desktop/mobile hint. Reduced motion always stays static.
         </p>
       </div>
     </div>

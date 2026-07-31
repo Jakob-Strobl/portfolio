@@ -18,6 +18,8 @@ export default function IsomorphicBackground() {
         seed={background.seed()}
         speed={background.speed()}
         intensity={background.intensity()}
+        quality={background.quality()}
+        frameRate={background.frameRate()}
       />
     </div>
   );

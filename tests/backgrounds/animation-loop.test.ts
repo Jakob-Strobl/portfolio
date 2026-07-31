@@ -21,6 +21,12 @@ function createScheduler() {
   return { scheduler, callbacks, cancelled };
 }
 
+function runNextFrame(runtime: ReturnType<typeof createScheduler>, timestamp: number) {
+  const [handle, callback] = runtime.callbacks.entries().next().value!;
+  runtime.callbacks.delete(handle);
+  callback(timestamp);
+}
+
 describe("createAnimationLoop", () => {
   test("uses one stable callback and does not start twice", () => {
     const runtime = createScheduler();
@@ -64,5 +70,56 @@ describe("createAnimationLoop", () => {
 
     expect(runtime.callbacks.size).toBe(0);
     expect(loop.isRunning()).toBe(false);
+  });
+
+  test("caps rendering near 30 FPS while keeping the scheduler alive", () => {
+    const runtime = createScheduler();
+    const render = vi.fn();
+    const loop = createAnimationLoop(render, runtime.scheduler);
+    loop.setMode("30");
+    loop.start();
+
+    runNextFrame(runtime, 0);
+    loop.invalidate();
+    runNextFrame(runtime, 16.7);
+    runNextFrame(runtime, 33.4);
+    runNextFrame(runtime, 50.1);
+    runNextFrame(runtime, 66.8);
+
+    expect(render.mock.calls.map(([timestamp]) => timestamp)).toEqual([0, 33.4, 66.8]);
+    expect(runtime.callbacks.size).toBe(1);
+  });
+
+  test("renders every display frame when uncapped", () => {
+    const runtime = createScheduler();
+    const render = vi.fn();
+    const loop = createAnimationLoop(render, runtime.scheduler);
+    loop.setMode("display");
+    loop.start();
+
+    runNextFrame(runtime, 0);
+    runNextFrame(runtime, 8.3);
+    runNextFrame(runtime, 16.7);
+
+    expect(render.mock.calls.map(([timestamp]) => timestamp)).toEqual([0, 8.3, 16.7]);
+  });
+
+  test("renders static mode only when explicitly invalidated", () => {
+    const runtime = createScheduler();
+    const render = vi.fn();
+    const loop = createAnimationLoop(render, runtime.scheduler);
+    loop.setMode("static");
+    loop.start();
+
+    runNextFrame(runtime, 0);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(runtime.callbacks.size).toBe(0);
+
+    loop.invalidate();
+    expect(runtime.callbacks.size).toBe(1);
+    runNextFrame(runtime, 5000);
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(runtime.callbacks.size).toBe(0);
   });
 });

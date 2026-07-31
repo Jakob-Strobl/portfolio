@@ -21,6 +21,8 @@ function BackgroundStateProbe() {
       <dd data-testid="intensity">{background.intensity()}</dd>
       <dt>Frame rate</dt>
       <dd data-testid="frame-rate">{background.frameRate()}</dd>
+      <dt>Quality</dt>
+      <dd data-testid="quality">{background.quality()}</dd>
     </dl>
   );
 }
@@ -78,16 +80,19 @@ describe("BackgroundSettings", () => {
     const initialSeed = page.getByTestId("seed").textContent;
     const speed = page.getByLabelText("Motion speed") as HTMLInputElement;
     const intensity = page.getByLabelText("Visual intensity") as HTMLInputElement;
+    const quality = page.getByLabelText("Quality") as HTMLSelectElement;
     const frameRate = page.getByLabelText("Frame rate") as HTMLSelectElement;
 
     await fireEvent.click(page.getByRole("button", { name: "New seed" }));
     await fireEvent.input(speed, { target: { value: "1.5" } });
     await fireEvent.input(intensity, { target: { value: "0.75" } });
+    await fireEvent.change(quality, { target: { value: "low" } });
     await fireEvent.change(frameRate, { target: { value: "display" } });
 
     expect(page.getByTestId("seed")).not.toHaveTextContent(initialSeed ?? "");
     expect(page.getByTestId("speed")).toHaveTextContent("1.5");
     expect(page.getByTestId("intensity")).toHaveTextContent("0.75");
+    expect(page.getByTestId("quality")).toHaveTextContent("low");
     expect(page.getByTestId("frame-rate")).toHaveTextContent("display");
   });
 

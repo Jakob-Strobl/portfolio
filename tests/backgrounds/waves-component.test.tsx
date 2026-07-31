@@ -30,16 +30,27 @@ describe("WavesBackground", () => {
       const [kind, setKind] = createSignal<"waves" | "tessellation">("waves");
       const [speed, setSpeed] = createSignal(1);
       const [intensity, setIntensity] = createSignal(1);
+      const [quality, setQuality] = createSignal<"auto" | "low">("auto");
+      const [frameRate, setFrameRate] = createSignal<"auto" | "30" | "display">("auto");
 
       return (
         <>
-          <WavesBackground kind={kind()} seed={seed()} speed={speed()} intensity={intensity()} />
+          <WavesBackground
+            kind={kind()}
+            seed={seed()}
+            speed={speed()}
+            intensity={intensity()}
+            quality={quality()}
+            frameRate={frameRate()}
+          />
           <button
             onClick={() => {
               setSeed(200);
               setKind("tessellation");
               setSpeed(1.5);
               setIntensity(0.75);
+              setQuality("low");
+              setFrameRate("30");
             }}
           >
             Update background
@@ -52,12 +63,15 @@ describe("WavesBackground", () => {
     await fireEvent.click(page.getByRole("button", { name: "Update background" }));
 
     expect(mocks.createHost).toHaveBeenCalledTimes(1);
-    expect(mocks.host.update).toHaveBeenLastCalledWith({
-      kind: "tessellation",
-      seed: 200,
-      speed: 1.5,
-      intensity: 0.75,
-    });
+    expect(mocks.host.update).toHaveBeenLastCalledWith(
+      {
+        kind: "tessellation",
+        seed: 200,
+        speed: 1.5,
+        intensity: 0.75,
+      },
+      { quality: "low", frameRate: "30" },
+    );
 
     page.unmount();
     expect(mocks.host.dispose).toHaveBeenCalledTimes(1);
