@@ -11,6 +11,7 @@ import {
   getAnchorLife,
   getTessellationFacetLight,
   getTessellationFillTransitionOpacities,
+  getTessellationMirageStyle,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
   isTessellationTransitionComplete,
@@ -47,6 +48,7 @@ function writeVertex(
   anchor: TessellationModel["anchors"][number],
   auxiliary: readonly [number, number, number],
   lifeMultiplier = 1,
+  lifeOverride?: number,
 ) {
   data[offset] = anchor.x;
   data[offset + 1] = anchor.y;
@@ -55,7 +57,7 @@ function writeVertex(
   data[offset + 4] = auxiliary[0];
   data[offset + 5] = auxiliary[1];
   data[offset + 6] = auxiliary[2];
-  data[offset + 7] = getAnchorLife(anchor) * lifeMultiplier;
+  data[offset + 7] = lifeOverride ?? getAnchorLife(anchor) * lifeMultiplier;
 }
 
 export function createTessellationTriangleVertices(
@@ -72,11 +74,12 @@ export function createTessellationTriangleVertices(
     const centroidX = (anchors[0]!.x + anchors[1]!.x + anchors[2]!.x) / 3;
     const centroidY = (anchors[0]!.y + anchors[1]!.y + anchors[2]!.y) / 3;
     const style = getTessellationSpatialStyle(model.seed, centroidX * model.aspectRatio, centroidY);
+    const mirage = getTessellationMirageStyle(model.seed, centroidX * model.aspectRatio, centroidY);
     const facetLight = getTessellationFacetLight([anchors[0]!, anchors[1]!, anchors[2]!], model.aspectRatio);
     const auxiliary = [style.strength, style.hue, facetLight] as const;
-    writeVertex(data, offset, model, anchors[0]!, auxiliary);
-    writeVertex(data, offset + FLOATS_PER_VERTEX, model, anchors[1]!, auxiliary);
-    writeVertex(data, offset + FLOATS_PER_VERTEX * 2, model, anchors[2]!, auxiliary);
+    writeVertex(data, offset, model, anchors[0]!, auxiliary, 1, mirage.strength);
+    writeVertex(data, offset + FLOATS_PER_VERTEX, model, anchors[1]!, auxiliary, 1, mirage.strength);
+    writeVertex(data, offset + FLOATS_PER_VERTEX * 2, model, anchors[2]!, auxiliary, 1, mirage.strength);
     offset += FLOATS_PER_VERTEX * 3;
   }
 

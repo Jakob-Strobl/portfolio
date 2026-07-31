@@ -89,6 +89,10 @@ void main() {
     float facetEnergy = wake * (0.19 + uIntensity * 0.065) + pointerInfluence * 0.026;
     vec3 energizedSurface = accent * 0.36 + purpleSurface * 0.72;
     vec3 color = mix(restingSurface, energizedSurface, facetEnergy);
+    float mirageWave = 0.5 + 0.5 * sin(uTime * 0.07 + vAuxiliary.y * TAU * 2.3);
+    float mirageCycle = smoothstep(0.12, 0.88, mirageWave);
+    vec3 mirageSurface = rainbow(vAuxiliary.y + 0.14) * 0.22 + purpleSurface * 0.81;
+    color = mix(color, mirageSurface, vLife * mirageCycle);
     color *= 1.0 + vAuxiliary.z * 0.03;
 
     outColor = vec4(color, uOpacity);

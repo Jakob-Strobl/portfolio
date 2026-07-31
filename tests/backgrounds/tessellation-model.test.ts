@@ -13,6 +13,7 @@ import {
   getLifecyclePulseInfluence,
   getTessellationFillTransitionOpacities,
   getTessellationFacetLight,
+  getTessellationMirageStyle,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
   isTessellationTransitionComplete,
@@ -277,6 +278,39 @@ describe("living tessellation model", () => {
     expect(lights).toEqual(duplicateLights);
     expect(lights.every((light) => light >= -1 && light <= 1)).toBe(true);
     expect(Math.max(...lights) - Math.min(...lights)).toBeGreaterThan(0.5);
+  });
+
+  test("selects dispersed mirage panes from a sparse continuous seeded field", () => {
+    const model = createTessellationModel(704);
+    const anchorsById = new Map(model.anchors.map((anchor) => [anchor.id, anchor]));
+    const centroids = triangulateTessellation(model.anchors)
+      .map((triangle) => {
+        const anchors = triangle.map((id) => anchorsById.get(id)!);
+        return {
+          x: ((anchors[0].x + anchors[1].x + anchors[2].x) / 3) * model.aspectRatio,
+          y: (anchors[0].y + anchors[1].y + anchors[2].y) / 3,
+        };
+      })
+      .filter(({ x, y }) => x >= 0 && x <= model.aspectRatio && y >= 0 && y <= 1);
+    const styles = centroids.map(({ x, y }) => getTessellationMirageStyle(model.seed, x, y));
+    const differentSeedStyles = centroids.map(({ x, y }) => getTessellationMirageStyle(model.seed + 1, x, y));
+    const selectedCentroids = centroids.filter((_, index) => styles[index].selected);
+    const sample = centroids[0];
+    const sampleStyle = getTessellationMirageStyle(model.seed, sample.x, sample.y);
+    const nearbyStyle = getTessellationMirageStyle(model.seed, sample.x + 0.001, sample.y + 0.001);
+    const occupiedColumns = new Set(
+      selectedCentroids.map(({ x }) => Math.min(3, Math.floor((x / model.aspectRatio) * 4))),
+    );
+    const occupiedRows = new Set(selectedCentroids.map(({ y }) => Math.min(3, Math.floor(y * 4))));
+
+    expect(sampleStyle).toEqual(getTessellationMirageStyle(model.seed, sample.x, sample.y));
+    expect(styles).not.toEqual(differentSeedStyles);
+    expect(Math.abs(sampleStyle.strength - nearbyStyle.strength)).toBeLessThan(0.01);
+    expect(selectedCentroids.length / styles.length).toBeGreaterThan(0.05);
+    expect(selectedCentroids.length / styles.length).toBeLessThan(0.35);
+    expect(occupiedColumns.size).toBeGreaterThanOrEqual(3);
+    expect(occupiedRows.size).toBeGreaterThanOrEqual(3);
+    expect(styles.every((style) => style.strength >= 0 && style.strength <= 0.11)).toBe(true);
   });
 
   test("emits bounded deterministic lifecycle pulses that ripple through nearby anchors", () => {

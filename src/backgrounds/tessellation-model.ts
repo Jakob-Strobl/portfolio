@@ -70,6 +70,11 @@ export type TessellationTriangleStyle = {
   hue: number;
 };
 
+export type TessellationMirageStyle = {
+  selected: boolean;
+  strength: number;
+};
+
 export type TessellationModel = {
   seed: number;
   time: number;
@@ -365,6 +370,17 @@ export function getTessellationSpatialStyle(seed: number, x: number, y: number):
     selected: strength > 0.01,
     strength,
     hue: seedHue + x * 0.11 + y * 0.08 + hueField * 0.24,
+  };
+}
+
+export function getTessellationMirageStyle(seed: number, x: number, y: number): TessellationMirageStyle {
+  const mirageField =
+    spatialNoise(seed, x, y, 9.4, 0xb5297a4d) * 0.64 + spatialNoise(seed, x, y, 17.2, 0x68e31da4) * 0.36;
+  const strength = smoothstep((mirageField - 0.66) / 0.17) * 0.11;
+
+  return {
+    selected: strength > 0.006,
+    strength,
   };
 }
 
