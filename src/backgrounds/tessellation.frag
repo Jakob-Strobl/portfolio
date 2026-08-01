@@ -6,6 +6,7 @@ precision highp int;
 const float TAU = 6.2831853;
 const vec3 BACKGROUND_COLOR = vec3(0.0745, 0.051, 0.1255);
 const vec2 LIGHT_DIRECTION = vec2(-0.6508, 0.7593);
+const float TESSELLATION_VISUAL_OPACITY = 0.65;
 
 uniform vec2 uResolution;
 uniform float uTime;
@@ -45,7 +46,7 @@ void main() {
         pointColor *= 0.94 + max(socketFacing, 0.0) * 0.075 - max(-socketFacing, 0.0) * 0.055 - contactRim * 0.13;
         pointColor += vec3(0.31, 0.25, 0.42) * highlight * 0.12;
         pointColor = mix(pointColor, accent * 0.88 + vec3(0.08, 0.06, 0.11), luminosity * 0.13);
-        float alpha = (circle + halo) * life * uOpacity * (0.48 + uIntensity * 0.22);
+        float alpha = (circle + halo) * life * uOpacity * TESSELLATION_VISUAL_OPACITY * (0.48 + uIntensity * 0.22);
         if (alpha < 0.01) discard;
         outColor = vec4(pointColor, alpha);
         return;
@@ -67,7 +68,7 @@ void main() {
         float bevelShadow = max(-lightFacing, 0.0) * bevel;
         edgeColor = mix(edgeColor, BACKGROUND_COLOR * 0.46, bevelShadow * 0.34);
         edgeColor += vec3(0.29, 0.23, 0.40) * bevelHighlight * 0.16;
-        float alpha = edge * edgeLife * uOpacity * (0.48 + uIntensity * 0.17);
+        float alpha = edge * edgeLife * uOpacity * TESSELLATION_VISUAL_OPACITY * (0.48 + uIntensity * 0.17);
         if (alpha < 0.005) discard;
         outColor = vec4(edgeColor, alpha);
         return;
@@ -88,5 +89,5 @@ void main() {
     color = mix(color, mirageSurface, vLife * mirageCycle);
     color *= 1.0 + vAuxiliary.z * 0.03;
 
-    outColor = vec4(color, uOpacity);
+    outColor = vec4(color, uOpacity * TESSELLATION_VISUAL_OPACITY);
 }
