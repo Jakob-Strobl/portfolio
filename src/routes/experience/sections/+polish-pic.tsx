@@ -4,7 +4,20 @@ import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const PolishPicSection = () => (
   <details class="group" open={false}>
-    <CollapsibleSummary label="View project details">
+    <CollapsibleSummary
+      label="View project details"
+      actions={
+        <a
+          class="inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
+          href="https://polishpic.com"
+          target="_blank"
+          rel="noreferrer"
+          onClick={(event) => event.stopPropagation()}
+        >
+          Visit polishpic.com <ExternalLink aria-hidden="true" size={13} />
+        </a>
+      }
+    >
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
         <h1>Polish Pic</h1>
         <h2 class="text-xl font-light">Oct 2025 - Present</h2>
@@ -20,13 +33,5 @@ export const PolishPicSection = () => (
       <li>Uses Durable Objects to coordinate image-generation sessions and track usage across requests</li>
       <li>Optimized client-side image processing with WebAssembly and Rust image engine</li>
     </ul>
-    <a
-      class="mt-3 inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
-      href="https://polishpic.com"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Visit polishpic.com <ExternalLink aria-hidden="true" size={13} />
-    </a>
   </details>
 );

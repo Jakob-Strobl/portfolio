@@ -4,7 +4,20 @@ import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const TimedatSection = () => (
   <details class="group" open={false}>
-    <CollapsibleSummary label="View project details">
+    <CollapsibleSummary
+      label="View project details"
+      actions={
+        <a
+          class="inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
+          href="https://timedat.app"
+          target="_blank"
+          rel="noreferrer"
+          onClick={(event) => event.stopPropagation()}
+        >
+          Visit timedat.app <ExternalLink aria-hidden="true" size={13} />
+        </a>
+      }
+    >
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
         <h1>timedat</h1>
         <h2 class="text-xl font-light">2026 - Present</h2>
@@ -26,14 +39,6 @@ export const TimedatSection = () => (
           Made session history and overlap review audit-ready while keeping the interface calm and distraction-free
         </li>
       </ul>
-      <a
-        class="mt-3 inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
-        href="https://timedat.app"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Visit timedat.app <ExternalLink aria-hidden="true" size={13} />
-      </a>
     </div>
   </details>
 );
