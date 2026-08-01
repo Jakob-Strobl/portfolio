@@ -87,8 +87,8 @@ export default function TimelineLayout(props: TimelineLayout) {
         </div>
       </div>
       {/* CENTER Content */}
-      <div class={`w-10/12 md:w-3/5 h-full ${topMargin}`}>
-        <div ref={contentContainerRef} class={`flex flex-col ${contentGap} mb-4`}>
+      <div class={`min-w-0 w-10/12 md:w-3/5 h-full ${topMargin}`}>
+        <div ref={contentContainerRef} class={`min-w-0 w-full flex flex-col ${contentGap} mb-4`}>
           {props.content}
           <div class="max-h-[48vh] min-h-[16vh] h-dvh"></div>
         </div>

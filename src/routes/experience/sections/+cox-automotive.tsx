@@ -1,7 +1,7 @@
 import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const CoxAutomotiveSection = () => (
-  <details class="group" open={false}>
+  <details class="group min-w-0 w-full" open={false}>
     <CollapsibleSummary label="View full role history">
       <div>
         <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">

@@ -125,7 +125,7 @@ export default function Shadow(props: ShadowProps) {
   return (
     <div
       class={`
-        w-full h-[inherit] border-[1px] transition-colors duration-300 rounded-lg
+        min-w-0 w-full h-[inherit] border-[1px] transition-colors duration-300 rounded-lg
         ${shadowState() === "warm" ? (interactionActive() ? "border-white/14" : "border-white/6") : "border-white/0"}
       `}
       onPointerEnter={(event) => event.pointerType !== "touch" && setPointerHovered(true)}
@@ -139,7 +139,7 @@ export default function Shadow(props: ShadowProps) {
       {...props.dataset}
     >
       <div
-        class={`text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-3 lg:p-4 2xl:p-5"} rounded-lg 
+        class={`min-w-0 text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-3 lg:p-4 2xl:p-5"} rounded-lg
           transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)] h-[inherit] text-sm md:text-md xl:text-lg 
         `}
         style={{

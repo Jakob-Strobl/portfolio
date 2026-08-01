@@ -83,6 +83,13 @@ describe("Experience Page", () => {
         expect(page.getByText("Cox Automotive")).toBeInTheDocument();
       });
 
+      it("keeps the collapsed history at the full timeline width", async () => {
+        const page = await renderExperiencePage();
+        const details = page.getByText("Cox Automotive").closest("details");
+
+        expect(details).toHaveClass("min-w-0", "w-full");
+      });
+
       it("displays date range (Aug 2021 - Jul 2025)", async () => {
         const page = await renderExperiencePage();
         expect(page.getByText(/Aug 2021 - Jul 2025/i)).toBeInTheDocument();
