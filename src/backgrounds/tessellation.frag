@@ -89,5 +89,8 @@ void main() {
     color = mix(color, mirageSurface, vLife * mirageCycle);
     color *= 1.0 + vAuxiliary.z * 0.03;
 
-    outColor = vec4(color, uOpacity * TESSELLATION_VISUAL_OPACITY);
+    // Keep fill coverage opaque so overlapping topology transitions crossfade cleanly.
+    // Soften the visual intensity through the color instead of making the mesh translucent.
+    color = mix(BACKGROUND_COLOR, color, TESSELLATION_VISUAL_OPACITY);
+    outColor = vec4(color, uOpacity);
 }
