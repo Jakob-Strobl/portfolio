@@ -21,6 +21,8 @@ import {
   isTessellationTransitionComplete,
   TESSELLATION_MAX_INTERIOR_ANCHORS,
   TESSELLATION_MAX_LIFECYCLE_PULSES,
+  TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS,
+  TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS,
   TESSELLATION_MIN_INTERIOR_ANCHORS,
   TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS,
   TESSELLATION_TOPOLOGY_INTERVAL_SECONDS,
@@ -77,6 +79,10 @@ describe("living tessellation model", () => {
     expect(desktopRange).toEqual({
       minimum: TESSELLATION_MIN_INTERIOR_ANCHORS,
       maximum: TESSELLATION_MAX_INTERIOR_ANCHORS,
+    });
+    expect(mobileRange).toEqual({
+      minimum: TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS,
+      maximum: TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS,
     });
     expect(mobileRange.maximum).toBeLessThan(desktopRange.minimum);
     expect(mobileInterior.length).toBeLessThan(desktopInterior.length);
