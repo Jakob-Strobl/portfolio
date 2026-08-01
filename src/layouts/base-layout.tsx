@@ -17,7 +17,7 @@ export default function BaseLayout(props: RouteSectionProps) {
         <BackgroundProvider>
           <IsomorphicBackground></IsomorphicBackground>
           <TimelineGradient></TimelineGradient>
-          <main class="flex flex-row h-screen max-w-dvw items-center justify-center">
+          <main class="min-w-0 w-full flex flex-row h-screen max-w-dvw items-center justify-center">
             <Umbra></Umbra>
             <Suspense>{props.children}</Suspense>
           </main>

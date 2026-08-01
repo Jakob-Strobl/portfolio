@@ -86,8 +86,12 @@ describe("Experience Page", () => {
       it("keeps the collapsed history at the full timeline width", async () => {
         const page = await renderExperiencePage();
         const details = page.getByText("Cox Automotive").closest("details");
+        const timelineRow = [...page.container.querySelectorAll("div")].find(
+          (element) => element.classList.contains("flex-row") && element.classList.contains("h-screen"),
+        );
 
         expect(details).toHaveClass("min-w-0", "w-full");
+        expect(timelineRow).toHaveClass("min-w-0", "w-full");
       });
 
       it("displays date range (Aug 2021 - Jul 2025)", async () => {

@@ -69,7 +69,7 @@ export default function TimelineLayout(props: TimelineLayout) {
   });
 
   return (
-    <div class="flex flex-row h-screen items-center xs:justify-center justify-start">
+    <div class="min-w-0 w-full flex flex-row h-screen items-center xs:justify-center justify-start">
       {/* LEFT Gutter */}
       <div class={`md:w-1/5 w-2/12 h-full flex flex-col items-end justify-start px-2  ${topMargin}`}>
         <div class="fixed md:max-w-3/4 max-w-1/2 w-fit">
