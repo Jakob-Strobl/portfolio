@@ -1,16 +1,32 @@
-export const PolishPicSection = () => (
-  <div class="flex flex-col gap-2">
-    <div>
-      <div class="text-2xl flex justify-between items-baseline flex-wrap">
-        <h1>Polish Pic</h1> <h2 class="font-light text-xl">Oct 2025 - Present</h2>
-      </div>
-      <p class="text-white/70">Svelte 5 with SvelteKit, Rust + WASM, Tailwind v4</p>
-    </div>
-    <p class="text-white/70 text-base">A privacy-preserving image processing web application SaaS tool</p>
+import ExternalLink from "lucide-solid/icons/external-link";
 
-    <ul class="list-disc list-inside text-white/80 space-y-1 mt-2 text-base">
-      <li>Serves as an applied research testbed for offline, on-device inference & federated learning</li>
+import CollapsibleSummary from "~/components/collapsible-summary";
+
+export const PolishPicSection = () => (
+  <details class="group" open={false}>
+    <CollapsibleSummary label="View project details">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
+        <h1>Polish Pic</h1>
+        <h2 class="text-xl font-light">Oct 2025 - Present</h2>
+      </div>
+      <p class="text-white/70">Svelte 5 with SvelteKit, Rust + WASM, Tailwind v4, Cloudflare Durable Objects</p>
+      <p class="mt-2 text-base text-white/80">
+        A privacy-preserving image processing SaaS with AI-powered image generation
+      </p>
+    </CollapsibleSummary>
+
+    <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
+      <li>Nearing completion of an AI image-generation release</li>
+      <li>Uses Durable Objects to coordinate image-generation sessions and track usage across requests</li>
       <li>Optimized client-side image processing with WebAssembly and Rust image engine</li>
     </ul>
-  </div>
+    <a
+      class="mt-3 inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
+      href="https://polishpic.com"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Visit polishpic.com <ExternalLink aria-hidden="true" size={13} />
+    </a>
+  </details>
 );

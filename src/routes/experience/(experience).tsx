@@ -11,10 +11,13 @@ import { PolishPicSection } from "./sections/+polish-pic";
 import { WebcamSandboxSection } from "./sections/+webcam-sandbox";
 import { ExclaimSection } from "./sections/+exclaim";
 import { CertificatesSection } from "./sections/+certificates";
+import { TimedatSection } from "./sections/+timedat";
+import CollapsibleSummary from "~/components/collapsible-summary";
+
 export default function Experience() {
   return (
     <TimelineLayout
-      defaultTitle="2025"
+      defaultTitle="2026"
       contentGap="gap-4"
       navBack={() => (
         <A href="/">
@@ -56,43 +59,59 @@ export default function Experience() {
             {UpittTaSection()}
           </Shadow>
           {/* Education */}
-          <div>
-            <h1 class="text-4xl text-white">Education & Credentials</h1>
-            <hr class=" border-night-300 mt-2"></hr>
-          </div>
-          <Shadow
-            warmupDelayMs={375}
-            contentFadeInDelayMs={500}
-            dataset={{
-              [timelineTitleDatasetKey]: "2016",
-            }}
+          <details
+            class="rounded-lg border border-white/10 bg-night-black/45 px-2 py-3 transition-colors open:bg-night-black/20 lg:px-3 lg:py-4"
+            open={false}
           >
-            {UpittEducationSection()}
-          </Shadow>
-          <Shadow
-            warmupDelayMs={375}
-            contentFadeInDelayMs={500}
-            dataset={{
-              [timelineTitleDatasetKey]: "2018",
-            }}
-          >
-            {YonseiEducationSection()}
-          </Shadow>
-          {/* Certificates */}
-          <Shadow
-            warmupDelayMs={375}
-            contentFadeInDelayMs={500}
-            dataset={{
-              [timelineTitleDatasetKey]: "2024",
-            }}
-          >
-            {CertificatesSection()}
-          </Shadow>
+            <CollapsibleSummary label="Show education">
+              <h1 class="text-4xl text-white">Education & Credentials</h1>
+              <p class="mt-1 text-sm text-white/60">Academic background and professional credentials</p>
+            </CollapsibleSummary>
+            <div class="mt-4 space-y-4 border-t border-white/10 pt-4">
+              <Shadow
+                warmupDelayMs={375}
+                contentFadeInDelayMs={500}
+                dataset={{
+                  [timelineTitleDatasetKey]: "2016",
+                }}
+              >
+                {UpittEducationSection()}
+              </Shadow>
+              <Shadow
+                warmupDelayMs={375}
+                contentFadeInDelayMs={500}
+                dataset={{
+                  [timelineTitleDatasetKey]: "2018",
+                }}
+              >
+                {YonseiEducationSection()}
+              </Shadow>
+              {/* Certificates */}
+              <Shadow
+                warmupDelayMs={375}
+                contentFadeInDelayMs={500}
+                dataset={{
+                  [timelineTitleDatasetKey]: "2024",
+                }}
+              >
+                {CertificatesSection()}
+              </Shadow>
+            </div>
+          </details>
           {/* Projects */}
           <div>
             <h1 class="text-4xl text-white">Projects</h1>
             <hr class=" border-night-300 mt-2"></hr>
           </div>
+          <Shadow
+            warmupDelayMs={375}
+            contentFadeInDelayMs={500}
+            dataset={{
+              [timelineTitleDatasetKey]: "2026",
+            }}
+          >
+            {TimedatSection()}
+          </Shadow>
           <Shadow
             warmupDelayMs={375}
             contentFadeInDelayMs={500}

@@ -104,6 +104,22 @@
 }
 
 @layer components {
+  .details-summary {
+    list-style: none;
+  }
+
+  .details-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .details-summary-icon {
+    transition: transform 200ms ease;
+  }
+
+  details[open] .details-summary-icon {
+    transform: rotate(180deg);
+  }
+
   /** 
     * Opacity fade-in component
     * @default duration is 500ms

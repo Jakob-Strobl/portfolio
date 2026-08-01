@@ -28,10 +28,9 @@ export default function TimelineLayout(props: TimelineLayout) {
   const [elementsToObserve, setElementsToObserve] = createSignal<HTMLElement[]>([]);
   createEffect(() => {
     if (contentContainerRef) {
-      // ASSUME the constraint, we know Shadow renders a single div.
-      const shadowElements = Array.from(contentContainerRef.children).filter(
-        (el) => el instanceof HTMLElement && el.hasAttribute(timelineTitleDatasetKey),
-      ) as HTMLElement[];
+      const shadowElements = Array.from(
+        contentContainerRef.querySelectorAll<HTMLElement>(`[${timelineTitleDatasetKey}]`),
+      );
       setElementsToObserve(shadowElements);
     }
   });

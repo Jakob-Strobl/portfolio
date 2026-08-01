@@ -10,7 +10,7 @@ export const LevelUpSection = () => (
 
     <div>
       <div class="text-lg mt-2 flex justify-between flex-wrap">
-        <h2>EMR Platform (under NDA)</h2> <h3 class="font-light">Feb 2025 - Jul 2025</h3>
+        <h2>EMR Platform (under NDA)</h2> <h3 class="font-light">Feb 2025 - Present</h3>
       </div>
       <p class="text-white/60 text-base">React w/ Better-Auth (Zod, TypeScript) </p>
     </div>
