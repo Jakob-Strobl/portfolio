@@ -47,7 +47,7 @@ export const UpittTaSection = () => (
                   class="text-night-400 hover:text-night-500"
                   href="https://www.youtube.com/watch?v=_fTCMhaWsdk"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   Attack Lab Primer - YouTube 2020
                 </a>

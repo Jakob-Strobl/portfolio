@@ -5,6 +5,7 @@ import Shadow from "../components/shadow/shadow";
 import { A } from "@solidjs/router";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import CenteredLayout from "../layouts/centered-layout";
+import Seo from "~/components/seo";
 
 export default function Contact() {
   const handle = "hey";
@@ -19,65 +20,80 @@ export default function Contact() {
   };
 
   return (
-    <CenteredLayout
-      navBack={() => (
-        <A href="/">
-          <ArrowBigLeft size={20} class="hover:stroke-night-300 transition-colors duration-300" />
-          <span class="hidden sm:inline">Home</span>
-        </A>
-      )}
-    >
-      <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
-        {/* padding's screem size breakpoints should match the image width's breakpoints */}
-        <div class="flex flex-col p-6 sm:p-8 xl:p-12 w-full ">
-          <div>
-            <p class="text-3xl">Connect with me:</p>
-          </div>
-          <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
-            <div id="github">
-              <a class="group flex flex-col items-center gap-8" href="https://github.com/Jakob-Strobl" target="_blank">
-                <img class="github-normalized-size" src="./images/Github-octocat.png" />
-                <p class="group-hover:text-shadow-lg duration-300 transition-text">GitHub</p>
-              </a>
+    <>
+      <Seo
+        title="Contact Jakob Strobl | Full-stack Developer"
+        description="Contact Jakob Strobl, a full-stack developer and product builder. Find his GitHub, LinkedIn, and email."
+        path="/contact"
+      />
+      <CenteredLayout
+        navBack={() => (
+          <A href="/">
+            <ArrowBigLeft size={20} class="hover:stroke-night-300 transition-colors duration-300" />
+            <span class="hidden sm:inline">Home</span>
+          </A>
+        )}
+      >
+        <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
+          {/* padding's screem size breakpoints should match the image width's breakpoints */}
+          <div class="flex flex-col p-6 sm:p-8 xl:p-12 w-full ">
+            <div>
+              <h1 class="text-3xl">Contact Jakob Strobl</h1>
+              <h2 class="mt-1 text-xl text-white/80">Connect with me:</h2>
             </div>
-            <div id="linkedin">
-              <a
-                class="group flex flex-col items-center gap-8"
-                href="https://www.linkedin.com/in/jakob-strobl"
-                target="_blank"
-              >
-                <img class="linkedin-normalized-size select-none" src="./images/LinkedIn.png" />
-                <p class="group-hover:text-shadow-lg duration-300 transition-text">LinkedIn</p>
-              </a>
+            <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
+              <div id="github">
+                <a
+                  class="group flex flex-col items-center gap-8"
+                  href="https://github.com/Jakob-Strobl"
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                >
+                  <img class="github-normalized-size" src="./images/Github-octocat.png" alt="GitHub Octocat" />
+                  <p class="group-hover:text-shadow-lg duration-300 transition-text">GitHub</p>
+                </a>
+              </div>
+              <div id="linkedin">
+                <a
+                  class="group flex flex-col items-center gap-8"
+                  href="https://www.linkedin.com/in/jakob-strobl"
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                >
+                  <img class="linkedin-normalized-size select-none" src="./images/LinkedIn.png" alt="LinkedIn" />
+                  <p class="group-hover:text-shadow-lg duration-300 transition-text">LinkedIn</p>
+                </a>
+              </div>
             </div>
-          </div>
-          <p class="text-xl">
-            Contact me directly:
-            <span class="flex sm:mt-0 sm:inline sm:justify-center">
-              <span
-                class="
-                  sm:ml-4 inline-block                   
-                  text-night-300 text-center whitespace-nowrap break-normal
-                  cursor-pointer select-none
-                  border-b-2 border-gray-300/60 hover:border-night-300/90
-                  transition-colors duration-300 ease-in-out
-                "
-                onclick={clickEmailHandler}
-                title="Click to copy email to clipboard"
-                aria-label="Click to copy email to clipboard"
-              >
-                {handle}
-                <span class="text-white p-2"> at </span>jstrobl.dev
-                {showClipboardBubble() != undefined && (
-                  <NotifyBubble offset={{ x: 0, y: -8 }} originEvent={showClipboardBubble()}>
-                    <p>Copied to clipboard!</p>
-                  </NotifyBubble>
-                )}
+            <p class="text-xl">
+              Contact me directly:
+              <span class="flex sm:mt-0 sm:inline sm:justify-center">
+                <a
+                  class="
+                    sm:ml-4 inline-block
+                    text-night-300 text-center whitespace-nowrap break-normal
+                    cursor-pointer select-none
+                    border-b-2 border-gray-300/60 hover:border-night-300/90
+                    transition-colors duration-300 ease-in-out
+                  "
+                  href={`mailto:${handle}@jstrobl.dev`}
+                  onclick={clickEmailHandler}
+                  title="Email Jakob Strobl"
+                  aria-label="Email Jakob Strobl"
+                >
+                  {handle}
+                  <span class="text-white p-2"> at </span>jstrobl.dev
+                  {showClipboardBubble() != undefined && (
+                    <NotifyBubble offset={{ x: 0, y: -8 }} originEvent={showClipboardBubble()}>
+                      <p>Copied to clipboard!</p>
+                    </NotifyBubble>
+                  )}
+                </a>
               </span>
-            </span>
-          </p>
-        </div>
-      </Shadow>
-    </CenteredLayout>
+            </p>
+          </div>
+        </Shadow>
+      </CenteredLayout>
+    </>
   );
 }

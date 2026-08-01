@@ -4,7 +4,7 @@ export const WebcamSandboxSection = () => (
   <details class="group" open={false}>
     <CollapsibleSummary label="View project details">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h1>3D Webcam Sandbox</h1>
+        <h3>3D Webcam Sandbox</h3>
         <h2 class="text-xl font-light">2023 - Present</h2>
       </div>
       <p class="text-white/70">Godot, Rust with gdext, Nokhwa, OpenSeeFace</p>

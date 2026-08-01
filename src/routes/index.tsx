@@ -3,6 +3,7 @@ import X from "lucide-solid/icons/x";
 import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 import { BackgroundSettingsPanel, BackgroundSettingsTrigger } from "~/components/background-settings";
+import Seo from "~/components/seo";
 
 import Menu from "../components/menu";
 
@@ -116,15 +117,26 @@ export default function Home() {
 
   return (
     <>
+      <Seo
+        title="Jakob Strobl | Full-stack Developer & Product Builder"
+        description="Jakob Strobl is a full-stack developer and product builder creating privacy-first web products with TypeScript, Rust, and Cloudflare, with a broad technical background spanning systems programming, compilers, computer graphics, and game development."
+        path="/"
+        pageType="ProfilePage"
+      />
       <div class="xs:w-1/5"></div>
       <div class="xs:w-4/5">
         <div
-          class="w-72 flex flex-col items-center gap-1.5 fade-in"
+          class="w-80 max-w-[90vw] flex flex-col items-center gap-1.5 fade-in"
           style={{
             opacity: !isReady() ? "0" : "100",
           }}
         >
           <h1 class="font-medium text-white text-5xl">Jakob Strobl</h1>
+          <p class="text-center text-sm text-gray-300">Full-stack developer &amp; product builder</p>
+          <p class="text-center text-xs leading-relaxed text-gray-400">
+            Building privacy-first web products with TypeScript, Rust, and Cloudflare—with a broad technical background
+            spanning systems programming, compilers, computer graphics, and game development.
+          </p>
           <div class="w-full">
             <Show when={isSettingsOpen()} fallback={<Menu />}>
               <BackgroundSettingsPanel id={settingsPanelId} onClose={closeSettings} />
@@ -136,6 +148,7 @@ export default function Home() {
               <a
                 class="inline-flex items-center transition-colors duration-200 group-hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
                 target="_blank"
+                rel="noopener"
                 href="https://github.com/Jakob-Strobl/portfolio/releases"
               >
                 <span>{process.env.PROJECT_VERSION}</span>

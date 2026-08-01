@@ -1,6 +1,6 @@
 export const UpittEducationSection = () => (
   <div class="flex flex-col gap-2">
-    <h1 class="text-2xl">University of Pittsburgh</h1>
+    <h3 class="text-2xl">University of Pittsburgh</h3>
     <div>
       <div class="text-lg mt-2 flex justify-between flex-wrap">
         <h2>

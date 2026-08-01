@@ -1,6 +1,6 @@
 export const CertificatesSection = () => (
   <div class="flex flex-col gap-2">
-    <h1 class="text-2xl">Certificates</h1>
+    <h3 class="text-2xl">Certificates</h3>
 
     <div class="mt-1 space-y-3">
       <div>

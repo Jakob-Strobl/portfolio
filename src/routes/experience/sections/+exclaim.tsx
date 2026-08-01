@@ -4,7 +4,7 @@ export const ExclaimSection = () => (
   <details class="group" open={false}>
     <CollapsibleSummary label="View project details">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h1>Exclaim</h1>
+        <h3>Exclaim</h3>
         <h2 class="text-xl font-light">2021</h2>
       </div>
       <p class="text-white/70">Rust</p>

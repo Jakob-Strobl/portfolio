@@ -1,7 +1,7 @@
 import { A, useParams } from "@solidjs/router";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import FullPhotoLayout from "~/layouts/full-photo-layout";
-import { getAllPhotos } from "~/data/gallery/catalog";
+import { getAllPhotos, getPhotosByCollection } from "~/data/gallery/catalog";
 
 export default function FullPhoto() {
   const params = useParams();
@@ -13,6 +13,8 @@ export default function FullPhoto() {
     return null;
   }
 
+  const photoCollection = getPhotosByCollection(photoResource.collection);
+
   return (
     <FullPhotoLayout
       resource={photoResource}
@@ -22,7 +24,7 @@ export default function FullPhoto() {
           <span class="hidden sm:inline">Gallery</span>
         </A>
       }
-      photoCollection={allPhotos}
+      photoCollection={photoCollection}
     ></FullPhotoLayout>
   );
 }

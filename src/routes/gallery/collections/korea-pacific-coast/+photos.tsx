@@ -13,7 +13,7 @@ export const PhotoCollection = (props: PhotoCollectionProps) => {
 
   return (
     <div class="flex flex-col gap-4">
-      <h1 class="text-4xl text-white">Korea - Around Gangneung (강릉시)</h1>
+      <h2 class="text-4xl text-white">Korea - Around Gangneung (강릉시)</h2>
       <div class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 gap-4">
         {photos().map((photo) => (
           <GalleryPhoto
@@ -21,6 +21,7 @@ export const PhotoCollection = (props: PhotoCollectionProps) => {
             photoId={photo.id}
             r2Key={photo.r2Key}
             dimensions={photo.dimensions}
+            alt={`${photo.name.replace(/\.[^/.]+$/, "")} — Korea - Around Gangneung`}
             variant="grid"
           />
         ))}

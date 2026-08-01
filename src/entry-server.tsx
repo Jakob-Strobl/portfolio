@@ -10,6 +10,7 @@ export default createHandler(() => (
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
           <link rel="icon" type="image/png" href="/favicon.png" />
+          <link rel="apple-touch-icon" href="/favicon.png" />
           {assets}
         </head>
         <body

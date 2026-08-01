@@ -1,6 +1,6 @@
 export const YonseiEducationSection = () => (
   <div class="flex flex-col gap-2">
-    <h1 class="text-2xl">Yonsei University</h1>
+    <h3 class="text-2xl">Yonsei University</h3>
 
     <div>
       <div class="mt-2 flex justify-between text-lg flex-wrap">

@@ -11,7 +11,7 @@ export const PolishPicSection = () => (
           class="inline-flex items-center gap-1 text-sm text-night-400 hover:text-night-500"
           href="https://polishpic.com"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener"
           onClick={(event) => event.stopPropagation()}
         >
           Visit polishpic.com <ExternalLink aria-hidden="true" size={13} />
@@ -19,7 +19,7 @@ export const PolishPicSection = () => (
       }
     >
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h1>Polish Pic</h1>
+        <h3>Polish Pic</h3>
         <h2 class="text-xl font-light">Oct 2025 - Present</h2>
       </div>
       <p class="text-white/70">Svelte 5 with SvelteKit, Rust + WASM, Tailwind v4, Cloudflare Durable Objects</p>

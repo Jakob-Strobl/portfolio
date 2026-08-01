@@ -10,6 +10,7 @@ export interface GalleryPhotoProps {
   thumbnailView?: boolean;
   collectionDirName?: string;
   dimensions?: Vec2;
+  alt?: string;
   variant?: PhotoVariantKey;
   loading?: "eager" | "lazy";
 }
@@ -35,6 +36,7 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
             aspect-ratio={aspectRatio(props.dimensions)}
             width={props.dimensions?.x}
             height={props.dimensions?.y}
+            alt={props.alt ?? props.photoId}
             loading={props.loading ?? "lazy"}
             decoding="async"
           ></img>
@@ -43,6 +45,7 @@ export default function GalleryPhoto(props: GalleryPhotoProps) {
         <img
           class={`w-full h-full rounded-sm transition-opacity duration-300 ${isThumbnailView ? "object-cover opacity-80 hover:opacity-100 " : "object-contain"}`}
           src={getImageUrl(props.r2Key, variant)}
+          alt={props.alt ?? props.photoId}
           loading={props.loading ?? "eager"}
           decoding="async"
         ></img>

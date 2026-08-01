@@ -45,14 +45,14 @@ describe("Experience Page", () => {
       const page = await renderExperiencePage();
       const header = page.getByRole("heading", {
         name: "Education & Credentials",
-        level: 1,
+        level: 2,
       });
       expect(header).toBeInTheDocument();
     });
 
     it("displays Projects header", async () => {
       const page = await renderExperiencePage();
-      const header = page.getByRole("heading", { name: "Projects", level: 1 });
+      const header = page.getByRole("heading", { name: "Projects", level: 2 });
       expect(header).toBeInTheDocument();
     });
   });

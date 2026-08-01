@@ -20,6 +20,10 @@ export function getCollections(): GalleryCollection[] {
   return GALLERY_COLLECTIONS;
 }
 
+export function getCollectionByKey(collectionKey: string): GalleryCollection | undefined {
+  return GALLERY_COLLECTIONS.find((collection) => collection.key === collectionKey);
+}
+
 export function getAllPhotos(): PhotoResource[] {
   return typedCatalog;
 }
@@ -30,6 +34,14 @@ export function getPhotosByCollection(collection: string): PhotoResource[] {
 
 export function getPhotoBySlug(collection: string, slug: string): PhotoResource | undefined {
   return typedCatalog.find((photo) => photo.collection === collection && photo.id === slug);
+}
+
+export function getPhotoPath(photo: PhotoResource): string {
+  return `/gallery/collections/${photo.collection}/${photo.id}`;
+}
+
+export function getPhotoDisplayName(photo: PhotoResource): string {
+  return photo.name.replace(/\.[^/.]+$/, "");
 }
 
 export function getPaginatedPhotos(page: number, pageSize: number): PhotoResource[] {
