@@ -4,7 +4,7 @@ import { JSX } from "solid-js";
 
 /**
  * Default wait time for Shadow component animations
- * Based on: warmupDelayMs (max 500ms) + animationDuration (750ms)
+ * Based on: warmupDelayMs (max 500ms) + animationDuration (600ms)
  * Rounded to 1500ms for safety margin
  */
 const DEFAULT_SHADOW_WAIT_MS = 0; // 1500; // was 1500 for checking for visible, but we can

@@ -83,7 +83,7 @@ describe("Shadow interaction border", () => {
     expect(detached.className).not.toContain("backdrop-blur");
     expect(detached).not.toHaveClass("transition-all");
     expect(detached.className).toContain("transition-[transform,opacity,background-color]");
-    expect(detached).toHaveClass("duration-[750ms]");
+    expect(detached).toHaveClass("duration-[600ms]");
     expect(detached.style.opacity).toBe("0");
 
     rect.setShadowState("warm");

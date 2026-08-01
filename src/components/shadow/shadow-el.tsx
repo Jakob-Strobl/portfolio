@@ -104,7 +104,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         ${
           rect.snapToSource()
             ? "transition-none"
-            : "transition-[transform,opacity,background-color] duration-[750ms] ease-out"
+            : "transition-[transform,opacity,background-color] duration-[600ms] ease-out"
         }
       `}
       style={{
