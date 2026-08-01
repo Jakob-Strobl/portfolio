@@ -61,7 +61,7 @@ export function BackgroundSettingsTrigger(props: BackgroundSettingsTriggerProps)
         props.triggerRef?.(element);
       }}
       type="button"
-      class="rounded-md p-1 transition-all duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+      class="h-8 w-8 rounded-md p-1 transition-all duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
       classList={{
         "bg-night-700/35 text-night-100 shadow-[0_0_0.65rem_rgba(202,156,242,0.5)]": props.isOpen,
         "text-gray-300/80": !props.isOpen,
