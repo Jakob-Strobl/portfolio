@@ -53,6 +53,10 @@ function mockLayout(element: HTMLElement, layout: MutableLayout, onRead?: () => 
   );
 }
 
+async function flushSynchronizationFrame() {
+  await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+}
+
 function createShadowRect(
   element: HTMLDivElement,
   layout: MutableLayout,
@@ -126,6 +130,7 @@ describe("Umbra shadow geometry observer", () => {
     observer.trigger();
     layout.height = 220;
     observer.trigger();
+    await flushSynchronizationFrame();
 
     expect(observer.observe).toHaveBeenCalledTimes(1);
     expect(state.shadows).toHaveLength(1);
@@ -153,13 +158,14 @@ describe("Umbra shadow geometry observer", () => {
     layout.y = 360;
     layout.height = 220;
     ResizeObserverMock.instances[0].trigger();
+    await flushSynchronizationFrame();
 
     expect(shadow.shadowState()).toBe("settling");
     expect(shadow.position()).toEqual({ x: 24, y: 360 });
     expect(shadow.dimensions()).toEqual({ x: 280, y: 220 });
     expect(shadow.activePosition()).toEqual(originalActivePosition);
     expect(shadow.activeDimensions()).toEqual(originalActiveDimensions);
-    expect(shadow.settlingEpoch()).toBe(2);
+    expect(shadow.settlingEpoch()).toBe(1);
     expect(beginShadowEntrance(source.dataset.shadow!)).toBe(true);
     expect(shadow.shadowState()).toBe("mounted");
     expect(shadow.activePosition()).toEqual({ x: 24, y: 360 });
@@ -170,6 +176,22 @@ describe("Umbra shadow geometry observer", () => {
       expect(detached).not.toHaveClass("transition-none");
       expect(detached.className).toContain("transition-[transform,opacity,background-color]");
     });
+  });
+
+  test("settles a hidden entrance without waiting for an impossible transition end", () => {
+    const element = document.body.appendChild(document.createElement("div"));
+    element.dataset.shadow = "hidden-card";
+    const layout = { x: 24, y: 360, width: 280, height: 220, visible: false };
+    mockLayout(element, layout);
+    const shadow = createShadowRect(element, layout, [], "fade-in");
+    setState({ shadows: [shadow] });
+
+    expect(beginShadowEntrance("hidden-card")).toBe(true);
+    expect(shadow.shadowState()).toBe("warm");
+    expect(shadow.snapToSource()).toBe(true);
+    expect(shadow.activePosition()).toEqual({ x: 24, y: 360 });
+    expect(shadow.activeDimensions()).toEqual({ x: 280, y: 220 });
+    element.remove();
   });
 
   test("queues mounted observer corrections until transition completion", () => {
@@ -234,20 +256,36 @@ describe("Umbra shadow geometry observer", () => {
     mockLayout(source, layout);
     const observer = ResizeObserverMock.instances[0];
     observer.trigger();
+    await flushSynchronizationFrame();
+    expect(beginShadowEntrance(source.dataset.shadow!)).toBe(true);
+    expect(completeShadowTransition(source.dataset.shadow!)).toBe(true);
 
     layout.visible = false;
     details.open = false;
     details.dispatchEvent(new Event("toggle"));
+    await flushSynchronizationFrame();
     expect(state.shadows[0].visible()).toBe(false);
     await waitFor(() => {
       const detachedShadow = page.container.querySelector<HTMLElement>("div[style*='translate3d']")!;
       expect(detachedShadow.style.display).toBe("none");
     });
 
+    layout.x = 36;
+    layout.y = 72;
+    layout.width = 340;
+    layout.height = 180;
+    window.dispatchEvent(new Event("resize"));
+    await flushSynchronizationFrame();
+    expect(state.shadows[0].position()).toEqual({ x: 36, y: 72 });
+    expect(state.shadows[0].dimensions()).toEqual({ x: 340, y: 180 });
+
     layout.visible = true;
     details.open = true;
     details.dispatchEvent(new Event("toggle"));
+    await flushSynchronizationFrame();
     expect(state.shadows[0].visible()).toBe(true);
+    expect(state.shadows[0].activePosition()).toEqual({ x: 36, y: 72 });
+    expect(state.shadows[0].activeDimensions()).toEqual({ x: 340, y: 180 });
     await waitFor(() => {
       const detachedShadow = page.container.querySelector<HTMLElement>("div[style*='translate3d']")!;
       expect(detachedShadow.style.display).toBe("");

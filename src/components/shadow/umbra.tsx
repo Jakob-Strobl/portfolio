@@ -2,7 +2,7 @@ import { createRenderEffect, For, onCleanup, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import ShadowEl from "./shadow-el";
 import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
-import { clearRemovedShadows, forceRecalculateShadowClientRects, synchronizeShadowClientRects } from "./actions";
+import { clearRemovedShadows, synchronizeShadowClientRects } from "./actions";
 import { isMobile } from "~/actions/device-actions";
 
 const [state, setState] = createStore<UmbraState>({
@@ -19,7 +19,16 @@ export interface UmbraProps {}
  */
 export default function Umbra(props: UmbraProps) {
   let resizeObserver: ResizeObserver | undefined;
+  let synchronizationFrame: number | undefined;
   const observedElements = new Set<Element>();
+
+  const scheduleSynchronization = () => {
+    if (synchronizationFrame !== undefined) return;
+    synchronizationFrame = window.requestAnimationFrame(() => {
+      synchronizationFrame = undefined;
+      synchronizeShadowClientRects("snap");
+    });
+  };
 
   const reconcileObservedElements = () => {
     if (resizeObserver == null) return;
@@ -39,29 +48,25 @@ export default function Umbra(props: UmbraProps) {
 
   onMount(() => {
     if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(() => {
-        synchronizeShadowClientRects("snap");
-      });
+      resizeObserver = new ResizeObserver(scheduleSynchronization);
       reconcileObservedElements();
     }
 
-    const handleResize = () => forceRecalculateShadowClientRects();
-    const handleToggle = () => synchronizeShadowClientRects("snap");
-    document.addEventListener("toggle", handleToggle, true);
-    onCleanup(() => document.removeEventListener("toggle", handleToggle, true));
-    // Turning off on mobile because it was causing a lot of thrashing and recalcs
-    // It handles tab bar collapse on Mac Safari in a desktop environment
+    document.addEventListener("toggle", scheduleSynchronization, true);
+    window.addEventListener("resize", scheduleSynchronization, { passive: true });
+
+    // visualViewport covers browser chrome changes that do not resize the layout
+    // viewport. The shared animation-frame scheduler deduplicates events when both
+    // viewport APIs and ResizeObserver fire for the same layout change.
     if (window.visualViewport && !isMobile()) {
-      // Use visualViewport for modern browsers (catches window resize + Safari UI chrome tab bar)
-      window.visualViewport.addEventListener("resize", handleResize, { passive: true });
-      onCleanup(() => window.visualViewport?.removeEventListener("resize", handleResize));
-    } else {
-      // Fallback for older browsers without visualViewport API
-      window.addEventListener("resize", handleResize, { passive: true });
-      onCleanup(() => window.removeEventListener("resize", handleResize));
+      window.visualViewport.addEventListener("resize", scheduleSynchronization, { passive: true });
     }
 
     onCleanup(() => {
+      document.removeEventListener("toggle", scheduleSynchronization, true);
+      window.removeEventListener("resize", scheduleSynchronization);
+      window.visualViewport?.removeEventListener("resize", scheduleSynchronization);
+      if (synchronizationFrame !== undefined) window.cancelAnimationFrame(synchronizationFrame);
       resizeObserver?.disconnect();
       observedElements.clear();
     });

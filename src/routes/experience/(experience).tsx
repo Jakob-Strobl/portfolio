@@ -75,10 +75,10 @@ export default function Experience() {
               warmupDelayMs={500}
               contentFadeInDelayMs={500}
               paddingOverride="p-0"
-              shadowOpacity={() => (isEducationExpanded() ? 0.2 : 0.6)}
+              shadowOpacity={() => (isEducationExpanded() ? 0.3 : 0.6)}
             >
               <details
-                class="rounded-lg border border-white/10 bg-night-black/45 px-2 py-3 transition-colors open:bg-night-black/20 lg:px-3 lg:py-4"
+                class="rounded-lg border border-white/10 px-2 py-3 lg:px-3 lg:py-4"
                 onToggle={(event) => setIsEducationExpanded(event.currentTarget.open)}
               >
                 <CollapsibleSummary label="Show education">

@@ -28,6 +28,7 @@ describe("Shadow entrance lifecycle", () => {
   test("waits for the detached renderer's real transition end before becoming warm", async () => {
     const page = render(() => <Shadow warmupDelayMs={125}>Independent source</Shadow>);
     const source = page.container.querySelector<HTMLElement>("[data-shadow]")!;
+    state.shadows[0].setVisible(true);
 
     expect(state.shadows[0].shadowState()).toBe("fade-in");
     expect(source.style.opacity).toBe("0");
@@ -51,6 +52,7 @@ describe("Shadow entrance lifecycle", () => {
         <Shadow warmupDelayMs={125}>Stable source</Shadow>
       </>
     ));
+    state.shadows[0].setVisible(true);
 
     await vi.advanceTimersByTimeAsync(34);
     expect(vi.getTimerCount()).toBe(1);
@@ -85,6 +87,7 @@ describe("Shadow entrance lifecycle", () => {
         </Show>
       </>
     ));
+    state.shadows[0].setVisible(true);
 
     await vi.advanceTimersByTimeAsync(34);
     expect(state.shadows[0].shadowState()).toBe("mounted");
@@ -96,6 +99,7 @@ describe("Shadow entrance lifecycle", () => {
 
     setRoute("experience");
     const sources = Array.from(page.container.querySelectorAll<HTMLElement>("[data-shadow]"));
+    state.shadows.forEach((shadow) => shadow.setVisible(true));
     expect(state.shadows.map((shadow) => shadow.shadowState())).toEqual(["fade-in", "fade-in", "fade-in"]);
     expect(sources.map((source) => source.style.opacity)).toEqual(["0", "0", "0"]);
 

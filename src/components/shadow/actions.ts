@@ -135,8 +135,10 @@ export function beginShadowEntrance(shadowId: string) {
   batch(() => {
     shadow.setActivePosition(shadow.position());
     shadow.setActiveDimensions(shadow.dimensions());
-    shadow.setSnapToSource(false);
-    shadow.setShadowState("mounted");
+    // A display:none detached shadow cannot emit transitionend. Treat a hidden
+    // source as already settled so it can snap to fresh geometry when revealed.
+    shadow.setSnapToSource(!shadow.visible());
+    shadow.setShadowState(shadow.visible() ? "mounted" : "warm");
   });
   return true;
 }
