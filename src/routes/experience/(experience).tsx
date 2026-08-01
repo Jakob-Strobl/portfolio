@@ -2,6 +2,7 @@ import Shadow from "../../components/shadow/shadow";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
 import { A } from "@solidjs/router";
+import { createSignal } from "solid-js";
 import { LevelUpSection } from "./sections/+level-up";
 import { CoxAutomotiveSection } from "./sections/+cox-automotive";
 import { UpittTaSection } from "./sections/+pitt-ta";
@@ -17,6 +18,8 @@ import Seo from "~/components/seo";
 import { PRODUCT_ENTITIES } from "~/data/seo";
 
 export default function Experience() {
+  const [isEducationExpanded, setIsEducationExpanded] = createSignal(false);
+
   return (
     <>
       <Seo
@@ -68,45 +71,52 @@ export default function Experience() {
               {UpittTaSection()}
             </Shadow>
             {/* Education */}
-            <details
-              class="rounded-lg border border-white/10 bg-night-black/45 px-2 py-3 transition-colors open:bg-night-black/20 lg:px-3 lg:py-4"
-              open={false}
+            <Shadow
+              warmupDelayMs={500}
+              contentFadeInDelayMs={500}
+              paddingOverride="p-0"
+              shadowOpacity={() => (isEducationExpanded() ? 0.2 : 0.6)}
             >
-              <CollapsibleSummary label="Show education">
-                <h2 class="text-4xl text-white">Education & Credentials</h2>
-                <p class="mt-1 text-sm text-white/60">Academic background and professional credentials</p>
-              </CollapsibleSummary>
-              <div class="mt-4 space-y-4 border-t border-white/10 pt-4">
-                <Shadow
-                  warmupDelayMs={375}
-                  contentFadeInDelayMs={500}
-                  dataset={{
-                    [timelineTitleDatasetKey]: "2016",
-                  }}
-                >
-                  {UpittEducationSection()}
-                </Shadow>
-                <Shadow
-                  warmupDelayMs={375}
-                  contentFadeInDelayMs={500}
-                  dataset={{
-                    [timelineTitleDatasetKey]: "2018",
-                  }}
-                >
-                  {YonseiEducationSection()}
-                </Shadow>
-                {/* Certificates */}
-                <Shadow
-                  warmupDelayMs={375}
-                  contentFadeInDelayMs={500}
-                  dataset={{
-                    [timelineTitleDatasetKey]: "2024",
-                  }}
-                >
-                  {CertificatesSection()}
-                </Shadow>
-              </div>
-            </details>
+              <details
+                class="rounded-lg border border-white/10 bg-night-black/45 px-2 py-3 transition-colors open:bg-night-black/20 lg:px-3 lg:py-4"
+                onToggle={(event) => setIsEducationExpanded(event.currentTarget.open)}
+              >
+                <CollapsibleSummary label="Show education">
+                  <h2 class="text-4xl text-white">Education & Credentials</h2>
+                  <p class="mt-1 text-sm text-white/60">Academic background and professional credentials</p>
+                </CollapsibleSummary>
+                <div class="mt-4 space-y-4 border-t border-white/10 pt-4">
+                  <Shadow
+                    warmupDelayMs={375}
+                    contentFadeInDelayMs={500}
+                    dataset={{
+                      [timelineTitleDatasetKey]: "2016",
+                    }}
+                  >
+                    {UpittEducationSection()}
+                  </Shadow>
+                  <Shadow
+                    warmupDelayMs={375}
+                    contentFadeInDelayMs={500}
+                    dataset={{
+                      [timelineTitleDatasetKey]: "2018",
+                    }}
+                  >
+                    {YonseiEducationSection()}
+                  </Shadow>
+                  {/* Certificates */}
+                  <Shadow
+                    warmupDelayMs={375}
+                    contentFadeInDelayMs={500}
+                    dataset={{
+                      [timelineTitleDatasetKey]: "2024",
+                    }}
+                  >
+                    {CertificatesSection()}
+                  </Shadow>
+                </div>
+              </details>
+            </Shadow>
             {/* Projects */}
             <div>
               <h2 class="text-4xl text-white">Projects</h2>

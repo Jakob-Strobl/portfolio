@@ -172,7 +172,13 @@ export const addShadow = (
   origin: ShadowOriginOptions = "relative",
   shadowRectOptions: Pick<
     ShadowRect,
-    "shadowState" | "setShadowState" | "settlingEpoch" | "advanceSettlingEpoch" | "warmupDelayMs" | "fixed"
+    | "shadowState"
+    | "setShadowState"
+    | "settlingEpoch"
+    | "advanceSettlingEpoch"
+    | "warmupDelayMs"
+    | "backgroundOpacity"
+    | "fixed"
   >,
 ) => {
   if (typeof window === "undefined" || shadowedEl == null) return false;

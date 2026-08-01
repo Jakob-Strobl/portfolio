@@ -117,6 +117,7 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
         transform: `translate3d(${statefulRect().position.x}px, ${statefulRect().position.y}px, 0) scale(${entranceScale().x}, ${entranceScale().y})`,
         opacity: isShadowCold(rect) ? 0 : 1,
         position: rect.fixed ? "fixed" : undefined,
+        "background-color": `rgb(11 7 18 / ${rect.backgroundOpacity()})`,
       }}
       ref={(el) => (shadowEl = el)}
     ></div>

@@ -42,6 +42,12 @@ interface ShadowProps {
   // TODO [ ]: Add optional title that goes above the shadow?
   // TODO [ ]: Parameterize the padding of a shadow?
   paddingOverride?: string;
+
+  /**
+   * Controls the opacity of the detached shadow background.
+   * @default 0.6
+   */
+  shadowOpacity?: Accessor<number>;
 }
 
 /**
@@ -101,6 +107,7 @@ export default function Shadow(props: ShadowProps) {
       advanceSettlingEpoch,
       fixed: props.fixed ?? false,
       warmupDelayMs: props.warmupDelayMs ?? 0,
+      backgroundOpacity: props.shadowOpacity ?? (() => 0.6),
     });
     if (!registered) return;
 

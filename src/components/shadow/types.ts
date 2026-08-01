@@ -62,6 +62,7 @@ export type ShadowRect = {
   shadowedEl: HTMLDivElement;
   origin: Rect;
   warmupDelayMs: number;
+  backgroundOpacity: Accessor<number>;
   fixed: boolean;
 };
 
@@ -86,6 +87,7 @@ export const ZERO_RECT: ShadowRect = {
   setSnapToSource: () => {},
   // @ts-expect-error This is a special case constant where the value of shadowedEl never matters (any field really)
   shadowedEl: null,
+  backgroundOpacity: () => 0,
   isCold: () => true,
   setIsCold: () => {},
   // @ts-expect-error This is a special case constant where the value of origin never matters (any field really)
