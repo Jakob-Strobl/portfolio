@@ -1,7 +1,7 @@
 export const SITE_URL = "https://jstrobl.dev";
 export const SITE_NAME = "Jakob Strobl";
 export const SITE_DESCRIPTION =
-  "Jakob Strobl is a full-stack developer and product builder creating privacy-first web products with TypeScript, Rust, and Cloudflare, with a broad technical background spanning systems programming, compilers, computer graphics, and game development.";
+  "Building privacy-first web products in TypeScript, Rust, and Cloudflare—fluent across modern frontend frameworks, with roots in compilers, game dev, and systems programming.";
 export const PERSON_ID = `${SITE_URL}/#person`;
 
 export const SOCIAL_PROFILES = ["https://github.com/Jakob-Strobl", "https://www.linkedin.com/in/jakob-strobl"] as const;
@@ -13,7 +13,7 @@ export const PERSON_ENTITY: JsonLdNode = {
   "@id": PERSON_ID,
   name: SITE_NAME,
   url: `${SITE_URL}/`,
-  jobTitle: "Full-stack developer and product builder",
+  jobTitle: "Full-stack developer & indie builder",
   description: SITE_DESCRIPTION,
   sameAs: SOCIAL_PROFILES,
   worksFor: {
@@ -40,7 +40,7 @@ export const PRODUCT_ENTITIES: JsonLdNode[] = [
     url: "https://timedat.app/",
     sameAs: "https://timedat.app/",
     description:
-      "A time tracker that helps freelancers and small teams track billable work accurately across overlapping projects in the AI era—without screen surveillance or productivity scoring.",
+      "A time tracker for freelancers, teams, and founders tracking billable work and sweat equity in the AI era—without screen surveillance or productivity scoring.",
     creator: { "@id": PERSON_ID },
   },
   {

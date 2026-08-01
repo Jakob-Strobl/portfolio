@@ -118,8 +118,8 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="Jakob Strobl | Full-stack Developer & Product Builder"
-        description="Jakob Strobl is a full-stack developer and product builder creating privacy-first web products with TypeScript, Rust, and Cloudflare, with a broad technical background spanning systems programming, compilers, computer graphics, and game development."
+        title="Jakob Strobl | Full-stack Developer & Indie Builder"
+        description="Building privacy-first web products in TypeScript, Rust, and Cloudflare—fluent across modern frontend frameworks, with roots in compilers, game dev, and systems programming."
         path="/"
         pageType="ProfilePage"
       />
@@ -132,11 +132,7 @@ export default function Home() {
           }}
         >
           <h1 class="font-medium text-white text-5xl">Jakob Strobl</h1>
-          <p class="text-center text-sm text-gray-300">Full-stack developer &amp; product builder</p>
-          <p class="text-center text-xs leading-relaxed text-gray-400">
-            Building privacy-first web products with TypeScript, Rust, and Cloudflare—with a broad technical background
-            spanning systems programming, compilers, computer graphics, and game development.
-          </p>
+          <p class="text-center text-base text-gray-300">Full-stack developer &amp; indie builder</p>
           <div class="w-full">
             <Show when={isSettingsOpen()} fallback={<Menu />}>
               <BackgroundSettingsPanel id={settingsPanelId} onClose={closeSettings} />

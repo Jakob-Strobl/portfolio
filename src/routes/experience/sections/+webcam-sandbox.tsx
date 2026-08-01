@@ -17,7 +17,7 @@ export const WebcamSandboxSection = () => (
     <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
       <li>Developed a Rust sub-process kernel for real-time async FFI message passing and handling</li>
       <li>Implemented virtualized video splitting for face tracker input and game engine textures</li>
-      <li>Eased testing system-level results with mocks by using traits as dependency injection</li>
+      <li>Used traits for dependency injection, enabling mock-based testing of system-level behavior</li>
     </ul>
   </details>
 );

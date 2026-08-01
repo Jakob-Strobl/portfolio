@@ -22,8 +22,8 @@ export default function Contact() {
   return (
     <>
       <Seo
-        title="Contact Jakob Strobl | Full-stack Developer"
-        description="Contact Jakob Strobl, a full-stack developer and product builder. Find his GitHub, LinkedIn, and email."
+        title="Contact Jakob Strobl | Full-stack Developer & Indie Builder"
+        description="Contact Jakob Strobl, a full-stack developer and indie builder. Find his GitHub, LinkedIn, and email."
         path="/contact"
       />
       <CenteredLayout
@@ -35,13 +35,16 @@ export default function Contact() {
         )}
       >
         <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
-          {/* padding's screem size breakpoints should match the image width's breakpoints */}
-          <div class="flex flex-col p-6 sm:p-8 xl:p-12 w-full ">
+          <div class="flex w-full flex-col">
             <div>
               <h1 class="text-3xl">Contact Jakob Strobl</h1>
               <h2 class="mt-1 text-xl text-white/80">Connect with me:</h2>
             </div>
-            <div class="flex gap-8 p-8 sm:gap-12 sm:p-12 xl:gap-16 xl:p-16">
+            <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
+              Building privacy-first web products in TypeScript, Rust, and Cloudflare—fluent across modern frontend
+              frameworks, with roots in compilers, game dev, and systems programming.
+            </p>
+            <div class="mt-6 flex gap-8 sm:gap-12 xl:gap-16">
               <div id="github">
                 <a
                   class="group flex flex-col items-center gap-8"
@@ -65,7 +68,7 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-            <p class="text-xl">
+            <p class="mt-8 text-xl">
               Contact me directly:
               <span class="flex sm:mt-0 sm:inline sm:justify-center">
                 <a

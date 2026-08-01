@@ -29,7 +29,6 @@ export const PolishPicSection = () => (
     </CollapsibleSummary>
 
     <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
-      <li>Nearing completion of an AI image-generation release</li>
       <li>Uses Durable Objects to coordinate image-generation sessions and track usage across requests</li>
       <li>Optimized client-side image processing with WebAssembly and Rust image engine</li>
     </ul>

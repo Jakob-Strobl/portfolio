@@ -24,8 +24,8 @@ export const TimedatSection = () => (
       </div>
       <p class="text-white/70">Product design · Full-stack web application</p>
       <p class="mt-2 text-base text-white/80">
-        A time tracker that helps freelancers and small teams track billable work accurately across overlapping projects
-        in the AI era—without screen surveillance or productivity scoring.
+        A time tracker for freelancers, teams, and founders tracking billable work and sweat equity in the AI
+        era—without screen surveillance or productivity scoring.
       </p>
     </CollapsibleSummary>
 

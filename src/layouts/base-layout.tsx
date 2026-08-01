@@ -11,7 +11,7 @@ import Umbra from "../components/shadow/umbra";
 export default function BaseLayout(props: RouteSectionProps) {
   return (
     <MetaProvider>
-      <Title>Jakob Strobl | Full-stack developer and product builder</Title>
+      <Title>Jakob Strobl | Full-stack developer &amp; indie builder</Title>
       <PostHogProvider>
         <BackgroundProvider>
           <IsomorphicBackground></IsomorphicBackground>
