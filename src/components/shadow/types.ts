@@ -3,7 +3,7 @@ import { Rect } from "../../types/rect";
 import { Vec2 } from "../../types/vector2";
 
 export type ShadowStartingStates = "ready" | "fade-in";
-export type ShadowInProgressStates = "mounted" | "moving";
+export type ShadowInProgressStates = "settling" | "mounted" | "moving";
 export type ShadowRestingState = "warm";
 /**
  * **STARTING STATES**
@@ -14,6 +14,8 @@ export type ShadowRestingState = "warm";
  * `'fade-in'` : Initialize a shadow with the content fade-in managed by shadow
  *
  * **INTERMEDIATE STATES**
+ *
+ * `'settling'`: Source geometry is still being measured; entrance destination is not committed yet
  *
  * `'mounted'` : Shadow is mounted and transitioning-in on the DOM
  *
@@ -47,6 +49,12 @@ export type ShadowRect = {
   setPosition: Setter<Vec2>;
   dimensions: Accessor<Vec2>;
   setDimensions: Setter<Vec2>;
+  activePosition: Accessor<Vec2>;
+  setActivePosition: Setter<Vec2>;
+  activeDimensions: Accessor<Vec2>;
+  setActiveDimensions: Setter<Vec2>;
+  settlingEpoch: Accessor<number>;
+  advanceSettlingEpoch: Setter<number>;
   visible: Accessor<boolean>;
   setVisible: Setter<boolean>;
   snapToSource: Accessor<boolean>;
@@ -66,6 +74,12 @@ export const ZERO_RECT: ShadowRect = {
   setPosition: () => {},
   dimensions: () => ({ x: 0, y: 0 }),
   setDimensions: () => {},
+  activePosition: () => ({ x: 0, y: 0 }),
+  setActivePosition: () => {},
+  activeDimensions: () => ({ x: 0, y: 0 }),
+  setActiveDimensions: () => {},
+  settlingEpoch: () => 0,
+  advanceSettlingEpoch: () => 0,
   visible: () => false,
   setVisible: () => {},
   snapToSource: () => false,

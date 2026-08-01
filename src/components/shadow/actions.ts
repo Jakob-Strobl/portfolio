@@ -93,9 +93,28 @@ export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition"
       }
       if (measurement.visibilityChanged) shadow.setVisible(measurement.visible);
 
+      // The active rectangle is immutable while a transition is running. New
+      // measurements stay in position/dimensions until transitionend flushes them.
+      if (measurement.geometryChanged && (shadow.shadowState() === "mounted" || shadow.shadowState() === "moving")) {
+        continue;
+      }
+
       if (mode === "snap") {
-        if (!shadow.snapToSource()) shadow.setSnapToSource(true);
+        const shadowState = shadow.shadowState();
+        if (shadowState === "ready" || shadowState === "fade-in" || shadowState === "settling") {
+          // Continue gathering destination geometry without changing the detached
+          // element's origin. The lifecycle owns the later frozen snapshot.
+          shadow.setSnapToSource(false);
+          shadow.setShadowState("settling");
+          shadow.advanceSettlingEpoch((epoch) => epoch + 1);
+        } else if (shadowState === "warm") {
+          shadow.setActivePosition(measurement.nextPosition);
+          shadow.setActiveDimensions(measurement.nextDimensions);
+          if (!shadow.snapToSource()) shadow.setSnapToSource(true);
+        }
       } else if (measurement.geometryChanged) {
+        shadow.setActivePosition(measurement.nextPosition);
+        shadow.setActiveDimensions(measurement.nextDimensions);
         if (shadow.snapToSource()) shadow.setSnapToSource(false);
         if (shadow.shadowState() !== "moving") shadow.setShadowState("moving");
       }
@@ -105,10 +124,56 @@ export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition"
   return true;
 }
 
+/** Freeze the measured destination immediately before a cold entrance begins. */
+export function beginShadowEntrance(shadowId: string) {
+  if (typeof window === "undefined") return false;
+  const shadow = state.shadows.find((candidate) => candidate.shadowedEl.dataset["shadow"] === shadowId);
+  if (shadow == null) return false;
+  const shadowState = shadow.shadowState();
+  if (shadowState !== "ready" && shadowState !== "fade-in" && shadowState !== "settling") return false;
+
+  batch(() => {
+    shadow.setActivePosition(shadow.position());
+    shadow.setActiveDimensions(shadow.dimensions());
+    shadow.setSnapToSource(false);
+    shadow.setShadowState("mounted");
+  });
+  return true;
+}
+
+/** Complete an active transition and apply any observer measurements queued during it. */
+export function completeShadowTransition(shadowId: string) {
+  if (typeof window === "undefined") return false;
+  const shadow = state.shadows.find((candidate) => candidate.shadowedEl.dataset["shadow"] === shadowId);
+  if (shadow == null || (shadow.shadowState() !== "mounted" && shadow.shadowState() !== "moving")) return false;
+
+  const position = shadow.position();
+  const dimensions = shadow.dimensions();
+  const activePosition = shadow.activePosition();
+  const activeDimensions = shadow.activeDimensions();
+  const pendingGeometry =
+    hasMeaningfulDelta(position.x, activePosition.x) ||
+    hasMeaningfulDelta(position.y, activePosition.y) ||
+    hasMeaningfulDelta(dimensions.x, activeDimensions.x) ||
+    hasMeaningfulDelta(dimensions.y, activeDimensions.y);
+
+  batch(() => {
+    shadow.setShadowState("warm");
+    if (!pendingGeometry) return;
+    shadow.setActivePosition(position);
+    shadow.setActiveDimensions(dimensions);
+    shadow.setSnapToSource(true);
+  });
+  return true;
+}
+
 export const addShadow = (
   shadowedEl: HTMLDivElement,
   origin: ShadowOriginOptions = "relative",
-  shadowRectOptions: Pick<ShadowRect, "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed">,
+  shadowRectOptions: Pick<
+    ShadowRect,
+    "shadowState" | "setShadowState" | "settlingEpoch" | "advanceSettlingEpoch" | "warmupDelayMs" | "fixed"
+  >,
 ) => {
   if (typeof window === "undefined" || shadowedEl == null) return false;
 
@@ -159,6 +224,8 @@ export const addShadow = (
     x: clientRect.width,
     y: clientRect.height,
   });
+  const [activePosition, setActivePosition] = createSignal(initialPosition);
+  const [activeDimensions, setActiveDimensions] = createSignal({ x: clientRect.width, y: clientRect.height });
   const [visible, setVisible] = createSignal(isShadowSourceVisible(shadowedEl));
   const [snapToSource, setSnapToSource] = createSignal(false);
 
@@ -175,6 +242,10 @@ export const addShadow = (
     setPosition,
     dimensions,
     setDimensions,
+    activePosition,
+    setActivePosition,
+    activeDimensions,
+    setActiveDimensions,
     visible,
     setVisible,
     snapToSource,

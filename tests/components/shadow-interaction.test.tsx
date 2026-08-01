@@ -82,7 +82,7 @@ describe("Shadow interaction border", () => {
     expect(detached).toHaveClass("bg-night-black/60");
     expect(detached.className).not.toContain("backdrop-blur");
     expect(detached).not.toHaveClass("transition-all");
-    expect(detached.className).toContain("transition-[width,height,transform,opacity,background-color]");
+    expect(detached.className).toContain("transition-[transform,opacity,background-color]");
     expect(detached).toHaveClass("duration-[750ms]");
     expect(detached.style.opacity).toBe("0");
 

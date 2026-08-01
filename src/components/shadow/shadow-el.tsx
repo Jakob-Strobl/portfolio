@@ -1,5 +1,6 @@
 import { batch, createMemo, createRenderEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { ShadowRect } from "./types";
+import { completeShadowTransition } from "./actions";
 
 interface ShadowRectProps {
   rect: ShadowRect;
@@ -10,16 +11,8 @@ interface ShadowRectProps {
  * @warning This is an internal component and should not be used directly. In most cases, use the Shadow component instead.
  */
 export default function ShadowEl({ rect }: ShadowRectProps) {
-  const animationDurationMs = 750;
-  // WARN: Dependent on the bezier curve's input values.
-  //   Go to https://cubic-bezier.com, put in bezier-curve and find Time interval that is close to 100% progression
-  //   "Effectively done" is more visual than math, so even progress >= 95% is usually good enough
-  const bezierCurveEffectiveCompleteProgressionRate = 0.75;
-  // Warmup + Rate (%) of animation duration, transition should look done
-  const animationEffectivelyCompleteTimer =
-    rect.warmupDelayMs + animationDurationMs * bezierCurveEffectiveCompleteProgressionRate;
-
-  const isShadowCold = (rect: ShadowRect) => rect.shadowState() === "ready" || rect.shadowState() === "fade-in";
+  const isShadowCold = (rect: ShadowRect) =>
+    rect.shadowState() === "ready" || rect.shadowState() === "fade-in" || rect.shadowState() === "settling";
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
 
@@ -50,37 +43,56 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
   });
 
   createRenderEffect(() => {
-    // IDK why this get client rect call needs to be here.
-    //   It helps with starting transitions the transitions consistent after multiple navigations
-    //   Even though the result is not used outside of this effect...
-    // Hypothesis 1: reading the bounding client rect forces this on the client side instead of SSR (?)
-    // Hypothesis 2: this forces a reflow which is needed to trigger the transition (?)
+    // Keep the source layout read tied to state changes so the browser commits the
+    // detached shadow's starting geometry before transitioning to its final rect.
+    rect.shadowState();
     const clientRect = rect.shadowedEl.getBoundingClientRect();
-    if (isShadowWarm(rect)) {
-      rect.shadowState() !== "warm" && setTimeout(() => rect.setShadowState("warm"), animationEffectivelyCompleteTimer);
-      return clientRect;
-    }
-
-    // Set lambda to enter transition for shadow that "scale up" from origin position
-    if (rect.warmupDelayMs >= 0) {
-      setTimeout(() => rect.setShadowState("mounted"), rect.warmupDelayMs);
-    } else {
-      queueMicrotask(() => rect.setShadowState("mounted"));
-    }
-    setTimeout(() => rect.setShadowState("warm"), animationEffectivelyCompleteTimer);
-
     return clientRect;
   });
 
   const statefulRect = createMemo(() => {
     if (isShadowWarm(rect)) {
       return {
-        position: rect.position(),
-        dimensions: rect.dimensions(),
+        position: rect.activePosition(),
+        dimensions: rect.activeDimensions(),
       };
     }
 
     return rect.origin;
+  });
+  const finalRect = createMemo(() => {
+    if (isShadowWarm(rect)) {
+      return {
+        position: rect.activePosition(),
+        dimensions: rect.activeDimensions(),
+      };
+    }
+
+    return {
+      position: rect.position(),
+      dimensions: rect.dimensions(),
+    };
+  });
+  const entranceScale = createMemo(() => {
+    if (!isShadowCold(rect)) return { x: 1, y: 1 };
+    const destination = finalRect().dimensions;
+    return {
+      x: destination.x === 0 ? 1 : rect.origin.dimensions.x / destination.x,
+      y: destination.y === 0 ? 1 : rect.origin.dimensions.y / destination.y,
+    };
+  });
+  let shadowEl: HTMLDivElement | undefined;
+
+  onMount(() => {
+    const handleTransitionEnd = (event: TransitionEvent) => {
+      if (event.target !== shadowEl || event.propertyName !== "transform") return;
+      const shadowId = rect.shadowedEl.dataset["shadow"];
+      if (shadowId != null) completeShadowTransition(shadowId);
+    };
+    shadowEl?.addEventListener("transitionend", handleTransitionEnd);
+    onCleanup(() => {
+      shadowEl?.removeEventListener("transitionend", handleTransitionEnd);
+    });
   });
 
   return (
@@ -88,22 +100,25 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
       class={`
         absolute -z-10 rounded-lg
         bg-night-black/60
+        will-change-[transform,opacity]
         ${
           rect.snapToSource()
             ? "transition-none"
-            : "transition-[width,height,transform,opacity,background-color] duration-[750ms] ease-out"
+            : "transition-[transform,opacity,background-color] duration-[750ms] ease-out"
         }
       `}
       style={{
         display: rect.visible() ? undefined : "none",
-        width: `${statefulRect().dimensions.x}px`,
-        height: `${statefulRect().dimensions.y}px`,
+        width: `${finalRect().dimensions.x}px`,
+        height: `${finalRect().dimensions.y}px`,
         top: 0,
         left: 0,
-        transform: `translate3d(${statefulRect().position.x}px, ${statefulRect().position.y}px, 0)`,
+        "transform-origin": "top left",
+        transform: `translate3d(${statefulRect().position.x}px, ${statefulRect().position.y}px, 0) scale(${entranceScale().x}, ${entranceScale().y})`,
         opacity: isShadowCold(rect) ? 0 : 1,
         position: rect.fixed ? "fixed" : undefined,
       }}
+      ref={(el) => (shadowEl = el)}
     ></div>
   );
 }

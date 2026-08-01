@@ -1,6 +1,6 @@
-import { children, createMemo, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
+import { children, createEffect, createMemo, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
 import type { JSX, Signal } from "solid-js";
-import { addShadow, removeShadow } from "./actions";
+import { addShadow, beginShadowEntrance, removeShadow } from "./actions";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
 import { DataAttributeKey } from "../../types/dom";
 
@@ -59,21 +59,57 @@ export default function Shadow(props: ShadowProps) {
   const [pointerHovered, setPointerHovered] = createSignal(false);
   const [focusWithin, setFocusWithin] = createSignal(false);
   const interactionActive = createMemo(() => pointerHovered() || focusWithin());
+  const [settlingEpoch, advanceSettlingEpoch] = createSignal(0);
+  const [entranceEpoch, startEntranceEpoch] = createSignal(0);
   let shadowEl: HTMLDivElement;
   let registered = false;
+  let active = false;
 
-  onMount(() => {
-    // setTimeout(() => setReady(true), 0);
-    // use onMount or createEffect to read after connected to DOM
-    registered = addShadow(shadowEl, props.origin, {
-      shadowState,
-      setShadowState,
-      fixed: props.fixed ?? false,
-      warmupDelayMs: props.warmupDelayMs ?? 0,
+  createEffect(() => {
+    if (typeof window === "undefined") return;
+    if (entranceEpoch() === 0 || !active) return;
+    const state = shadowState();
+    settlingEpoch();
+    if (state !== "ready" && state !== "fade-in" && state !== "settling") return;
+
+    let firstPaintFrame: number | undefined;
+    let secondPaintFrame: number | undefined;
+    let warmupTimer: number | undefined;
+    firstPaintFrame = window.requestAnimationFrame(() => {
+      secondPaintFrame = window.requestAnimationFrame(() => {
+        const warmupDelayMs = props.warmupDelayMs ?? 0;
+        const begin = () => active && beginShadowEntrance(shadowId);
+        if (warmupDelayMs >= 0) {
+          warmupTimer = window.setTimeout(begin, warmupDelayMs);
+        } else {
+          queueMicrotask(begin);
+        }
+      });
+    });
+    onCleanup(() => {
+      if (firstPaintFrame !== undefined) window.cancelAnimationFrame(firstPaintFrame);
+      if (secondPaintFrame !== undefined) window.cancelAnimationFrame(secondPaintFrame);
+      if (warmupTimer !== undefined) window.clearTimeout(warmupTimer);
     });
   });
 
+  onMount(() => {
+    registered = addShadow(shadowEl, props.origin, {
+      shadowState,
+      setShadowState,
+      settlingEpoch,
+      advanceSettlingEpoch,
+      fixed: props.fixed ?? false,
+      warmupDelayMs: props.warmupDelayMs ?? 0,
+    });
+    if (!registered) return;
+
+    active = true;
+    startEntranceEpoch((epoch) => epoch + 1);
+  });
+
   onCleanup(() => {
+    active = false;
     if (!registered) return;
     registered = false;
     removeShadow(shadowId);
@@ -101,7 +137,7 @@ export default function Shadow(props: ShadowProps) {
         `}
         style={{
           // Start with 0 opacity so we can "fade-in"
-          opacity: shadowState() === "fade-in" ? 0 : 100,
+          opacity: shadowState() === "fade-in" || shadowState() === "settling" ? 0 : 100,
           "transition-delay": `${props.contentFadeInDelayMs ?? 250}ms`,
         }}
         ref={(el) => (shadowEl = el)}

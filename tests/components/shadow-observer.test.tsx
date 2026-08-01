@@ -7,6 +7,8 @@ import Shadow from "../../src/components/shadow/shadow";
 import Umbra, { setState, state } from "../../src/components/shadow/umbra";
 import {
   addShadow,
+  beginShadowEntrance,
+  completeShadowTransition,
   forceRecalculateShadowClientRects,
   removeShadow,
   synchronizeShadowClientRects,
@@ -51,12 +53,20 @@ function mockLayout(element: HTMLElement, layout: MutableLayout, onRead?: () => 
   );
 }
 
-function createShadowRect(element: HTMLDivElement, layout: MutableLayout, writeLog: string[] = []): ShadowRect {
+function createShadowRect(
+  element: HTMLDivElement,
+  layout: MutableLayout,
+  writeLog: string[] = [],
+  initialState: ShadowStates = "warm",
+): ShadowRect {
   const [position, setPositionSignal] = createSignal({ x: layout.x, y: layout.y });
   const [dimensions, setDimensionsSignal] = createSignal({ x: layout.width, y: layout.height });
+  const [activePosition, setActivePositionSignal] = createSignal({ x: layout.x, y: layout.y });
+  const [activeDimensions, setActiveDimensionsSignal] = createSignal({ x: layout.width, y: layout.height });
+  const [settlingEpoch, advanceSettlingEpochSignal] = createSignal(0);
   const [visible, setVisibleSignal] = createSignal(layout.visible);
   const [snapToSource, setSnapToSourceSignal] = createSignal(false);
-  const [shadowState, setShadowStateSignal] = createSignal<ShadowStates>("warm");
+  const [shadowState, setShadowStateSignal] = createSignal<ShadowStates>(initialState);
   const wrapSetter = <T,>(name: string, setter: Setter<T>): Setter<T> =>
     ((value: T | ((previous: T) => T)) => {
       writeLog.push(name);
@@ -69,6 +79,12 @@ function createShadowRect(element: HTMLDivElement, layout: MutableLayout, writeL
     setPosition: wrapSetter("position", setPositionSignal),
     dimensions,
     setDimensions: wrapSetter("dimensions", setDimensionsSignal),
+    activePosition,
+    setActivePosition: wrapSetter("active-position", setActivePositionSignal),
+    activeDimensions,
+    setActiveDimensions: wrapSetter("active-dimensions", setActiveDimensionsSignal),
+    settlingEpoch,
+    advanceSettlingEpoch: wrapSetter("settling-epoch", advanceSettlingEpochSignal),
     visible,
     setVisible: wrapSetter("visible", setVisibleSignal),
     snapToSource,
@@ -105,6 +121,7 @@ describe("Umbra shadow geometry observer", () => {
     const layout = { x: 12, y: 24, width: 240, height: 80, visible: true };
     mockLayout(source, layout);
     const observer = ResizeObserverMock.instances[0];
+    state.shadows[0].setShadowState("warm");
 
     observer.trigger();
     layout.height = 220;
@@ -113,8 +130,71 @@ describe("Umbra shadow geometry observer", () => {
     expect(observer.observe).toHaveBeenCalledTimes(1);
     expect(state.shadows).toHaveLength(1);
     expect(state.shadows[0].dimensions()).toEqual({ x: 240, y: 220 });
+    expect(state.shadows[0].activeDimensions()).toEqual({ x: 240, y: 220 });
     expect(state.shadows[0].snapToSource()).toBe(true);
     await waitFor(() => expect(page.container.querySelector(".transition-none")).toBeInTheDocument());
+  });
+
+  test("queues several cold observer corrections and commits one frozen entrance destination", async () => {
+    const page = render(() => (
+      <>
+        <Umbra />
+        <Shadow warmupDelayMs={250}>Lazy route card</Shadow>
+      </>
+    ));
+    const source = page.container.querySelector<HTMLDivElement>("[data-shadow]")!;
+    const layout = { x: 24, y: 320, width: 280, height: 160, visible: true };
+    mockLayout(source, layout);
+
+    const shadow = state.shadows[0];
+    const originalActivePosition = shadow.activePosition();
+    const originalActiveDimensions = shadow.activeDimensions();
+    ResizeObserverMock.instances[0].trigger();
+    layout.y = 360;
+    layout.height = 220;
+    ResizeObserverMock.instances[0].trigger();
+
+    expect(shadow.shadowState()).toBe("settling");
+    expect(shadow.position()).toEqual({ x: 24, y: 360 });
+    expect(shadow.dimensions()).toEqual({ x: 280, y: 220 });
+    expect(shadow.activePosition()).toEqual(originalActivePosition);
+    expect(shadow.activeDimensions()).toEqual(originalActiveDimensions);
+    expect(shadow.settlingEpoch()).toBe(2);
+    expect(beginShadowEntrance(source.dataset.shadow!)).toBe(true);
+    expect(shadow.shadowState()).toBe("mounted");
+    expect(shadow.activePosition()).toEqual({ x: 24, y: 360 });
+    expect(shadow.activeDimensions()).toEqual({ x: 280, y: 220 });
+    expect(beginShadowEntrance(source.dataset.shadow!)).toBe(false);
+    await waitFor(() => {
+      const detached = page.container.querySelector<HTMLElement>("div[style*='translate3d']")!;
+      expect(detached).not.toHaveClass("transition-none");
+      expect(detached.className).toContain("transition-[transform,opacity,background-color]");
+    });
+  });
+
+  test("queues mounted observer corrections until transition completion", () => {
+    const element = document.body.appendChild(document.createElement("div"));
+    element.dataset.shadow = "mounted-card";
+    const layout = { x: 10, y: 20, width: 200, height: 80, visible: true };
+    mockLayout(element, layout);
+    const shadow = createShadowRect(element, layout, [], "mounted");
+    setState({ shadows: [shadow] });
+
+    layout.y = 52;
+    layout.height = 160;
+    expect(synchronizeShadowClientRects("snap")).toBe(true);
+    expect(shadow.position()).toEqual({ x: 10, y: 52 });
+    expect(shadow.dimensions()).toEqual({ x: 200, y: 160 });
+    expect(shadow.activePosition()).toEqual({ x: 10, y: 20 });
+    expect(shadow.activeDimensions()).toEqual({ x: 200, y: 80 });
+    expect(shadow.snapToSource()).toBe(false);
+
+    expect(completeShadowTransition("mounted-card")).toBe(true);
+    expect(shadow.shadowState()).toBe("warm");
+    expect(shadow.activePosition()).toEqual({ x: 10, y: 52 });
+    expect(shadow.activeDimensions()).toEqual({ x: 200, y: 160 });
+    expect(shadow.snapToSource()).toBe(true);
+    element.remove();
   });
 
   test("remeasures every shadow when one source resize moves a sibling", () => {
