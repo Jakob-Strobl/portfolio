@@ -11,11 +11,11 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
-function renderInteractiveShadow(blurOnInteraction = true) {
+function renderInteractiveShadow() {
   const page = render(() => (
     <>
       <Umbra />
-      <Shadow blurOnInteraction={blurOnInteraction}>
+      <Shadow>
         <button>Card action</button>
       </Shadow>
     </>
@@ -30,7 +30,7 @@ function renderInteractiveShadow(blurOnInteraction = true) {
   return { page, source, wrapper, button, detached, rect };
 }
 
-describe("Shadow interaction backdrop blur", () => {
+describe("Shadow interaction border", () => {
   beforeEach(() => {
     vi.stubGlobal("ResizeObserver", ResizeObserverMock);
     setState({ shadows: [], removedShadows: [] });
@@ -41,71 +41,46 @@ describe("Shadow interaction backdrop blur", () => {
     vi.unstubAllGlobals();
   });
 
-  test("uses one combined hover and focus-within state for the warm border and blur", async () => {
-    const { wrapper, button, detached, rect } = renderInteractiveShadow();
+  test("keeps the warm border highlighted across combined hover and focus-within", async () => {
+    const { wrapper, button, rect } = renderInteractiveShadow();
     rect.setShadowState("warm");
 
     await fireEvent.pointerEnter(wrapper, { pointerType: "mouse" });
-    expect(rect.interactionActive()).toBe(true);
-    await waitFor(() => {
-      expect(wrapper).toHaveClass("border-white/14");
-      expect(detached).toHaveClass("backdrop-blur-md");
-    });
+    await waitFor(() => expect(wrapper).toHaveClass("border-white/14"));
 
     await fireEvent.focusIn(button);
     await fireEvent.pointerLeave(wrapper, { pointerType: "mouse" });
-    expect(rect.interactionActive()).toBe(true);
     expect(wrapper).toHaveClass("border-white/14");
-    expect(detached).toHaveClass("backdrop-blur-md");
 
     await fireEvent.focusOut(button, { relatedTarget: document.body });
-    expect(rect.interactionActive()).toBe(false);
-    await waitFor(() => {
-      expect(wrapper).toHaveClass("border-white/6");
-      expect(detached).not.toHaveClass("backdrop-blur-md");
-    });
+    await waitFor(() => expect(wrapper).toHaveClass("border-white/6"));
   });
 
   test("ignores touch pointer entry", async () => {
-    const { wrapper, detached, rect } = renderInteractiveShadow();
+    const { wrapper, rect } = renderInteractiveShadow();
     rect.setShadowState("warm");
 
     await fireEvent.pointerEnter(wrapper, { pointerType: "touch" });
 
-    expect(rect.interactionActive()).toBe(false);
     expect(wrapper).toHaveClass("border-white/6");
-    expect(detached).not.toHaveClass("backdrop-blur-md");
   });
 
-  test("requires the opt-in, source visibility, warm state, and active interaction", async () => {
-    const enabled = renderInteractiveShadow();
-    enabled.rect.setShadowState("mounted");
-    await fireEvent.pointerEnter(enabled.wrapper, { pointerType: "mouse" });
-    expect(enabled.rect.interactionActive()).toBe(true);
-    expect(enabled.detached).not.toHaveClass("backdrop-blur-md");
-    expect(enabled.wrapper).toHaveClass("border-white/0");
+  test("does not reveal the interaction border until the shadow is warm", async () => {
+    const { wrapper, rect } = renderInteractiveShadow();
+    rect.setShadowState("mounted");
+    await fireEvent.pointerEnter(wrapper, { pointerType: "mouse" });
+    expect(wrapper).toHaveClass("border-white/0");
 
-    enabled.rect.setShadowState("warm");
-    await waitFor(() => expect(enabled.detached).toHaveClass("backdrop-blur-md"));
-    enabled.rect.setVisible(false);
-    await waitFor(() => expect(enabled.detached).not.toHaveClass("backdrop-blur-md"));
-    enabled.page.unmount();
-    setState({ shadows: [], removedShadows: [] });
-
-    const disabled = renderInteractiveShadow(false);
-    disabled.rect.setShadowState("warm");
-    await fireEvent.pointerEnter(disabled.wrapper, { pointerType: "mouse" });
-    expect(disabled.rect.interactionActive()).toBe(true);
-    expect(disabled.wrapper).toHaveClass("border-white/14");
-    expect(disabled.detached).not.toHaveClass("backdrop-blur-md");
+    rect.setShadowState("warm");
+    await waitFor(() => expect(wrapper).toHaveClass("border-white/14"));
   });
 
-  test("keeps the dark fallback and entrance fade without transitioning backdrop-filter", async () => {
+  test("keeps the dark detached shadow and entrance fade without backdrop filtering", async () => {
     const { detached, rect } = renderInteractiveShadow();
     rect.setShadowState("ready");
 
     expect(detached).toHaveClass("bg-night-black/60");
-    expect(detached).not.toHaveClass("backdrop-blur-md");
+    expect(detached.className).not.toContain("backdrop-blur");
     expect(detached).not.toHaveClass("transition-all");
     expect(detached.className).toContain("transition-[width,height,transform,opacity,background-color]");
     expect(detached).toHaveClass("duration-[750ms]");

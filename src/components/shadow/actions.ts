@@ -108,10 +108,7 @@ export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition"
 export const addShadow = (
   shadowedEl: HTMLDivElement,
   origin: ShadowOriginOptions = "relative",
-  shadowRectOptions: Pick<
-    ShadowRect,
-    "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed" | "interactionActive" | "blurOnInteraction"
-  >,
+  shadowRectOptions: Pick<ShadowRect, "shadowState" | "setShadowState" | "warmupDelayMs" | "fixed">,
 ) => {
   if (typeof window === "undefined" || shadowedEl == null) return false;
 

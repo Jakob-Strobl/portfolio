@@ -73,8 +73,6 @@ function createShadowRect(element: HTMLDivElement, layout: MutableLayout, writeL
     setVisible: wrapSetter("visible", setVisibleSignal),
     snapToSource,
     setSnapToSource: wrapSetter("snap", setSnapToSourceSignal),
-    interactionActive: () => false,
-    blurOnInteraction: false,
     shadowState,
     setShadowState: wrapSetter("state", setShadowStateSignal),
     origin: { position: { x: layout.x, y: layout.y }, dimensions: { x: layout.width, y: layout.height } },
@@ -247,8 +245,6 @@ describe("Umbra shadow geometry observer", () => {
         setShadowState,
         warmupDelayMs: 0,
         fixed: false,
-        interactionActive: () => false,
-        blurOnInteraction: false,
       }),
     ).toBe(true);
     const shadow = state.shadows[0];
@@ -296,8 +292,6 @@ describe("Umbra shadow geometry observer", () => {
       setShadowState,
       warmupDelayMs: 0,
       fixed: true,
-      interactionActive: () => false,
-      blurOnInteraction: false,
     });
     const shadow = state.shadows[0];
     expect(shadow.position()).toEqual({ x: 20, y: 0 });

@@ -82,16 +82,12 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
 
     return rect.origin;
   });
-  const blurActive = createMemo(
-    () => rect.blurOnInteraction && rect.visible() && rect.shadowState() === "warm" && rect.interactionActive(),
-  );
 
   return (
     <div
       class={`
         absolute -z-10 rounded-lg
         bg-night-black/60
-        ${blurActive() ? "backdrop-blur-md" : ""}
         ${
           rect.snapToSource()
             ? "transition-none"

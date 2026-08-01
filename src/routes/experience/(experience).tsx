@@ -29,7 +29,6 @@ export default function Experience() {
             <hr class=" border-night-300 mt-2"></hr>
           </div>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={125}
             contentFadeInDelayMs={500}
             dataset={{
@@ -39,7 +38,6 @@ export default function Experience() {
             {LevelUpSection()}
           </Shadow>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={250}
             contentFadeInDelayMs={500}
             dataset={{
@@ -49,7 +47,6 @@ export default function Experience() {
             {CoxAutomotiveSection()}
           </Shadow>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -64,7 +61,6 @@ export default function Experience() {
             <hr class=" border-night-300 mt-2"></hr>
           </div>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -74,7 +70,6 @@ export default function Experience() {
             {UpittEducationSection()}
           </Shadow>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -85,7 +80,6 @@ export default function Experience() {
           </Shadow>
           {/* Certificates */}
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -100,7 +94,6 @@ export default function Experience() {
             <hr class=" border-night-300 mt-2"></hr>
           </div>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -110,7 +103,6 @@ export default function Experience() {
             {PolishPicSection()}
           </Shadow>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{
@@ -120,7 +112,6 @@ export default function Experience() {
             {WebcamSandboxSection()}
           </Shadow>
           <Shadow
-            blurOnInteraction
             warmupDelayMs={375}
             contentFadeInDelayMs={500}
             dataset={{

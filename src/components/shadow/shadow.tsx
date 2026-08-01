@@ -35,9 +35,6 @@ interface ShadowProps {
    */
   fixed?: boolean;
 
-  /** Add a backdrop blur to the detached shadow while this card is hovered or focused. */
-  blurOnInteraction?: boolean;
-
   dataset?: {
     [name: DataAttributeKey]: string | undefined;
   };
@@ -73,8 +70,6 @@ export default function Shadow(props: ShadowProps) {
       setShadowState,
       fixed: props.fixed ?? false,
       warmupDelayMs: props.warmupDelayMs ?? 0,
-      interactionActive,
-      blurOnInteraction: props.blurOnInteraction ?? false,
     });
   });
 
