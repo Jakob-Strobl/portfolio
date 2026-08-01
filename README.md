@@ -42,7 +42,7 @@ This portfolio site showcases professional experience through an interactive tim
 
 - **Framework**: SolidJS with SolidStart 2 RC (SSR-enabled)
 - **Styling**: Tailwind CSS v4
-- **Rendering**: Multiple custom WebGL 2 background effect models with custom GLSL vertex and fragment shaders
+- **Rendering**: Multiple custom WebGL 2 effect models with custom GLSL shaders
 - **Runtime**: Bun
 - **Deployment**: Cloudflare Pages through Nitro's `cloudflare_pages` preset and GitHub Actions CI/CD
 - **Testing**: Vitest + SolidJS Testing Library
@@ -50,14 +50,24 @@ This portfolio site showcases professional experience through an interactive tim
 
 ### Background Payload
 
-The background rewrite removes the old Three.js dependency and substantially reduces the effect payload. These figures compare the old production `waves` chunk with the current Vite build; sizes are decimal bytes, with gzip recompressed from the decoded JavaScript for an apples-to-apples comparison.
+The background rewrite removes the old Three.js dependency and substantially reduces the effect payload. These figures compare the old production `waves` chunk with the current Vite build; gzip is recompressed from the decoded JavaScript for an apples-to-apples comparison.
 
-| Background payload              | Uncompressed         | Gzip                 | Source                            |
-| ------------------------------- | -------------------- | -------------------- | --------------------------------- |
-| Old production waves + Three.js | 490,673 B (490.7 KB) | 124,896 B (124.9 KB) | Live `waves-CqeVZqS3.js` asset    |
-| Current custom effect models    | 29,422 B (29.4 KB)   | 10,512 B (10.5 KB)   | Current Vite `waves` client chunk |
+| Background payload              | Uncompressed | Gzip     | Source                            |
+| ------------------------------- | ------------ | -------- | --------------------------------- |
+| Old production waves + Three.js | 490.7 KB     | 124.9 KB | Live `waves-CqeVZqS3.js` asset    |
+| Current custom effect models    | 29.4 KB      | 10.5 KB  | Current Vite `waves` client chunk |
+| Reduction                       | 16.7×        | 11.9×    | Old payload ÷ current payload     |
 
-Cloudflare currently serves the old production asset with Brotli at 124,585 B; the table uses gzip for both generations. The current Vite build reports the same new chunk at 10.61 kB gzip. This comparison covers the background payload, not the complete initial client bundle.
+### Initial Payload Including Background
+
+| Initial client + background | Uncompressed | Gzip     |
+| --------------------------- | ------------ | -------- |
+| Old production              | 712.5 KB     | 196.2 KB |
+| Current build               | 324.3 KB     | 101.9 KB |
+
+Including the background payload, the current build is approximately **2.2× smaller raw** and **1.9× smaller gzip** than the old production payload.
+
+The first table isolates the background payload; the second includes the initial client assets plus the background payload.
 
 ## Custom Design Features
 
