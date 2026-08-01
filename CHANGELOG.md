@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.11.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.1...v0.11.0) (2026-08-01)
+
+
+### Features
+
+* add living tessellation background ([baaba42](https://github.com/Jakob-Strobl/portfolio/commit/baaba4223f47c93e1b5515bf4c400b2a2487e6e4))
+* add mass and wake to tessellation ([213f16b](https://github.com/Jakob-Strobl/portfolio/commit/213f16b95a6b82f134e306cc443c86596f6c0765))
+* add rounded portfolio favicon ([f015ac7](https://github.com/Jakob-Strobl/portfolio/commit/f015ac709ca88936d5e178bebdcc4bdc95ab0870))
+* add tessellation mirage fills ([c24b7e4](https://github.com/Jakob-Strobl/portfolio/commit/c24b7e4069a9828e0ae2e572f6a6092c383d6aca))
+* add tessellation relief lighting ([3f79bf4](https://github.com/Jakob-Strobl/portfolio/commit/3f79bf4936880bb561f26194091ae292aaab582f))
+* align project visit links with expand controls ([eefdd5d](https://github.com/Jakob-Strobl/portfolio/commit/eefdd5dff347aa006c469238313271f1ace8d654))
+* animate education card as a shadow ([75279b5](https://github.com/Jakob-Strobl/portfolio/commit/75279b5a29754d394c934de5f5bfabfa2633bd98))
+* blur active experience shadows ([b20187e](https://github.com/Jakob-Strobl/portfolio/commit/b20187efd2fb83a07f2b41290a27696ff1197a9e))
+* improve portfolio SEO and gallery metadata ([078fbfb](https://github.com/Jakob-Strobl/portfolio/commit/078fbfb8178e683351599240d45f5aed4a524067))
+* improve settings tooltip onboarding ([533df38](https://github.com/Jakob-Strobl/portfolio/commit/533df3827e2a33664f7fd47e75fd157ce91afebc))
+* rebuild interactive backgrounds ([1f34f46](https://github.com/Jakob-Strobl/portfolio/commit/1f34f46e87e2632e3efaa6ff2bed0917b5570661))
+* refine experience disclosures and projects ([fe8ce02](https://github.com/Jakob-Strobl/portfolio/commit/fe8ce025d10edbdb9622d1d9d782bc9c1a53ffae))
+* refine living tessellation motion ([6a41dd2](https://github.com/Jakob-Strobl/portfolio/commit/6a41dd2682037c75cf145e95209ecc9d27f98a20))
+* refine portfolio copy and contact layout ([ee30fc3](https://github.com/Jakob-Strobl/portfolio/commit/ee30fc345321a86553261fe3e4f04b62843e4d1c))
+* save background preferences ([b415a3d](https://github.com/Jakob-Strobl/portfolio/commit/b415a3da9ae1609c9eca364b0d3d7842cd5bbdb9))
+* seed wave palette phase ([15752e2](https://github.com/Jakob-Strobl/portfolio/commit/15752e2412998403d65ed884f19d313d8638f06b))
+
+
+### Bug Fixes
+
+* align home controls and reduce mobile anchors ([7b8a3c2](https://github.com/Jakob-Strobl/portfolio/commit/7b8a3c2caad5e3c03322502ffc172033d6dc742a))
+* avoid tessellation fill flicker ([b032f2c](https://github.com/Jakob-Strobl/portfolio/commit/b032f2cd73bd520e113d7b3cb45e7eb518e4e564))
+* keep disclosure labels visible on mobile ([6d62aec](https://github.com/Jakob-Strobl/portfolio/commit/6d62aecf49b5cddf18c088b386f76d4fb555372e))
+* match home control heights ([8004d0d](https://github.com/Jakob-Strobl/portfolio/commit/8004d0d5f605db42881ef920b180407a7562f8e8))
+* pin timeline row width ([bd59af7](https://github.com/Jakob-Strobl/portfolio/commit/bd59af7e039b2c5ef0be6a54a31dcee739c5336d))
+* refine experience summaries and contact email ([8f2bdeb](https://github.com/Jakob-Strobl/portfolio/commit/8f2bdeb7cd038c2e0cfcd0f6d214836af7336a9a))
+* remove tessellation pointer response ([c1c2161](https://github.com/Jakob-Strobl/portfolio/commit/c1c216184cae40f0babb265b75b97fbff9e00ff4))
+* settle shadow FLIP timing at 600ms ([91dd92a](https://github.com/Jakob-Strobl/portfolio/commit/91dd92ab0ec30e06e9eaa0e9845f943b4218f142))
+* smooth tessellation lifecycle transitions ([a659dab](https://github.com/Jakob-Strobl/portfolio/commit/a659dabdc8e5e1e5f833157ec20fc53eb1d68395))
+* smooth timeline fades and tune mobile tessellation ([3865547](https://github.com/Jakob-Strobl/portfolio/commit/386554713eb3a717475021a251e69b63dfd400f8))
+* soften tessellation background ([2f2a628](https://github.com/Jakob-Strobl/portfolio/commit/2f2a62881b7d70ad2380671a8deaf788724ba4cb))
+* stabilize collapsed experience card width ([86255ab](https://github.com/Jakob-Strobl/portfolio/commit/86255ab15df013d958ca65d03ece7b3e8787d686))
+* stabilize umbra across ssr and scroll ([728080b](https://github.com/Jakob-Strobl/portfolio/commit/728080b8a2eee6ab1effe559932a3a7e0f3d2ceb))
+* synchronize detached shadows during resize ([2239a6d](https://github.com/Jakob-Strobl/portfolio/commit/2239a6dc0db2420bbb5979ba7465a6e00d11a31f))
+* synchronize dynamic umbra geometry ([e939601](https://github.com/Jakob-Strobl/portfolio/commit/e939601058fef7e90e1e274375cf7e4a6d6793b5))
+* use compositor transforms for umbra entrances ([5dbc0f6](https://github.com/Jakob-Strobl/portfolio/commit/5dbc0f6ed98f928f412f6217325c79414c322dcb))
+* **vinxi:** runtime warning by adding dependency ([ab13393](https://github.com/Jakob-Strobl/portfolio/commit/ab13393ca22d794773d7263dedd39e9c347b27f3))
+
+
+### Performance Improvements
+
+* adapt background rendering policy ([a3c4ccf](https://github.com/Jakob-Strobl/portfolio/commit/a3c4ccf068a145c7d3d674807a16ece9d5c2bd7b))
+
 ## [0.10.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.0...v0.10.1) (2026-03-31)
 
 
