@@ -11,7 +11,7 @@ export default function Contact() {
   const [showClipboardBubble, setBubbleVisible] = createSignal<MouseEvent>();
 
   const clickEmailHandler = async (ev: MouseEvent) => {
-    const successful = await copyToClipboard(`${handle + "@"}jstrobl.com`);
+    const successful = await copyToClipboard(`${handle + "@"}jstrobl.dev`);
     if (successful) {
       setBubbleVisible(ev);
       setTimeout(() => setBubbleVisible(undefined), 2400);
@@ -67,7 +67,7 @@ export default function Contact() {
                 aria-label="Click to copy email to clipboard"
               >
                 {handle}
-                <span class="text-white p-2"> at </span>jstrobl.com
+                <span class="text-white p-2"> at </span>jstrobl.dev
                 {showClipboardBubble() != undefined && (
                   <NotifyBubble offset={{ x: 0, y: -8 }} originEvent={showClipboardBubble()}>
                     <p>Copied to clipboard!</p>
