@@ -18,10 +18,8 @@ export default function TimelineLayout(props: TimelineLayout) {
   const [isReady, setReady] = createSignal(false);
   const allIntersections = new Map<Element, IntersectionObserverEntry>();
   let contentContainerRef: HTMLDivElement | undefined;
-  // These margins and height have relation - need to work together to look good
-  // Gradient Height should at max be half the --spacing as the respective margin top rule
+  // Keep the top content margin in sync with the shared timeline gradient height.
   const topMargin = "lg:mt-80 md:mt-64 sm:mt-48 mt-32";
-  const gradientHeight = "lg:h-40 md:h-32 sm:h-24 h-16";
 
   // Holds the actual DOM elements we want to observe.
   // This will be populated once the contentContainerRef is available in the DOM. See createEffect below
@@ -72,12 +70,6 @@ export default function TimelineLayout(props: TimelineLayout) {
 
   return (
     <div class="flex flex-row h-screen items-center xs:justify-center justify-start">
-      {/* Top Horizontal Margin - gradient fade out content at top (fades around same time as background)*/}
-      <div
-        // 300vw to cover portrait to landscape orientations on mobile
-        class={`fixed top-0 left-0 w-[300vw] ${gradientHeight} z-10 duration-1000 bg-linear-to-b from-[#130d20] from-20% to-transparent`}
-        style={{ opacity: isReady() ? 1 : 0 }}
-      ></div>
       {/* LEFT Gutter */}
       <div class={`md:w-1/5 w-2/12 h-full flex flex-col items-end justify-start px-2  ${topMargin}`}>
         <div class="fixed md:max-w-3/4 max-w-1/2 w-fit">

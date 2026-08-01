@@ -3,6 +3,8 @@ import { normalizeSeed } from "./wave-model";
 
 export const TESSELLATION_MIN_INTERIOR_ANCHORS = 32;
 export const TESSELLATION_MAX_INTERIOR_ANCHORS = 48;
+export const TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS = 24;
+export const TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS = 30;
 export const TESSELLATION_TOPOLOGY_INTERVAL_SECONDS = 0.25;
 export const TESSELLATION_TRANSITION_SECONDS = 0.45;
 export const TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS = 0.8;
@@ -23,6 +25,10 @@ const FACET_LIGHT_X = -0.4243;
 const FACET_LIGHT_Y = 0.4949;
 const FACET_LIGHT_Z = 0.7576;
 const FACET_LIGHT_RESPONSE = 4;
+const TESSELLATION_MOBILE_BREAKPOINT = 768;
+const TESSELLATION_INITIAL_MIN_INTERIOR_ANCHORS = 36;
+const TESSELLATION_INITIAL_MAX_INTERIOR_ANCHORS = 42;
+const TESSELLATION_MOBILE_INITIAL_MAX_INTERIOR_ANCHORS = 30;
 
 export type TessellationAnchorState = "active" | "budding" | "retiring" | "dead";
 
@@ -84,6 +90,7 @@ export type TessellationModel = {
   eventElapsed: number;
   nextEventAt: number;
   aspectRatio: number;
+  viewportWidth: number;
   anchors: TessellationAnchor[];
   pulses: TessellationLifecyclePulse[];
 };
@@ -235,8 +242,34 @@ export function createTessellationValues(config: TessellationBackgroundConfig): 
   };
 }
 
-export function createTessellationModel(seed: number, aspectRatio = 16 / 9): TessellationModel {
+export function isTessellationMobileViewport(aspectRatio: number, viewportWidth = Number.POSITIVE_INFINITY) {
+  return viewportWidth <= TESSELLATION_MOBILE_BREAKPOINT || aspectRatio < 0.8;
+}
+
+export function getTessellationInteriorAnchorRange(aspectRatio: number, viewportWidth = Number.POSITIVE_INFINITY) {
+  if (isTessellationMobileViewport(aspectRatio, viewportWidth)) {
+    return {
+      minimum: TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS,
+      maximum: TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS,
+    };
+  }
+
+  return {
+    minimum: TESSELLATION_MIN_INTERIOR_ANCHORS,
+    maximum: TESSELLATION_MAX_INTERIOR_ANCHORS,
+  };
+}
+
+export function createTessellationModel(
+  seed: number,
+  aspectRatio = 16 / 9,
+  viewportWidth = Number.POSITIVE_INFINITY,
+): TessellationModel {
   const normalizedSeed = normalizeSeed(seed);
+  const normalizedAspectRatio = clamp(aspectRatio, 0.5, 2.5);
+  const normalizedViewportWidth = Number.isFinite(viewportWidth)
+    ? Math.max(1, viewportWidth)
+    : Number.POSITIVE_INFINITY;
   const model: TessellationModel = {
     seed: normalizedSeed,
     time: 0,
@@ -244,11 +277,19 @@ export function createTessellationModel(seed: number, aspectRatio = 16 / 9): Tes
     nextAnchorId: 0,
     eventElapsed: 0,
     nextEventAt: 0,
-    aspectRatio: clamp(aspectRatio, 0.5, 2.5),
+    aspectRatio: normalizedAspectRatio,
+    viewportWidth: normalizedViewportWidth,
     anchors: [],
     pulses: [],
   };
-  const interiorCount = 36 + Math.floor(nextRandom(model) * 7);
+  const mobileViewport = isTessellationMobileViewport(normalizedAspectRatio, normalizedViewportWidth);
+  const initialMinimum = mobileViewport
+    ? TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS
+    : TESSELLATION_INITIAL_MIN_INTERIOR_ANCHORS;
+  const initialMaximum = mobileViewport
+    ? TESSELLATION_MOBILE_INITIAL_MAX_INTERIOR_ANCHORS
+    : TESSELLATION_INITIAL_MAX_INTERIOR_ANCHORS;
+  const interiorCount = initialMinimum + Math.floor(nextRandom(model) * (initialMaximum - initialMinimum + 1));
 
   addInteriorAnchors(model, interiorCount);
   addBoundaryAnchors(model, interiorCount);
@@ -637,12 +678,11 @@ function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
   if (model.eventElapsed < model.nextEventAt) return;
   model.eventElapsed %= model.nextEventAt;
   const count = countInteriorAnchors(model);
-  const shouldBirth =
-    count <= TESSELLATION_MIN_INTERIOR_ANCHORS ||
-    (count < TESSELLATION_MAX_INTERIOR_ANCHORS && nextRandom(model) < 0.52);
+  const { minimum, maximum } = getTessellationInteriorAnchorRange(model.aspectRatio, model.viewportWidth);
+  const shouldBirth = count <= minimum || (count < maximum && nextRandom(model) < 0.52);
 
   if (shouldBirth) birthAnchor(model);
-  else if (count > TESSELLATION_MIN_INTERIOR_ANCHORS) retireAnchor(model);
+  else if (count > minimum) retireAnchor(model);
   model.nextEventAt = randomRange(model, 5.5, 9);
 }
 

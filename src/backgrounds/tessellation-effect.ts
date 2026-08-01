@@ -14,6 +14,7 @@ import {
   getTessellationMirageStyle,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
+  isTessellationMobileViewport,
   isTessellationTransitionComplete,
   pruneDeadTessellationAnchors,
   shouldResetTessellationAspect,
@@ -196,8 +197,8 @@ export function createTessellationEffect(
   let hasMeasuredViewport = false;
   let disposed = false;
 
-  function resetModel(aspectRatio: number) {
-    model = createTessellationModel(config.seed, aspectRatio);
+  function resetModel(aspectRatio: number, viewportWidth: number) {
+    model = createTessellationModel(config.seed, aspectRatio, viewportWidth);
     currentTopology = triangulateTessellation(model.anchors);
     previousTopology = undefined;
     topologyTime = 0;
@@ -256,7 +257,7 @@ export function createTessellationEffect(
     const seedChanged = nextConfig.seed !== config.seed;
     config = nextConfig;
     values = createTessellationValues(config);
-    if (seedChanged) resetModel(width / height);
+    if (seedChanged) resetModel(width / height, width);
   }
 
   update(initialConfig);
@@ -264,11 +265,18 @@ export function createTessellationEffect(
   return {
     resize(nextWidth, nextHeight) {
       const previousAspectRatio = width / height;
+      const wasMobileViewport = isTessellationMobileViewport(model.aspectRatio, model.viewportWidth);
       width = nextWidth;
       height = nextHeight;
       const aspectRatio = width / height;
-      if (shouldResetTessellationAspect(hasMeasuredViewport, previousAspectRatio, aspectRatio)) {
-        resetModel(aspectRatio);
+      const isMobileViewport = isTessellationMobileViewport(aspectRatio, width);
+      if (
+        shouldResetTessellationAspect(hasMeasuredViewport, previousAspectRatio, aspectRatio) ||
+        wasMobileViewport !== isMobileViewport
+      ) {
+        resetModel(aspectRatio, width);
+      } else {
+        model.viewportWidth = width;
       }
       hasMeasuredViewport = true;
       gl.useProgram(program);

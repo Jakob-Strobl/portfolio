@@ -13,9 +13,11 @@ import {
   getLifecyclePulseInfluence,
   getTessellationFillTransitionOpacities,
   getTessellationFacetLight,
+  getTessellationInteriorAnchorRange,
   getTessellationMirageStyle,
   getTessellationSpatialStyle,
   getTessellationTransitionWeights,
+  isTessellationMobileViewport,
   isTessellationTransitionComplete,
   TESSELLATION_MAX_INTERIOR_ANCHORS,
   TESSELLATION_MAX_LIFECYCLE_PULSES,
@@ -61,6 +63,24 @@ describe("living tessellation model", () => {
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x > 1)).toBe(true);
     expect(first.nextEventAt).toBeGreaterThanOrEqual(5.5);
     expect(first.nextEventAt).toBeLessThanOrEqual(9);
+  });
+
+  test("uses a smaller anchor population for mobile-sized viewports", () => {
+    const desktopRange = getTessellationInteriorAnchorRange(16 / 9, 1440);
+    const mobileRange = getTessellationInteriorAnchorRange(390 / 844, 390);
+    const desktop = createTessellationModel(123, 16 / 9, 1440);
+    const mobile = createTessellationModel(123, 390 / 844, 390);
+    const desktopInterior = desktop.anchors.filter((anchor) => !anchor.boundary);
+    const mobileInterior = mobile.anchors.filter((anchor) => !anchor.boundary);
+
+    expect(isTessellationMobileViewport(390 / 844, 390)).toBe(true);
+    expect(desktopRange).toEqual({
+      minimum: TESSELLATION_MIN_INTERIOR_ANCHORS,
+      maximum: TESSELLATION_MAX_INTERIOR_ANCHORS,
+    });
+    expect(mobileRange.maximum).toBeLessThan(desktopRange.minimum);
+    expect(mobileInterior.length).toBeLessThan(desktopInterior.length);
+    expect(mobileInterior.length).toBeLessThanOrEqual(mobileRange.maximum);
   });
 
   test("produces deterministic, nondegenerate Delaunay triangles with valid anchor ids", () => {

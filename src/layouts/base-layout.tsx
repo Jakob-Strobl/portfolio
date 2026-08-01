@@ -7,6 +7,7 @@ import { PostHogProvider } from "~/providers/posthog";
 
 import IsomorphicBackground from "../components/background";
 import Umbra from "../components/shadow/umbra";
+import TimelineGradient from "../components/timeline-gradient";
 
 export default function BaseLayout(props: RouteSectionProps) {
   return (
@@ -15,6 +16,7 @@ export default function BaseLayout(props: RouteSectionProps) {
       <PostHogProvider>
         <BackgroundProvider>
           <IsomorphicBackground></IsomorphicBackground>
+          <TimelineGradient></TimelineGradient>
           <main class="flex flex-row h-screen max-w-dvw items-center justify-center">
             <Umbra></Umbra>
             <Suspense>{props.children}</Suspense>
