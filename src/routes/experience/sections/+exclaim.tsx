@@ -1,19 +1,19 @@
 import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const ExclaimSection = () => (
-  <details class="group" open={false}>
+  <details class="group min-w-0 w-full" open={false}>
     <CollapsibleSummary label="View project details">
-      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h3>Exclaim</h3>
-        <h2 class="text-xl font-light">2021</h2>
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <h3 class="experience-card-title">Exclaim</h3>
+        <h2 class="experience-card-date">2021</h2>
       </div>
-      <p class="text-white/70">Rust</p>
-      <p class="mt-2 text-base text-white/80">
+      <p class="experience-card-tech">Rust</p>
+      <p class="experience-card-summary mt-2">
         A template language (exclaim-grammar) and compiler for static-site generation
       </p>
     </CollapsibleSummary>
 
-    <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
+    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
       <li>Designed an LL(1) grammar that enabled implementation of a non-backtracking recursive-descent parser</li>
       <li>
         Used an arena-allocated index-tree pattern for memory-performant AST generation without per-node allocations in

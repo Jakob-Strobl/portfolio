@@ -2,24 +2,19 @@ import Shadow from "../../components/shadow/shadow";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
 import { A } from "@solidjs/router";
-import { createSignal } from "solid-js";
 import { LevelUpSection } from "./sections/+level-up";
 import { CoxAutomotiveSection } from "./sections/+cox-automotive";
 import { UpittTaSection } from "./sections/+pitt-ta";
-import { UpittEducationSection } from "./sections/+pitt-education";
-import { YonseiEducationSection } from "./sections/+yonsei-education";
+import { EducationSection } from "./sections/+education";
 import { PolishPicSection } from "./sections/+polish-pic";
 import { WebcamSandboxSection } from "./sections/+webcam-sandbox";
 import { ExclaimSection } from "./sections/+exclaim";
-import { CertificatesSection } from "./sections/+certificates";
 import { TimedatSection } from "./sections/+timedat";
-import CollapsibleSummary from "~/components/collapsible-summary";
+import { SkillsSection } from "./sections/+skills";
 import Seo from "~/components/seo";
 import { PRODUCT_ENTITIES } from "~/data/seo";
 
 export default function Experience() {
-  const [isEducationExpanded, setIsEducationExpanded] = createSignal(false);
-
   return (
     <>
       <Seo
@@ -40,8 +35,8 @@ export default function Experience() {
         content={
           <>
             <div>
-              <h1 class="text-4xl text-white">Experience</h1>
-              <hr class=" border-night-300 mt-2"></hr>
+              <h1 class="experience-section-title">Experience</h1>
+              <hr class="mt-2 border-night-300" />
             </div>
             <Shadow
               warmupDelayMs={125}
@@ -72,12 +67,12 @@ export default function Experience() {
             </Shadow>
             {/* Education */}
             <div>
-              <h2 class="text-4xl text-white">Education</h2>
+              <h2 class="experience-section-title">Education</h2>
               <hr class="mt-2 border-night-300" />
             </div>
             {EducationSection()}
             <div>
-              <h2 class="text-4xl text-white">Technical Skills</h2>
+              <h2 class="experience-section-title">Technical Skills</h2>
               <hr class="mt-2 border-night-300" />
             </div>
             <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
@@ -85,7 +80,7 @@ export default function Experience() {
             </Shadow>
             {/* Projects */}
             <div>
-              <h2 class="text-4xl text-white">Projects</h2>
+              <h2 class="experience-section-title">Projects</h2>
               <hr class="mt-2 border-night-300" />
             </div>
             <Shadow

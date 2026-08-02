@@ -3,7 +3,7 @@ import ExternalLink from "lucide-solid/icons/external-link";
 import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const PolishPicSection = () => (
-  <details class="group" open={false}>
+  <details class="group min-w-0 w-full" open={false}>
     <CollapsibleSummary
       label="View project details"
       actions={
@@ -18,15 +18,17 @@ export const PolishPicSection = () => (
         </a>
       }
     >
-      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h3>Polish Pic</h3>
-        <h2 class="text-xl font-light">Oct 2025 - Present</h2>
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <h3 class="experience-card-title">Polish Pic</h3>
+        <h2 class="experience-card-date">Oct 2025 - Present</h2>
       </div>
-      <p class="text-white/70">Svelte 5, SvelteKit, Rust/WebAssembly, Tailwind CSS v4, Cloudflare Durable Objects</p>
-      <p class="mt-2 text-base text-white/80">A privacy-first image-processing SaaS with AI image generation</p>
+      <p class="experience-card-tech">
+        Svelte 5, SvelteKit, Rust/WebAssembly, Tailwind CSS v4, Cloudflare Durable Objects
+      </p>
+      <p class="experience-card-summary mt-2">A privacy-first image-processing SaaS with AI image generation</p>
     </CollapsibleSummary>
 
-    <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
+    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
       <li>Uses Durable Objects to coordinate image-generation sessions and record usage across requests</li>
       <li>
         Optimizes client-side image processing with WebAssembly, a Rust image engine, and asynchronous web workers to

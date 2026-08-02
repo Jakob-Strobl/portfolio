@@ -4,49 +4,49 @@ export const CoxAutomotiveSection = () => (
   <details class="group min-w-0 w-full" open={false}>
     <CollapsibleSummary label="View full role history">
       <div>
-        <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-          <h2>Cox Automotive</h2>
-          <h3 class="text-xl font-light">Aug 2021 - Jul 2025</h3>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          <h2 class="experience-card-title">Cox Automotive</h2>
+          <h3 class="experience-card-date">Aug 2021 - Jul 2025</h3>
         </div>
-        <p class="text-lg text-white/70">Full-stack developer · Remote (Arlington, VA)</p>
+        <p class="experience-card-meta">Full-stack developer · Remote (Arlington, VA)</p>
       </div>
 
       <div class="mt-3 space-y-3 text-base">
         <div>
-          <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-lg">
-            <h3>Software Engineer II</h3>
-            <span class="font-light">Mar 2023</span>
+          <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h3 class="experience-card-subtitle">Software Engineer II</h3>
+            <span class="experience-card-date">Mar 2023</span>
           </div>
-          <p class="mt-1 text-sm text-white/80">
+          <p class="mt-1 experience-card-summary">
             • Automated upgrades for 10,000+ dealers with a custom .NET worker, saving more than 20,000 hours of manual
             work
           </p>
         </div>
         <div>
-          <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-lg">
-            <h3>Software Engineer I</h3>
-            <span class="font-light">Aug 2021</span>
+          <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h3 class="experience-card-subtitle">Software Engineer I</h3>
+            <span class="experience-card-date">Aug 2021</span>
           </div>
-          <p class="mt-1 text-sm text-white/80">
+          <p class="mt-1 experience-card-summary">
             • Built a web-component library and delivered the Intelligent Promotions UI within seven months
           </p>
         </div>
       </div>
     </CollapsibleSummary>
 
-    <div class="mt-4 space-y-4 border-t border-white/10 pt-4">
+    <div class="experience-card-expanded space-y-4">
       <div>
-        <p class="text-base text-white/70">
+        <p class="experience-card-meta">
           B2B SaaS web applications for merchandising: Intelligent Promotions and vAuto
         </p>
-        <p class="text-sm text-white/60">
+        <p class="experience-card-tech">
           TypeScript, StencilJS, Tailwind CSS, SCSS, Terraform, C#/.NET, GitHub Actions, AWS, React, New Relic
         </p>
       </div>
 
       <div>
-        <p class="text-sm text-white/60">Additional contributions as Software Engineer II</p>
-        <ul class="mt-1 list-inside list-disc space-y-1 text-base text-white/80">
+        <p class="experience-card-detail-label">Additional contributions as Software Engineer II</p>
+        <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
           <li>Onboarded teams to existing front-end projects and mentored them as a front-end subject-matter expert</li>
           <li>
             Revamped the front-end CI/CD pipeline to streamline internal deployments and testing, shortening the
@@ -61,8 +61,8 @@ export const CoxAutomotiveSection = () => (
       </div>
 
       <div>
-        <p class="text-sm text-white/60">Additional contributions as Software Engineer I</p>
-        <ul class="mt-1 list-inside list-disc space-y-1 text-base text-white/80">
+        <p class="experience-card-detail-label">Additional contributions as Software Engineer I</p>
+        <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
           <li>
             Built a custom "Smart Fields" HTML5 text editor with a language parser, syntax highlighting, autocomplete,
             and backward compatibility

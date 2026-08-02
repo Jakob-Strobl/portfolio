@@ -1,20 +1,20 @@
 import CollapsibleSummary from "~/components/collapsible-summary";
 
 export const WebcamSandboxSection = () => (
-  <details class="group" open={false}>
+  <details class="group min-w-0 w-full" open={false}>
     <CollapsibleSummary label="View project details">
-      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-2xl">
-        <h3>3D Webcam Sandbox</h3>
-        <h2 class="text-xl font-light">2023 - Present</h2>
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <h3 class="experience-card-title">3D Webcam Sandbox</h3>
+        <h2 class="experience-card-date">2023 - Present</h2>
       </div>
-      <p class="text-white/70">Godot, GDScript, Rust with gdext, Nokhwa, OpenSeeFace (Python)</p>
-      <p class="mt-2 text-base text-white/80">
+      <p class="experience-card-tech">Godot, GDScript, Rust with gdext, Nokhwa, OpenSeeFace (Python)</p>
+      <p class="experience-card-summary mt-2">
         A real-time 3D VTuber renderer that maps tracked facial movement onto 3D models and updates their textures from
         a live video feed
       </p>
     </CollapsibleSummary>
 
-    <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
+    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
       <li>Built a Rust subprocess kernel for asynchronous, real-time FFI message passing</li>
       <li>
         Implemented virtual video splitting to provide separate feeds for face-tracker input and game-engine textures

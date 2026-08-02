@@ -104,6 +104,55 @@
 }
 
 @layer components {
+  .experience-section-title {
+    @apply text-4xl leading-10 text-white;
+  }
+
+  .experience-card-title {
+    @apply text-2xl leading-8 text-white;
+  }
+
+  .experience-card-subtitle {
+    @apply text-lg leading-7 text-white;
+  }
+
+  .experience-card-date {
+    @apply text-lg leading-7 font-light text-white/80;
+  }
+
+  .experience-card-meta {
+    @apply text-base leading-6 text-white/70;
+  }
+
+  .experience-card-tech {
+    @apply text-sm leading-5 text-white/70;
+  }
+
+  .experience-card-summary,
+  .experience-card-body {
+    @apply text-base leading-6 text-white/80;
+  }
+
+  .experience-card-muted {
+    @apply text-sm leading-5 text-white/60;
+  }
+
+  .experience-card-detail-label {
+    @apply text-sm leading-5 font-medium text-white/70;
+  }
+
+  .experience-card-expanded {
+    @apply mt-4 border-t border-white/10 pt-4;
+  }
+
+  .experience-card-inline-expanded {
+    @apply mt-3 pt-3;
+  }
+
+  .experience-card-control {
+    @apply cursor-pointer gap-1 text-sm font-medium text-white/70 transition-colors duration-200 hover:text-night-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300;
+  }
+
   .details-summary {
     list-style: none;
   }
