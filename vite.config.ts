@@ -8,10 +8,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [tailwindcss(), glsl(), solidStart({ solid: { ssr: true } }), nitro()],
   resolve: { conditions: ["development", "browser"] },
-  esbuild: {
-    define: {
-      "process.env.PROJECT_VERSION": JSON.stringify(Package.version),
-    },
+  define: {
+    "process.env.PROJECT_VERSION": JSON.stringify(Package.version),
   },
   nitro: {
     preset: "cloudflare_pages",
