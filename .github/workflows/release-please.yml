@@ -36,9 +36,9 @@ jobs:
           # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           target-branch: ${{ github.ref_name }} # main
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: node
+          # Advanced Release Please settings live in the manifest configuration.
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
           # Because of this open issue, https://github.com/googleapis/release-please-action/issues/937
           # when we set skip-pull-request to true but skip-release to false, the action does not make a release
           # From how I read the docs, this seems like a bug, but I'm not in the mood to go down that rabbit hole now
