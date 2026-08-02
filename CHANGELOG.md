@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.0...v0.11.1) (2026-08-02)
+
+
+### Bug Fixes
+
+* **build:** make Bun release verification reproducible ([d19c862](https://github.com/Jakob-Strobl/portfolio/commit/d19c8620191812387d39718f0e19cda81316de1a))
+* **worker:** configure standalone Wrangler deployment ([05e922f](https://github.com/Jakob-Strobl/portfolio/commit/05e922f36e7a0a929877031ed64056d91a02cd76))
+
 ## [0.11.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.10.1...v0.11.0) (2026-08-01)
 
 
