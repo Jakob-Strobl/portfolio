@@ -5,6 +5,8 @@ export const TESSELLATION_MIN_INTERIOR_ANCHORS = 32;
 export const TESSELLATION_MAX_INTERIOR_ANCHORS = 48;
 export const TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS = 16;
 export const TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS = 24;
+export const TESSELLATION_MIN_LIFECYCLE_EVENT_INTERVAL_SECONDS = 5.5;
+export const TESSELLATION_MAX_LIFECYCLE_EVENT_INTERVAL_SECONDS = 12;
 export const TESSELLATION_TOPOLOGY_INTERVAL_SECONDS = 0.25;
 export const TESSELLATION_TRANSITION_SECONDS = 0.45;
 export const TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS = 0.8;
@@ -14,6 +16,11 @@ const BIRTH_DURATION_SECONDS = 1.8;
 const RETIRE_DURATION_SECONDS = 2.4;
 const BOUNDARY_MARGIN = 0.09;
 const TAU = Math.PI * 2;
+// Each anchor moves by at most ±0.08 hue units. Therefore the animated span
+// can add at most 2 × 0.08 = 0.16 cycles to the seeded [0, 1] base span, for a
+// theoretical upper bound of 1.16 hue cycles. The actual span oscillates below
+// that bound rather than growing with model time.
+const ANCHOR_HUE_SWING = 0.08;
 const LIFECYCLE_PULSE_DURATION_SECONDS = 3.2;
 const LIFECYCLE_ACCELERATION = 0.065;
 const LIFECYCLE_HOME_SHIFT_RATE = 0.0075;
@@ -25,6 +32,10 @@ const FACET_LIGHT_X = -0.4243;
 const FACET_LIGHT_Y = 0.4949;
 const FACET_LIGHT_Z = 0.7576;
 const FACET_LIGHT_RESPONSE = 4;
+// Keep stained-glass facets as an accent. The lower threshold modestly raises
+// their frequency while the soft band preserves a gradual, non-distracting edge.
+const STAINED_GLASS_SELECTION_THRESHOLD = 0.6;
+const STAINED_GLASS_SELECTION_SOFTNESS = 0.2;
 const TESSELLATION_MOBILE_BREAKPOINT = 768;
 const TESSELLATION_INITIAL_MIN_INTERIOR_ANCHORS = 36;
 const TESSELLATION_INITIAL_MAX_INTERIOR_ANCHORS = 42;
@@ -293,7 +304,11 @@ export function createTessellationModel(
 
   addInteriorAnchors(model, interiorCount);
   addBoundaryAnchors(model, interiorCount);
-  model.nextEventAt = randomRange(model, 5.5, 9);
+  model.nextEventAt = randomRange(
+    model,
+    TESSELLATION_MIN_LIFECYCLE_EVENT_INTERVAL_SECONDS,
+    TESSELLATION_MAX_LIFECYCLE_EVENT_INTERVAL_SECONDS,
+  );
   return model;
 }
 
@@ -423,7 +438,7 @@ function spatialNoise(seed: number, x: number, y: number, scale: number, salt: n
 export function getTessellationSpatialStyle(seed: number, x: number, y: number): TessellationTriangleStyle {
   const selectionField =
     spatialNoise(seed, x, y, 2.4, 0x51ed270b) * 0.72 + spatialNoise(seed, x, y, 5.2, 0xa24baed4) * 0.28;
-  const selection = smoothstep((selectionField - 0.62) / 0.2);
+  const selection = smoothstep((selectionField - STAINED_GLASS_SELECTION_THRESHOLD) / STAINED_GLASS_SELECTION_SOFTNESS);
   const strength = selection * 0.21;
   const seedHue = normalizeSeed(seed) / 4294967296;
   const hueField = spatialNoise(seed, x, y, 1.8, 0x9fb21c65);
@@ -567,7 +582,13 @@ export function getAnchorGlow(model: TessellationModel, anchor: TessellationAnch
 }
 
 export function getAnchorHue(model: TessellationModel, anchor: TessellationAnchor) {
-  return anchor.hue + model.time * anchor.hueRate;
+  // Vertex hues are interpolated across every edge and facet before the
+  // shader samples its periodic rainbow palette. A linearly accumulated,
+  // per-anchor phase eventually spans several palette cycles and creates the
+  // long-running rainbow banding seen after repeated lifecycle events. Keep
+  // the individual motion periodic and bounded; the shader still supplies the
+  // shared slow color drift.
+  return anchor.hue + Math.sin(model.time * anchor.hueRate * TAU) * ANCHOR_HUE_SWING;
 }
 
 export function consumeTopologyTime(accumulatedSeconds: number, deltaSeconds: number) {
@@ -683,7 +704,11 @@ function updateLifecycle(model: TessellationModel, deltaSeconds: number) {
 
   if (shouldBirth) birthAnchor(model);
   else if (count > minimum) retireAnchor(model);
-  model.nextEventAt = randomRange(model, 5.5, 9);
+  model.nextEventAt = randomRange(
+    model,
+    TESSELLATION_MIN_LIFECYCLE_EVENT_INTERVAL_SECONDS,
+    TESSELLATION_MAX_LIFECYCLE_EVENT_INTERVAL_SECONDS,
+  );
 }
 
 function advanceMotionStep(model: TessellationModel, deltaSeconds: number) {

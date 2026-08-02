@@ -24,7 +24,9 @@ import {
   TESSELLATION_MOBILE_MAX_INTERIOR_ANCHORS,
   TESSELLATION_MOBILE_MIN_INTERIOR_ANCHORS,
   TESSELLATION_MIN_INTERIOR_ANCHORS,
+  TESSELLATION_MIN_LIFECYCLE_EVENT_INTERVAL_SECONDS,
   TESSELLATION_MIN_TOPOLOGY_DWELL_SECONDS,
+  TESSELLATION_MAX_LIFECYCLE_EVENT_INTERVAL_SECONDS,
   TESSELLATION_TOPOLOGY_INTERVAL_SECONDS,
   TESSELLATION_TRANSITION_SECONDS,
   shouldResetTessellationAspect,
@@ -63,8 +65,8 @@ describe("living tessellation model", () => {
     expect(new Set(interior.map((anchor) => anchor.relief)).size).toBeGreaterThan(1);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x < 0)).toBe(true);
     expect(first.anchors.some((anchor) => anchor.boundary && anchor.x > 1)).toBe(true);
-    expect(first.nextEventAt).toBeGreaterThanOrEqual(5.5);
-    expect(first.nextEventAt).toBeLessThanOrEqual(9);
+    expect(first.nextEventAt).toBeGreaterThanOrEqual(TESSELLATION_MIN_LIFECYCLE_EVENT_INTERVAL_SECONDS);
+    expect(first.nextEventAt).toBeLessThanOrEqual(TESSELLATION_MAX_LIFECYCLE_EVENT_INTERVAL_SECONDS);
   });
 
   test("uses a smaller anchor population for mobile-sized viewports", () => {
@@ -260,7 +262,7 @@ describe("living tessellation model", () => {
     expect(Math.max(...samples)).toBeLessThanOrEqual(1);
   });
 
-  test("keeps hue continuous across the shader palette wrap boundary", () => {
+  test("keeps interpolated hues bounded after long-lived lifecycle motion", () => {
     const model = createTessellationModel(27);
     const anchor = model.anchors.find((candidate) => !candidate.boundary)!;
     anchor.hue = 0.99;
@@ -270,9 +272,12 @@ describe("living tessellation model", () => {
     model.time = 1.1;
     const afterWrap = getAnchorHue(model, anchor);
 
-    expect(beforeWrap).toBeCloseTo(0.999);
-    expect(afterWrap).toBeCloseTo(1.001);
-    expect(afterWrap - beforeWrap).toBeCloseTo(0.002);
+    expect(Math.abs(afterWrap - beforeWrap)).toBeLessThan(0.01);
+
+    model.time = 600;
+    const hues = model.anchors.map((candidate) => getAnchorHue(model, candidate));
+    expect(Math.max(...hues) - Math.min(...hues)).toBeLessThan(1.2);
+    expect(hues.every((hue) => hue >= -0.09 && hue <= 1.09)).toBe(true);
   });
 
   test("selects stained-glass facets from a sparse continuous seeded spatial field", () => {
