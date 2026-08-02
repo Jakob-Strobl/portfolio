@@ -9,13 +9,16 @@ export const ExclaimSection = () => (
       </div>
       <p class="text-white/70">Rust</p>
       <p class="mt-2 text-base text-white/80">
-        A template language (exclaim-grammar) and compiler for static site generation
+        A template language (exclaim-grammar) and compiler for static-site generation
       </p>
     </CollapsibleSummary>
 
     <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
-      <li>Implemented a non-backtracking recursive descent parser by designing an LL(1) grammar</li>
-      <li>Utilized arena-allocated index tree pattern for memory-performant AST generation</li>
+      <li>Designed an LL(1) grammar that enabled implementation of a non-backtracking recursive-descent parser</li>
+      <li>
+        Used an arena-allocated index-tree pattern for memory-performant AST generation without per-node allocations in
+        the hot loop
+      </li>
     </ul>
   </details>
 );

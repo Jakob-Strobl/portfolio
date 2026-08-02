@@ -152,9 +152,9 @@ describe("Experience Page", () => {
         expect(upittElements.length).toBeGreaterThanOrEqual(1);
       });
 
-      it("displays degree (B.S. Computer Science)", async () => {
+      it("displays degree (B.S. in Computer Science)", async () => {
         const page = await renderExperiencePage();
-        expect(page.getByText(/B\.S\. Computer Science/i)).toBeInTheDocument();
+        expect(page.getByText(/B\.S\. in Computer Science/i)).toBeInTheDocument();
       });
 
       it("displays honors (Summa Cum Laude)", async () => {

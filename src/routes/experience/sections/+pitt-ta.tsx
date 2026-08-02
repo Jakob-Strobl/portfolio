@@ -11,15 +11,19 @@ export const UpittTaSection = () => (
             <h3>Undergraduate Teaching Assistant</h3>
             <span class="font-light">Spring 2018, Fall 2019, Spring 2020</span>
           </div>
-          <p class="text-base text-white/70">• Led labs where students implemented core concepts from lectures</p>
+          <p class="text-base text-white/70">
+            • Led weekly lab sessions where students applied core concepts from lectures
+          </p>
         </div>
 
         <div>
           <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-lg">
-            <h3>TLI - Tech Divaz & High School Academy Summer Camp</h3>
+            <h3>TLI — Tech Divaz & High School Academy Summer Camp</h3>
             <span class="font-light">Summer 2018</span>
           </div>
-          <p class="text-base text-white/70">• Taught computer science and web fundamentals (HTML5 & JavaScript)</p>
+          <p class="text-base text-white/70">
+            • Taught computer science and web-development fundamentals in HTML5 and JavaScript
+          </p>
         </div>
       </div>
     </CollapsibleSummary>
@@ -28,8 +32,8 @@ export const UpittTaSection = () => (
       <div>
         <p class="text-base text-white/70">Computer Science Department</p>
         <ul class="mt-1 list-inside list-disc space-y-1 text-base text-white/80">
-          <li>Reinforced important course concepts by designing presentations and examples</li>
-          <li>Mentored and assisted students during weekly office hours</li>
+          <li>Reinforced course concepts through presentations and examples</li>
+          <li>Mentored students during weekly office hours</li>
         </ul>
       </div>
 
@@ -38,7 +42,7 @@ export const UpittTaSection = () => (
         <ul class="mt-1 list-inside list-disc space-y-1">
           <li>CS0008 - Intro to Programming with Python</li>
           <li>CS0401 - Intermediate Programming in Java</li>
-          <li>CS0447 - Computer Org. & Assembly</li>
+          <li>CS0447 — Computer Organization and Assembly</li>
           <li>
             CS0449 - Intro to Systems Programming with C
             <ul class="mt-1 ml-4 list-inside list-disc space-y-1">
@@ -49,7 +53,7 @@ export const UpittTaSection = () => (
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Attack Lab Primer - YouTube 2020
+                  Attack Lab primer (YouTube, 2020)
                 </a>
               </li>
             </ul>
@@ -61,7 +65,7 @@ export const UpittTaSection = () => (
         <h3 class="text-lg">Lead Instructor</h3>
         <p class="text-base text-white/70">Grades 6-12 · Summer 2018</p>
         <ul class="mt-1 list-inside list-disc space-y-1 text-base text-white/80">
-          <li>Expanded on HTML5 concepts with a follow-along canvas game, a 'Space-Invaders' clone</li>
+          <li>Expanded on HTML5 concepts through a follow-along canvas game: a Space Invaders clone</li>
         </ul>
       </div>
     </div>

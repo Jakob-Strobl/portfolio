@@ -4,12 +4,12 @@ export const UpittEducationSection = () => (
     <div>
       <div class="text-lg mt-2 flex justify-between flex-wrap">
         <h2>
-          B.S. Computer Science - <span class="font-medium">Summa Cum Laude Honors Graduate</span>
+          B.S. in Computer Science — <span class="font-medium">summa cum laude</span>
         </h2>
         <h3 class="font-light">2016 - 2020</h3>
       </div>
       <div class="flex justify-between text-white/70 text-base flex-wrap">
-        <h2>Minor in Korean Language, Asian Studies Certificate</h2>
+        <h2>Minor in Korean Language · Certificate in Asian Studies</h2>
         <h3>GPA: 3.79/4.00 · Major GPA: 3.81/4.00</h3>
       </div>
     </div>

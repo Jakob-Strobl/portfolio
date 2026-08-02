@@ -22,15 +22,16 @@ export const PolishPicSection = () => (
         <h3>Polish Pic</h3>
         <h2 class="text-xl font-light">Oct 2025 - Present</h2>
       </div>
-      <p class="text-white/70">Svelte 5 with SvelteKit, Rust + WASM, Tailwind v4, Cloudflare Durable Objects</p>
-      <p class="mt-2 text-base text-white/80">
-        A privacy-preserving image processing SaaS with AI-powered image generation
-      </p>
+      <p class="text-white/70">Svelte 5, SvelteKit, Rust/WebAssembly, Tailwind CSS v4, Cloudflare Durable Objects</p>
+      <p class="mt-2 text-base text-white/80">A privacy-first image-processing SaaS with AI image generation</p>
     </CollapsibleSummary>
 
     <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
-      <li>Uses Durable Objects to coordinate image-generation sessions and track usage across requests</li>
-      <li>Optimized client-side image processing with WebAssembly and Rust image engine</li>
+      <li>Uses Durable Objects to coordinate image-generation sessions and record usage across requests</li>
+      <li>
+        Optimizes client-side image processing with WebAssembly, a Rust image engine, and asynchronous web workers to
+        keep the UI responsive by moving work off the main thread
+      </li>
     </ul>
   </details>
 );

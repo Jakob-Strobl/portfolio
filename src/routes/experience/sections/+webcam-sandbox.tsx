@@ -9,15 +9,17 @@ export const WebcamSandboxSection = () => (
       </div>
       <p class="text-white/70">Godot, Rust with gdext, Nokhwa, OpenSeeFace</p>
       <p class="mt-2 text-base text-white/80">
-        A real-time 3D renderer with face tracking that rigs face movements to any 3D model and simultaneously updates
-        texture resources with the video feed
+        A real-time 3D renderer that maps tracked facial movement onto 3D models and updates their textures from a live
+        video feed
       </p>
     </CollapsibleSummary>
 
     <ul class="mt-4 list-inside list-disc space-y-1 border-t border-white/10 pt-4 text-base text-white/80">
-      <li>Developed a Rust sub-process kernel for real-time async FFI message passing and handling</li>
-      <li>Implemented virtualized video splitting for face tracker input and game engine textures</li>
-      <li>Used traits for dependency injection, enabling mock-based testing of system-level behavior</li>
+      <li>Built a Rust subprocess kernel for asynchronous, real-time FFI message passing</li>
+      <li>
+        Implemented virtual video splitting to provide separate feeds for face-tracker input and game-engine textures
+      </li>
+      <li>Used traits for dependency injection to enable mock-based system tests locally and on CI runners</li>
     </ul>
   </details>
 );

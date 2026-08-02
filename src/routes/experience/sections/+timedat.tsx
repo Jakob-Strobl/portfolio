@@ -22,21 +22,23 @@ export const TimedatSection = () => (
         <h3>timedat</h3>
         <h2 class="text-xl font-light">2026 - Present</h2>
       </div>
-      <p class="text-white/70">Product design · Full-stack web application</p>
+      <p class="text-white/70">Product design and full-stack development</p>
       <p class="mt-2 text-base text-white/80">
-        A time tracker for freelancers, teams, and founders tracking billable work and sweat equity in the AI
-        era—without screen surveillance or productivity scoring.
+        A privacy-first time tracker for freelancers, teams, and founders to record billable work and sweat
+        equity—without screen surveillance or productivity scoring.
       </p>
     </CollapsibleSummary>
 
     <div class="mt-4 border-t border-white/10 pt-4">
       <ul class="list-inside list-disc space-y-1 text-base text-white/80">
+        <li>Designed parallel-task tracking to allocate overlapping time across tasks without double-counting it</li>
         <li>
-          Designed parallel-task tracking that lets people split overlapping work fairly instead of double-counting time
+          Built flexible, portable live sessions backed by Convex's ACID-compliant database, with a custom diff builder
+          for manual edits and saves while a session is active
         </li>
-        <li>Built a keyboard-first workflow around always-on timers, quick switching, projects, and custom reports</li>
         <li>
-          Made session history and overlap review audit-ready while keeping the interface calm and distraction-free
+          Tracked fine-grained slices of task activity, breaks, and task switches in live sessions, so people can review
+          active-time overlaps without double-counting ad hoc work logged while another session was paused
         </li>
       </ul>
     </div>

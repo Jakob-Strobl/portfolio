@@ -24,7 +24,7 @@ export default function Experience() {
     <>
       <Seo
         title="Experience & Projects | Jakob Strobl"
-        description="Explore Jakob Strobl's professional experience, education, and products—from full-stack engineering and cloud infrastructure to privacy-first SaaS."
+        description="Explore Jakob Strobl's professional experience, education, and projects across full-stack engineering, cloud infrastructure, and privacy-first product development."
         path="/experience"
         structuredData={PRODUCT_ENTITIES}
       />
@@ -81,7 +81,7 @@ export default function Experience() {
                 class="rounded-lg border border-white/10 px-2 py-3 lg:px-3 lg:py-4"
                 onToggle={(event) => setIsEducationExpanded(event.currentTarget.open)}
               >
-                <CollapsibleSummary label="Show education">
+                <CollapsibleSummary label="Show education and credentials">
                   <h2 class="text-4xl text-white">Education & Credentials</h2>
                   <p class="mt-1 text-sm text-white/60">Academic background and professional credentials</p>
                 </CollapsibleSummary>

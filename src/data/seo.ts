@@ -40,7 +40,7 @@ export const PRODUCT_ENTITIES: JsonLdNode[] = [
     url: "https://timedat.app/",
     sameAs: "https://timedat.app/",
     description:
-      "A time tracker for freelancers, teams, and founders tracking billable work and sweat equity in the AI era—without screen surveillance or productivity scoring.",
+      "A privacy-first time tracker for freelancers, teams, and founders to record billable work and sweat equity—without screen surveillance or productivity scoring.",
     creator: { "@id": PERSON_ID },
   },
   {
@@ -49,7 +49,7 @@ export const PRODUCT_ENTITIES: JsonLdNode[] = [
     name: "Polish Pic",
     url: "https://polishpic.com/",
     sameAs: "https://polishpic.com/",
-    description: "A privacy-preserving image processing SaaS with AI-powered image generation.",
+    description: "A privacy-first image-processing SaaS with AI image generation.",
     creator: { "@id": PERSON_ID },
   },
 ];
