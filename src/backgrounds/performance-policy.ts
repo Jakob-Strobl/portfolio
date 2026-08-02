@@ -27,6 +27,10 @@ export type BackgroundPerformanceObserver = {
   dispose(): void;
 };
 
+const LOW_QUALITY_RESOLUTION_SCALE = 0.75;
+const MAX_AUTO_DEVICE_PIXEL_RATIO = 2;
+const MAX_COARSE_POINTER_RESOLUTION_SCALE = 1.5;
+
 export const DEFAULT_BACKGROUND_PREFERENCES: BackgroundRuntimePreferences = {
   quality: "auto",
   frameRate: "auto",
@@ -43,9 +47,23 @@ export function resolveBackgroundFrameMode(
   return hints.coarsePointer ? "30" : "display";
 }
 
-export function resolveBackgroundResolutionScale(quality: BackgroundQuality, coarsePointer: boolean) {
-  if (quality === "low") return 0.75;
-  return coarsePointer ? 0.75 : 1;
+export function resolveBackgroundResolutionScale(
+  quality: BackgroundQuality,
+  coarsePointer: boolean,
+  devicePixelRatio = 1,
+) {
+  if (quality === "low") return LOW_QUALITY_RESOLUTION_SCALE;
+
+  const normalizedDevicePixelRatio = Number.isFinite(devicePixelRatio)
+    ? Math.min(MAX_AUTO_DEVICE_PIXEL_RATIO, Math.max(1, devicePixelRatio))
+    : 1;
+  if (!coarsePointer) return normalizedDevicePixelRatio;
+
+  // Touch devices keep the existing 0.75x economy path at 1x, but gain a
+  // sharper backing store on Retina displays without paying for their full
+  // 2–3x native pixel density. Auto also caps mobile at 1.5x because fill
+  // cost grows with the square of this value.
+  return Math.min(MAX_COARSE_POINTER_RESOLUTION_SCALE, normalizedDevicePixelRatio * LOW_QUALITY_RESOLUTION_SCALE);
 }
 
 function observeMediaQuery(query: MediaQueryList, listener: () => void) {

@@ -39,6 +39,11 @@ function getViewportDimensions() {
   };
 }
 
+function getDevicePixelRatio() {
+  const devicePixelRatio = window.devicePixelRatio;
+  return Number.isFinite(devicePixelRatio) && devicePixelRatio > 0 ? devicePixelRatio : 1;
+}
+
 export function createWebGlBackgroundHost(
   canvas: HTMLCanvasElement,
   factory: BackgroundEffectFactory<BackgroundConfig>,
@@ -94,13 +99,22 @@ export function createWebGlBackgroundHost(
   function resize() {
     if (disposed) return;
     const { width, height } = getViewportDimensions();
+    const coarsePointer = performanceObserver?.snapshot().coarsePointer ?? false;
+    const nextResolutionScale = resolveBackgroundResolutionScale(
+      preferences.quality,
+      coarsePointer,
+      getDevicePixelRatio(),
+    );
+    resolutionScale = nextResolutionScale;
     const renderWidth = Math.max(1, Math.round(width * resolutionScale));
     const renderHeight = Math.max(1, Math.round(height * resolutionScale));
 
     if (canvas.width !== renderWidth) canvas.width = renderWidth;
     if (canvas.height !== renderHeight) canvas.height = renderHeight;
     gl.viewport(0, 0, renderWidth, renderHeight);
-    effect?.resize(renderWidth, renderHeight);
+    // Effects receive both physical backing dimensions and the logical CSS
+    // viewport. Tessellation uses the latter for its mobile anchor budget.
+    effect?.resize(renderWidth, renderHeight, width, height);
     loop.invalidate();
   }
 
@@ -114,7 +128,11 @@ export function createWebGlBackgroundHost(
   function applyPerformancePolicy() {
     if (disposed || performanceObserver == null) return;
     const hints = performanceObserver.snapshot();
-    const nextResolutionScale = resolveBackgroundResolutionScale(preferences.quality, hints.coarsePointer);
+    const nextResolutionScale = resolveBackgroundResolutionScale(
+      preferences.quality,
+      hints.coarsePointer,
+      getDevicePixelRatio(),
+    );
     const nextFrameMode = resolveBackgroundFrameMode(preferences.frameRate, hints);
 
     if (frameMode !== nextFrameMode) previousTimestamp = undefined;

@@ -79,6 +79,7 @@ describe("createWebGlBackgroundHost", () => {
     );
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 1000 });
     Object.defineProperty(window, "innerHeight", { configurable: true, value: 500 });
+    Object.defineProperty(window, "devicePixelRatio", { configurable: true, value: 1 });
     Object.defineProperty(document, "hidden", { configurable: true, get: () => documentHidden });
   });
 
@@ -106,7 +107,7 @@ describe("createWebGlBackgroundHost", () => {
     host.update({ kind: "tessellation", seed: 2, speed: 1, intensity: 1 });
     expect(waves.dispose).toHaveBeenCalledTimes(1);
     expect(factory).toHaveBeenCalledTimes(2);
-    expect(tessellation.resize).toHaveBeenCalledWith(1000, 500);
+    expect(tessellation.resize).toHaveBeenCalledWith(1000, 500, 1000, 500);
     runNextFrame(100);
     expect(tessellation.render).toHaveBeenCalledWith({
       elapsedSeconds: 0,
@@ -140,17 +141,37 @@ describe("createWebGlBackgroundHost", () => {
 
     expect(canvas.width).toBe(750);
     expect(canvas.height).toBe(375);
-    expect(effect.resize).toHaveBeenCalledWith(750, 375);
+    expect(effect.resize).toHaveBeenCalledWith(750, 375, 1000, 500);
     expect(gl.viewport).toHaveBeenLastCalledWith(0, 0, 750, 375);
 
     host.update(config, { quality: "auto", frameRate: "display" });
     expect(canvas.width).toBe(1000);
     expect(canvas.height).toBe(500);
-    expect(effect.resize).toHaveBeenLastCalledWith(1000, 500);
+    expect(effect.resize).toHaveBeenLastCalledWith(1000, 500, 1000, 500);
 
     coarsePointer.setMatches(true);
     expect(canvas.width).toBe(750);
     expect(canvas.height).toBe(375);
+    host.dispose();
+  });
+
+  test("uses a capped HiDPI backing store while preserving the CSS viewport for effects", () => {
+    Object.defineProperty(window, "devicePixelRatio", { configurable: true, value: 3 });
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 844 });
+    coarsePointer.setMatches(true);
+    const gl = createGl();
+    const canvas = document.createElement("canvas");
+    vi.spyOn(canvas, "getContext").mockReturnValue(gl);
+    const effect = createEffect();
+    const config = { kind: "tessellation", seed: 1, speed: 1, intensity: 1 } as const;
+
+    const host = createWebGlBackgroundHost(canvas, () => effect, config)!;
+
+    expect(canvas.width).toBe(585);
+    expect(canvas.height).toBe(1266);
+    expect(effect.resize).toHaveBeenCalledWith(585, 1266, 390, 844);
+    expect(gl.viewport).toHaveBeenLastCalledWith(0, 0, 585, 1266);
     host.dispose();
   });
 

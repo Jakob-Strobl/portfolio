@@ -257,32 +257,34 @@ export function createTessellationEffect(
     const seedChanged = nextConfig.seed !== config.seed;
     config = nextConfig;
     values = createTessellationValues(config);
-    if (seedChanged) resetModel(width / height, width);
+    if (seedChanged) resetModel(model.aspectRatio, model.viewportWidth);
   }
 
   update(initialConfig);
 
   return {
-    resize(nextWidth, nextHeight) {
-      const previousAspectRatio = width / height;
+    resize(nextWidth, nextHeight, viewportWidth = nextWidth, viewportHeight = nextHeight) {
+      const previousAspectRatio = model.aspectRatio;
       const wasMobileViewport = isTessellationMobileViewport(model.aspectRatio, model.viewportWidth);
       width = nextWidth;
       height = nextHeight;
-      const aspectRatio = width / height;
-      const isMobileViewport = isTessellationMobileViewport(aspectRatio, width);
+      const logicalViewportWidth = Math.max(1, viewportWidth);
+      const logicalViewportHeight = Math.max(1, viewportHeight);
+      const aspectRatio = logicalViewportWidth / logicalViewportHeight;
+      const isMobileViewport = isTessellationMobileViewport(aspectRatio, logicalViewportWidth);
       if (
         shouldResetTessellationAspect(hasMeasuredViewport, previousAspectRatio, aspectRatio) ||
         wasMobileViewport !== isMobileViewport
       ) {
-        resetModel(aspectRatio, width);
+        resetModel(aspectRatio, logicalViewportWidth);
       } else {
-        model.viewportWidth = width;
+        model.viewportWidth = logicalViewportWidth;
       }
       hasMeasuredViewport = true;
       gl.useProgram(program);
       gl.uniform2f(uniforms.resolution, width, height);
       gl.uniform1f(uniforms.pointSize, Math.max(3, Math.min(6.5, height / 170)));
-      gl.uniform1f(uniforms.edgeHalfWidth, 1.4);
+      gl.uniform1f(uniforms.edgeHalfWidth, 1.4 * (width / logicalViewportWidth));
     },
     render(frame) {
       if (disposed) return;

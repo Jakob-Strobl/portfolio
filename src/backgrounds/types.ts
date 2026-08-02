@@ -35,7 +35,7 @@ export type BackgroundFrame = {
 };
 
 export type BackgroundEffect<TConfig extends BackgroundConfig = BackgroundConfig> = {
-  resize(width: number, height: number): void;
+  resize(width: number, height: number, viewportWidth?: number, viewportHeight?: number): void;
   render(frame: BackgroundFrame): void;
   update(config: TConfig): void;
   dispose(): void;

@@ -77,10 +77,15 @@ describe("background performance policy", () => {
     expect(resolveBackgroundFrameMode("auto", { reducedMotion: false, coarsePointer: true })).toBe("30");
   });
 
-  test("keeps Auto at CSS-pixel resolution on fine pointers and lowers Auto or Low to 0.75 on cheaper paths", () => {
+  test("uses capped HiDPI resolution while keeping coarse-pointer and Low paths economical", () => {
     expect(resolveBackgroundResolutionScale("auto", false)).toBe(1);
     expect(resolveBackgroundResolutionScale("auto", true)).toBe(0.75);
     expect(resolveBackgroundResolutionScale("low", false)).toBe(0.75);
+    expect(resolveBackgroundResolutionScale("auto", false, 2)).toBe(2);
+    expect(resolveBackgroundResolutionScale("auto", false, 3)).toBe(2);
+    expect(resolveBackgroundResolutionScale("auto", true, 2)).toBe(1.5);
+    expect(resolveBackgroundResolutionScale("auto", true, 3)).toBe(1.5);
+    expect(resolveBackgroundResolutionScale("low", false, 2)).toBe(0.75);
   });
 
   test("observes live charging and media-query changes, then removes all listeners", async () => {
