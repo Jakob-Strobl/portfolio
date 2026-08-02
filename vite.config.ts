@@ -15,6 +15,6 @@ export default defineConfig({
   },
   nitro: {
     preset: "cloudflare_pages",
-    cloudflare: { nodeCompat: true },
+    cloudflare: { nodeCompat: true, deployConfig: false },
   },
 });

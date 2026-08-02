@@ -1,2 +1,13 @@
+# Optional Worker deployment configuration. Production CI continues to deploy
+# the same build to the Cloudflare Pages project with `wrangler pages deploy`.
+name = "portfolio"
+main = "./dist/_worker.js/index.js"
 compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2025-09-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[build]
+command = "bun run build"

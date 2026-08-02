@@ -1,0 +1,6 @@
+_worker.js
+_routes.json
+# Workers Static Assets consumes the generated _headers and _redirects files.
+nitro.json
+.vite
+.assetsignore

@@ -110,9 +110,13 @@ bun run build
 
 ### Cloudflare Deployment Scripts
 
-- **`cloudflare-step-deploy`**: Installs dependencies, runs the full test suite (`vitest run`), and only if tests pass, proceeds to build the project with Vite/Nitro (`vite build`). This is used by Cloudflare Pages CI.
+- **`cloudflare-step-deploy`**: Runs the full test suite (`vitest run`) and, only if tests pass, builds the project with Vite/Nitro (`bun run build`). Dependencies are installed separately with the committed lockfile by CI.
 
-- **`cloudflare-deploy-local`**: Builds the project with Vite/Nitro and deploys the generated `dist` directory directly to Cloudflare Pages using Wrangler CLI (`wrangler pages deploy`). Useful for local testing before pushing to CI/CD.
+- **`cloudflare-deploy-local`**: Builds the project with Vite/Nitro and deploys the generated `dist` directory directly to Cloudflare Pages using Wrangler CLI (`bunx wrangler pages deploy`). Useful for local testing before pushing to CI/CD.
+
+- **`bunx wrangler deploy`**: Builds and deploys the Nitro Worker and its static assets using the checked-in `wrangler.toml`; `--dry-run` validates the upload without publishing. This targets a Cloudflare Worker, while CI and `cloudflare-deploy-local` continue to target the Cloudflare Pages project.
+
+- **Existing checkout note**: `bun run build` removes Nitro's stale, generated `.wrangler/deploy/config.json` redirect. Run it once after pulling this configuration if `bunx wrangler deploy` still reports that it is using a redirected Pages config; clean checkouts do not have this ignored file.
 
 ## Project Highlights
 
