@@ -31,6 +31,10 @@
     {
       "type": "style",
       "section": "Styles"
+    },
+    {
+      "type": "copy",
+      "section": "Content"
     }
   ],
   "packages": {
