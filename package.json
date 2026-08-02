@@ -2,15 +2,17 @@
   "name": "portfolio",
   "type": "module",
   "version": "0.11.0",
+  "packageManager": "bun@1.3.14",
   "repository": {
     "type": "git",
     "url": "https://github.com/Jakob-Strobl/portfolio"
   },
   "scripts": {
     "dev": "vite dev",
+    "prebuild": "bun scripts/clear-nitro-deploy-config.ts",
     "build": "vite build",
-    "cloudflare-step-deploy": "bun i && vitest run && vite build",
-    "cloudflare-deploy-local": "vite build && wrangler pages deploy dist --project-name=portfolio",
+    "cloudflare-step-deploy": "vitest run && bun run build",
+    "cloudflare-deploy-local": "bun run build && bunx wrangler pages deploy dist --project-name=portfolio",
     "start": "vite preview",
     "test": "vitest run",
     "test-watch": "vitest",

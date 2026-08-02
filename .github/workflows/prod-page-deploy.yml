@@ -5,7 +5,8 @@ on:
     inputs:
       branch:
         description: The branch to build
-        required: true
+        required: false
+        default: main
 
   workflow_call:
     inputs:
@@ -26,7 +27,7 @@ on:
         required: false
 
 permissions:
-  contents: write
+  contents: read
   deployments: write
 
 jobs:
@@ -34,19 +35,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: 24
+          package-manager-cache: false
 
-      - name: Install Bun
-        run: npm install -g bun
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
 
-      - name: Install Dependencies
-        run: bun install
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Build
+      - name: Test and build
         run: bun run cloudflare-step-deploy
         env:
           VITE_PUBLIC_POSTHOG_KEY: ${{ secrets.VITE_PUBLIC_POSTHOG_KEY }}
@@ -54,9 +59,11 @@ jobs:
           PRIVATE_POSTHOG_KEY: ${{ secrets.PRIVATE_POSTHOG_KEY }}
 
       - name: Publish
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ${{ vars.OUTPUT_DIRECTORY }} --project-name=${{ vars.PAGES_PROJECT_NAME }} --branch=${{ inputs.branch }}
-          wranglerVersion: "4"
+          command: pages deploy ${{ vars.OUTPUT_DIRECTORY }} --project-name=${{ vars.PAGES_PROJECT_NAME }} --branch=${{ inputs.branch }} --commit-hash=${{ github.sha }}
+          gitHubToken: ${{ github.token }}
+          packageManager: bun
+          wranglerVersion: "4.118.0"
