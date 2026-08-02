@@ -17,7 +17,7 @@ export const YonseiEducationSection = (isExpanded: Accessor<boolean>) => (
     </div>
 
     <Show when={isExpanded()}>
-      <div class="experience-card-inline-expanded">
+      <div>
         <div>
           <p class="experience-card-detail-label">Major Coursework:</p>
           <p class="experience-card-body">

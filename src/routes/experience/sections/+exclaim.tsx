@@ -13,7 +13,7 @@ export const ExclaimSection = () => (
       </p>
     </CollapsibleSummary>
 
-    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
+    <ul class="experience-card-expanded experience-card-expanded-standalone experience-card-body list-inside list-disc space-y-1">
       <li>Designed an LL(1) grammar that enabled implementation of a non-backtracking recursive-descent parser</li>
       <li>
         Used an arena-allocated index-tree pattern for memory-performant AST generation without per-node allocations in

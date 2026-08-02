@@ -30,7 +30,7 @@ export const TimedatSection = () => (
       </p>
     </CollapsibleSummary>
 
-    <div class="experience-card-expanded">
+    <div class="experience-card-expanded experience-card-expanded-standalone">
       <ul class="experience-card-body list-inside list-disc space-y-1">
         <li>Designed parallel-task tracking to allocate overlapping time across tasks without double-counting it</li>
         <li>

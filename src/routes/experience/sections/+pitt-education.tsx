@@ -18,7 +18,7 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
     </div>
 
     <Show when={isExpanded()}>
-      <div class="experience-card-inline-expanded">
+      <div>
         <div class="space-y-2">
           <div>
             <p class="experience-card-detail-label">Major Coursework:</p>

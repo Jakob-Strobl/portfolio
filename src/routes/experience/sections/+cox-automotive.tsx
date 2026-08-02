@@ -34,7 +34,7 @@ export const CoxAutomotiveSection = () => (
       </div>
     </CollapsibleSummary>
 
-    <div class="experience-card-expanded space-y-4">
+    <div class="experience-card-expanded experience-card-expanded-standalone space-y-4">
       <div>
         <p class="experience-card-meta">
           B2B SaaS web applications for merchandising: Intelligent Promotions and vAuto

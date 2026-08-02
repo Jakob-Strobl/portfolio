@@ -14,7 +14,7 @@ export const WebcamSandboxSection = () => (
       </p>
     </CollapsibleSummary>
 
-    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
+    <ul class="experience-card-expanded experience-card-expanded-standalone experience-card-body list-inside list-disc space-y-1">
       <li>Built a Rust subprocess kernel for asynchronous, real-time FFI message passing</li>
       <li>
         Implemented virtual video splitting to provide separate feeds for face-tracker input and game-engine textures

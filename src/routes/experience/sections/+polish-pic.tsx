@@ -28,7 +28,7 @@ export const PolishPicSection = () => (
       <p class="experience-card-summary mt-2">A privacy-first image-processing SaaS with AI image generation</p>
     </CollapsibleSummary>
 
-    <ul class="experience-card-expanded experience-card-body list-inside list-disc space-y-1">
+    <ul class="experience-card-expanded experience-card-expanded-standalone experience-card-body list-inside list-disc space-y-1">
       <li>Uses Durable Objects to coordinate image-generation sessions and record usage across requests</li>
       <li>
         Optimizes client-side image processing with WebAssembly, a Rust image engine, and asynchronous web workers to
