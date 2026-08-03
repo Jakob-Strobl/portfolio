@@ -8,7 +8,7 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
       <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <div>
           <h2 class="experience-card-subtitle">
-            B.S. in Computer Science · <span class="font-medium">summa cum laude</span>
+            B.S. in Computer Science · <em class="font-medium">summa cum laude</em>
           </h2>
         </div>
         <h3 class="experience-card-date">2016 - 2020</h3>
