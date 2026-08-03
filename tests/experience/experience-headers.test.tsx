@@ -148,7 +148,6 @@ describe("Experience Page", () => {
         expect(page.getByText("TLI — Lead Instructor")).toBeInTheDocument();
         expect(page.getByText(/Tech Divaz & High School Academy Summer Camp/)).toBeInTheDocument();
         expect(page.getByText("Grades 6-12")).toBeInTheDocument();
-        expect(page.getByText(/Mentored students during weekly office hours/i)).toBeInTheDocument();
         expect(page.getByText(/Expanded on HTML5 concepts/i)).toBeInTheDocument();
       });
 
@@ -165,17 +164,21 @@ describe("Experience Page", () => {
 
         expect(courseDetails).not.toHaveAttribute("open");
         expect(courseDetailsSummary).toBeInTheDocument();
+        expect(courseDetailsSummary).toContainElement(page.getByText(/Led weekly lab sessions/i));
 
         await fireEvent.click(courseDetailsSummary!);
 
         expect(courseDetails).toHaveAttribute("open");
         expect(page.getByText("Undergraduate TA Courses:")).toBeInTheDocument();
+        expect(page.getByText(/Reinforced course concepts through presentations and examples/i)).toBeInTheDocument();
+        expect(page.getByText(/Mentored students during weekly office hours/i)).toBeInTheDocument();
         const coursesLabel = page.getByText("Undergraduate TA Courses:");
         expect(page.getByText("CS0008 - Intro to Programming with Python")).toBeInTheDocument();
         expect(courseDetailsSummary).not.toContainElement(coursesLabel);
         expect(courseDetails?.querySelector(".experience-card-expanded")).toContainElement(coursesLabel);
         expect(courseDetails?.querySelector(".experience-card-expanded")).toHaveClass(
           "experience-card-expanded-standalone",
+          "space-y-4",
         );
       });
     });

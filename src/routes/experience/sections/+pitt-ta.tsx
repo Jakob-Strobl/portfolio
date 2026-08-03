@@ -21,8 +21,6 @@ export const UpittTaSection = () => {
                 <p class="experience-card-meta">Computer Science Department</p>
                 <ul class="experience-card-body list-inside list-disc space-y-1">
                   <li>Led weekly lab sessions where students applied core concepts from lectures</li>
-                  <li>Reinforced course concepts through presentations and examples</li>
-                  <li>Mentored students during weekly office hours</li>
                 </ul>
               </div>
 
@@ -46,7 +44,7 @@ export const UpittTaSection = () => {
       </CollapsibleSummary>
 
       <Show when={isExpanded()}>
-        <div class="experience-card-expanded experience-card-expanded-standalone">
+        <div class="experience-card-expanded experience-card-expanded-standalone space-y-4">
           <div>
             <p class="experience-card-detail-label">Undergraduate TA Courses:</p>
             <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
@@ -68,6 +66,13 @@ export const UpittTaSection = () => {
                   </li>
                 </ul>
               </li>
+            </ul>
+          </div>
+          <div>
+            <p class="experience-card-detail-label">Additional teaching contributions:</p>
+            <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
+              <li>Reinforced course concepts through presentations and examples</li>
+              <li>Mentored students during weekly office hours</li>
             </ul>
           </div>
         </div>
