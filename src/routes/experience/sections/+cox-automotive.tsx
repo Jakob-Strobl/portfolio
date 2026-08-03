@@ -8,7 +8,9 @@ export const CoxAutomotiveSection = () => (
           <h2 class="experience-card-title">Cox Automotive</h2>
           <h3 class="experience-card-date">Aug 2021 - Jul 2025</h3>
         </div>
-        <p class="experience-card-meta">Full-stack developer · Remote (Arlington, VA)</p>
+        <p class="experience-card-meta">
+          Full-stack developer · Intelligent Promotions and vAuto · Remote (Arlington, VA)
+        </p>
         <p class="experience-card-tech">
           TypeScript, StencilJS, Tailwind CSS, SCSS, Terraform, C#/.NET, GitHub Actions, AWS, React, New Relic
         </p>
@@ -39,9 +41,7 @@ export const CoxAutomotiveSection = () => (
 
     <div class="experience-card-expanded experience-card-expanded-standalone space-y-4">
       <div>
-        <p class="experience-card-meta">
-          B2B SaaS web applications for merchandising: Intelligent Promotions and vAuto
-        </p>
+        <p class="experience-card-meta">B2B SaaS web applications for merchandising</p>
       </div>
 
       <div>
