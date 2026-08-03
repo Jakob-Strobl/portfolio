@@ -2,7 +2,6 @@ import { fireEvent, render } from "@solidjs/testing-library";
 import { Route, MemoryRouter, createMemoryHistory } from "@solidjs/router";
 import Experience from "../../src/routes/experience/(experience)";
 import { waitForShadowAnimations } from "../helpers/test-utils";
-import { TIMELINE_TITLE_ATTR } from "../helpers/test-data";
 
 // Helper to render Experience page at /experience route
 async function renderExperiencePage() {
@@ -49,8 +48,24 @@ describe("Experience Page", () => {
 
     it("displays Projects header", async () => {
       const page = await renderExperiencePage();
-      const header = page.getByRole("heading", { name: "Projects", level: 2 });
+      const header = page.getByRole("heading", { name: "Selected Projects", level: 2 });
       expect(header).toBeInTheDocument();
+    });
+
+    it("orders the main sections for hiring-focused scanning", async () => {
+      const page = await renderExperiencePage();
+      const headers = Array.from(page.container.querySelectorAll(".experience-section-title")).map((header) =>
+        header.textContent?.trim(),
+      );
+
+      expect(headers).toEqual(["Experience", "Selected Projects", "Technical Skills", "Education"]);
+    });
+
+    it("does not render a scroll-linked year indicator", async () => {
+      const page = await renderExperiencePage();
+
+      expect(page.container.querySelectorAll("[data-timeline-title]")).toHaveLength(0);
+      expect(page.container.querySelector(".cursor-vertical-text")).not.toBeInTheDocument();
     });
   });
 
@@ -65,12 +80,6 @@ describe("Experience Page", () => {
         const page = await renderExperiencePage();
         const dateElements = page.queryAllByText(/2025.*Present/i);
         expect(dateElements.length).toBeGreaterThan(0);
-      });
-
-      it("shows timeline header 2025", async () => {
-        const page = await renderExperiencePage();
-        const timeline = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2025"]`);
-        expect(timeline).toBeInTheDocument();
       });
     });
 
@@ -116,12 +125,6 @@ describe("Experience Page", () => {
         const aug2021Elements = page.queryAllByText(/Aug 2021/);
         expect(aug2021Elements.length).toBeGreaterThan(0);
       });
-
-      it("shows timeline header 2021", async () => {
-        const page = await renderExperiencePage();
-        const timeline = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2021"]`);
-        expect(timeline).toBeInTheDocument();
-      });
     });
 
     describe("Pitt TA", () => {
@@ -150,23 +153,17 @@ describe("Experience Page", () => {
 
       it("keeps course details behind one shared control", async () => {
         const page = await renderExperiencePage();
-        const courseDetailsButton = page.getByRole("button", { name: "View course details" });
+        const courseDetails = page.getByText("View course details").closest("details");
+        const courseDetailsSummary = courseDetails?.querySelector("summary");
 
-        expect(courseDetailsButton).toHaveAttribute("aria-expanded", "false");
-        expect(page.queryByText("CS0008 - Intro to Programming with Python")).not.toBeInTheDocument();
+        expect(courseDetails).not.toHaveAttribute("open");
+        expect(courseDetailsSummary).toBeInTheDocument();
 
-        await fireEvent.click(courseDetailsButton);
+        await fireEvent.click(courseDetailsSummary!);
 
-        expect(courseDetailsButton).toHaveAttribute("aria-expanded", "true");
+        expect(courseDetails).toHaveAttribute("open");
         expect(page.getByText("Undergraduate TA Courses:")).toBeInTheDocument();
         expect(page.getByText("CS0008 - Intro to Programming with Python")).toBeInTheDocument();
-      });
-
-      it("shows timeline header 2018", async () => {
-        const page = await renderExperiencePage();
-        const timelines = page.container.querySelectorAll(`[${TIMELINE_TITLE_ATTR}="2018"]`);
-        // 2018 appears multiple times (TA and Education), just verify at least one exists
-        expect(timelines.length).toBeGreaterThan(0);
       });
     });
   });
@@ -181,28 +178,27 @@ describe("Experience Page", () => {
 
     it("keeps detailed education content collapsed by default", async () => {
       const page = await renderExperiencePage();
-      const educationDetailsButton = page.getByRole("button", { name: "View education details" });
+      const educationDetails = page.getByText("View education details").closest("details");
 
-      expect(educationDetailsButton).toHaveAttribute("aria-expanded", "false");
-      expect(page.queryByText("Major Coursework:")).not.toBeInTheDocument();
+      expect(educationDetails).not.toHaveAttribute("open");
     });
 
     it("expands both schools with one control", async () => {
       const page = await renderExperiencePage();
-      const educationDetailsButton = page.getByRole("button", { name: "View education details" });
+      const educationDetails = page.getByText("View education details").closest("details");
+      const educationDetailsSummary = educationDetails?.querySelector("summary");
 
-      await fireEvent.click(educationDetailsButton);
+      await fireEvent.click(educationDetailsSummary!);
 
-      expect(educationDetailsButton).toHaveAttribute("aria-expanded", "true");
+      expect(educationDetails).toHaveAttribute("open");
       expect(page.getAllByText("Major Coursework:")).toHaveLength(2);
       expect(page.getByText("Clubs:")).toBeInTheDocument();
     });
 
-    it("renders certificates in their own timeline shadow", async () => {
+    it("renders certificates in their own shadow", async () => {
       const page = await renderExperiencePage();
 
       expect(page.getByRole("heading", { name: "Certificates" })).toBeInTheDocument();
-      expect(page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2024"]`)).toBeInTheDocument();
     });
 
     describe("University of Pittsburgh", () => {
@@ -232,25 +228,12 @@ describe("Experience Page", () => {
         const page = await renderExperiencePage();
         expect(page.queryAllByText(/GPA.*3\.79/i).length).toBeGreaterThan(0);
       });
-
-      it("shows timeline header 2016", async () => {
-        const page = await renderExperiencePage();
-        const timeline = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2016"]`);
-        expect(timeline).toBeInTheDocument();
-      });
     });
 
     describe("Yonsei University", () => {
       it("renders section", async () => {
         const page = await renderExperiencePage();
         expect(page.queryAllByText(/Yonsei/i).length).toBeGreaterThan(0);
-      });
-
-      it("shows timeline header 2018", async () => {
-        const page = await renderExperiencePage();
-        const timelines = page.container.querySelectorAll(`[${TIMELINE_TITLE_ATTR}="2018"]`);
-        // 2018 appears for both TA and Yonsei
-        expect(timelines.length).toBeGreaterThan(0);
       });
     });
   });
@@ -261,25 +244,12 @@ describe("Experience Page", () => {
         const page = await renderExperiencePage();
         expect(page.getByText(/Polish Pic/i)).toBeInTheDocument();
       });
-
-      it("shows timeline header 2025", async () => {
-        const page = await renderExperiencePage();
-        const timelines = page.container.querySelectorAll(`[${TIMELINE_TITLE_ATTR}="2025"]`);
-        // 2025 appears for Level Up and Polish Pic
-        expect(timelines.length).toBeGreaterThanOrEqual(2);
-      });
     });
 
     describe("Webcam Sandbox", () => {
       it("renders section", async () => {
         const page = await renderExperiencePage();
         expect(page.getByText(/Webcam Sandbox/i)).toBeInTheDocument();
-      });
-
-      it("shows timeline header 2023", async () => {
-        const page = await renderExperiencePage();
-        const timeline = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2023"]`);
-        expect(timeline).toBeInTheDocument();
       });
     });
 
@@ -289,13 +259,6 @@ describe("Experience Page", () => {
         // Exclaim is an h1, look for it specifically
         const exclaimHeader = page.getByRole("heading", { name: /Exclaim/i });
         expect(exclaimHeader).toBeInTheDocument();
-      });
-
-      it("shows timeline header 2021", async () => {
-        const page = await renderExperiencePage();
-        const timelines = page.container.querySelectorAll(`[${TIMELINE_TITLE_ATTR}="2021"]`);
-        // 2021 appears for Cox and Exclaim
-        expect(timelines.length).toBeGreaterThanOrEqual(2);
       });
     });
   });

@@ -1,6 +1,6 @@
 import Shadow from "../../components/shadow/shadow";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
-import TimelineLayout, { timelineTitleDatasetKey } from "../../layouts/timeline-layout";
+import TimelineLayout from "../../layouts/timeline-layout";
 import { A } from "@solidjs/router";
 import { LevelUpSection } from "./sections/+level-up";
 import { CoxAutomotiveSection } from "./sections/+cox-automotive";
@@ -24,7 +24,6 @@ export default function Experience() {
         structuredData={PRODUCT_ENTITIES}
       />
       <TimelineLayout
-        defaultTitle="2026"
         contentGap="gap-4"
         navBack={() => (
           <A href="/">
@@ -38,32 +37,38 @@ export default function Experience() {
               <h1 class="experience-section-title">Experience</h1>
               <hr class="mt-2 border-night-300" />
             </div>
-            <Shadow
-              warmupDelayMs={125}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2025",
-              }}
-            >
+            <Shadow warmupDelayMs={125} contentFadeInDelayMs={500}>
               {LevelUpSection()}
             </Shadow>
-            <Shadow
-              warmupDelayMs={250}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2021",
-              }}
-            >
+            <Shadow warmupDelayMs={250} contentFadeInDelayMs={500}>
               {CoxAutomotiveSection()}
             </Shadow>
-            <Shadow
-              warmupDelayMs={375}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2018",
-              }}
-            >
+            <Shadow warmupDelayMs={375} contentFadeInDelayMs={500}>
               {UpittTaSection()}
+            </Shadow>
+            {/* Projects */}
+            <div>
+              <h2 class="experience-section-title">Selected Projects</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            <Shadow warmupDelayMs={500} contentFadeInDelayMs={500}>
+              {TimedatSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={625} contentFadeInDelayMs={500}>
+              {PolishPicSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={750} contentFadeInDelayMs={500}>
+              {WebcamSandboxSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
+              {ExclaimSection()}
+            </Shadow>
+            <div>
+              <h2 class="experience-section-title">Technical Skills</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            <Shadow warmupDelayMs={1000} contentFadeInDelayMs={500}>
+              {SkillsSection()}
             </Shadow>
             {/* Education */}
             <div>
@@ -71,54 +76,6 @@ export default function Experience() {
               <hr class="mt-2 border-night-300" />
             </div>
             {EducationSection()}
-            <div>
-              <h2 class="experience-section-title">Technical Skills</h2>
-              <hr class="mt-2 border-night-300" />
-            </div>
-            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
-              {SkillsSection()}
-            </Shadow>
-            {/* Projects */}
-            <div>
-              <h2 class="experience-section-title">Projects</h2>
-              <hr class="mt-2 border-night-300" />
-            </div>
-            <Shadow
-              warmupDelayMs={375}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2026",
-              }}
-            >
-              {TimedatSection()}
-            </Shadow>
-            <Shadow
-              warmupDelayMs={375}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2025",
-              }}
-            >
-              {PolishPicSection()}
-            </Shadow>
-            <Shadow
-              warmupDelayMs={375}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2023",
-              }}
-            >
-              {WebcamSandboxSection()}
-            </Shadow>
-            <Shadow
-              warmupDelayMs={375}
-              contentFadeInDelayMs={500}
-              dataset={{
-                [timelineTitleDatasetKey]: "2021",
-              }}
-            >
-              {ExclaimSection()}
-            </Shadow>
           </>
         }
       ></TimelineLayout>

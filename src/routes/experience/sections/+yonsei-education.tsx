@@ -1,8 +1,5 @@
-import type { Accessor } from "solid-js";
-import { Show } from "solid-js";
-
-export const YonseiEducationSection = (isExpanded: Accessor<boolean>) => (
-  <section class="flex min-w-0 flex-col gap-2" data-timeline-title="2018">
+export const YonseiEducationSection = () => (
+  <section class="flex min-w-0 flex-col gap-2">
     <h3 class="experience-card-title">Yonsei University</h3>
 
     <div>
@@ -15,16 +12,14 @@ export const YonseiEducationSection = (isExpanded: Accessor<boolean>) => (
         <h3>GPA: 4.00/4.30</h3>
       </div>
     </div>
-
-    <Show when={isExpanded()}>
-      <div>
-        <div>
-          <p class="experience-card-detail-label">Major Coursework:</p>
-          <p class="experience-card-body">
-            Computer Networking, Artificial Intelligence with an Introduction to Neural Networks
-          </p>
-        </div>
-      </div>
-    </Show>
   </section>
+);
+
+export const YonseiEducationDetails = () => (
+  <div>
+    <p class="experience-card-detail-label">Major Coursework:</p>
+    <p class="experience-card-body">
+      Computer Networking, Artificial Intelligence with an Introduction to Neural Networks
+    </p>
+  </div>
 );
