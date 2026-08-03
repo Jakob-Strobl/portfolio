@@ -23,6 +23,7 @@ export const TimedatSection = () => (
         <h2 class="text-xl font-light">2026 - Present</h2>
       </div>
       <p class="text-white/70">Product design and full-stack development</p>
+      <p class="text-white/60">Convex</p>
       <p class="mt-2 text-base text-white/80">
         A privacy-first time tracker for freelancers, teams, and founders to record billable work and sweat
         equity—without screen surveillance or productivity scoring.

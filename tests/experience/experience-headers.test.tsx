@@ -1,4 +1,4 @@
-import { render } from "@solidjs/testing-library";
+import { fireEvent, render } from "@solidjs/testing-library";
 import { Route, MemoryRouter, createMemoryHistory } from "@solidjs/router";
 import Experience from "../../src/routes/experience/(experience)";
 import { waitForShadowAnimations } from "../helpers/test-utils";
@@ -41,12 +41,9 @@ describe("Experience Page", () => {
       expect(header).toBeInTheDocument();
     });
 
-    it("displays Education & Credentials header", async () => {
+    it("displays Education header", async () => {
       const page = await renderExperiencePage();
-      const header = page.getByRole("heading", {
-        name: "Education & Credentials",
-        level: 2,
-      });
+      const header = page.getByRole("heading", { name: "Education", level: 2 });
       expect(header).toBeInTheDocument();
     });
 
@@ -132,6 +129,37 @@ describe("Experience Page", () => {
         const page = await renderExperiencePage();
         // Check for TA-specific content
         expect(page.getByText(/Undergraduate Teaching Assistant/i)).toBeInTheDocument();
+        expect(page.getByText("Computer Science Department")).toBeInTheDocument();
+      });
+
+      it("surfaces the lead instructor role, grades, and key teaching bullets", async () => {
+        const page = await renderExperiencePage();
+
+        expect(page.getByText("TLI — Lead Instructor")).toBeInTheDocument();
+        expect(page.getByText(/Tech Divaz & High School Academy Summer Camp/)).toBeInTheDocument();
+        expect(page.getByText("Grades 6-12")).toBeInTheDocument();
+        expect(page.getByText(/Mentored students during weekly office hours/i)).toBeInTheDocument();
+        expect(page.getByText(/Expanded on HTML5 concepts/i)).toBeInTheDocument();
+      });
+
+      it("shows Summer 2018 once", async () => {
+        const page = await renderExperiencePage();
+
+        expect(page.queryAllByText("Summer 2018")).toHaveLength(1);
+      });
+
+      it("keeps course details behind one shared control", async () => {
+        const page = await renderExperiencePage();
+        const courseDetailsButton = page.getByRole("button", { name: "View course details" });
+
+        expect(courseDetailsButton).toHaveAttribute("aria-expanded", "false");
+        expect(page.queryByText("CS0008 - Intro to Programming with Python")).not.toBeInTheDocument();
+
+        await fireEvent.click(courseDetailsButton);
+
+        expect(courseDetailsButton).toHaveAttribute("aria-expanded", "true");
+        expect(page.getByText("Undergraduate TA Courses:")).toBeInTheDocument();
+        expect(page.getByText("CS0008 - Intro to Programming with Python")).toBeInTheDocument();
       });
 
       it("shows timeline header 2018", async () => {
@@ -144,6 +172,39 @@ describe("Experience Page", () => {
   });
 
   describe("Education", () => {
+    it("surfaces honors and GPAs", async () => {
+      const page = await renderExperiencePage();
+
+      expect(page.queryAllByText(/summa cum laude/i).length).toBeGreaterThan(0);
+      expect(page.queryAllByText(/GPA.*3\.79/i).length).toBeGreaterThan(0);
+    });
+
+    it("keeps detailed education content collapsed by default", async () => {
+      const page = await renderExperiencePage();
+      const educationDetailsButton = page.getByRole("button", { name: "View education details" });
+
+      expect(educationDetailsButton).toHaveAttribute("aria-expanded", "false");
+      expect(page.queryByText("Major Coursework:")).not.toBeInTheDocument();
+    });
+
+    it("expands both schools with one control", async () => {
+      const page = await renderExperiencePage();
+      const educationDetailsButton = page.getByRole("button", { name: "View education details" });
+
+      await fireEvent.click(educationDetailsButton);
+
+      expect(educationDetailsButton).toHaveAttribute("aria-expanded", "true");
+      expect(page.getAllByText("Major Coursework:")).toHaveLength(2);
+      expect(page.getByText("Clubs:")).toBeInTheDocument();
+    });
+
+    it("renders certificates in their own timeline shadow", async () => {
+      const page = await renderExperiencePage();
+
+      expect(page.getByRole("heading", { name: "Certificates" })).toBeInTheDocument();
+      expect(page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2024"]`)).toBeInTheDocument();
+    });
+
     describe("University of Pittsburgh", () => {
       it("displays institution name", async () => {
         const page = await renderExperiencePage();
@@ -154,12 +215,12 @@ describe("Experience Page", () => {
 
       it("displays degree (B.S. in Computer Science)", async () => {
         const page = await renderExperiencePage();
-        expect(page.getByText(/B\.S\. in Computer Science/i)).toBeInTheDocument();
+        expect(page.queryAllByText(/B\.S\. in Computer Science/i).length).toBeGreaterThan(0);
       });
 
       it("displays honors (Summa Cum Laude)", async () => {
         const page = await renderExperiencePage();
-        expect(page.getByText(/Summa Cum Laude/i)).toBeInTheDocument();
+        expect(page.queryAllByText(/Summa Cum Laude/i).length).toBeGreaterThan(0);
       });
 
       it("displays date range (2016 - 2020)", async () => {
@@ -169,7 +230,7 @@ describe("Experience Page", () => {
 
       it("displays GPA", async () => {
         const page = await renderExperiencePage();
-        expect(page.getByText(/GPA.*3\.79/i)).toBeInTheDocument();
+        expect(page.queryAllByText(/GPA.*3\.79/i).length).toBeGreaterThan(0);
       });
 
       it("shows timeline header 2016", async () => {
@@ -182,7 +243,7 @@ describe("Experience Page", () => {
     describe("Yonsei University", () => {
       it("renders section", async () => {
         const page = await renderExperiencePage();
-        expect(page.getByText(/Yonsei/i)).toBeInTheDocument();
+        expect(page.queryAllByText(/Yonsei/i).length).toBeGreaterThan(0);
       });
 
       it("shows timeline header 2018", async () => {
@@ -190,21 +251,6 @@ describe("Experience Page", () => {
         const timelines = page.container.querySelectorAll(`[${TIMELINE_TITLE_ATTR}="2018"]`);
         // 2018 appears for both TA and Yonsei
         expect(timelines.length).toBeGreaterThan(0);
-      });
-    });
-
-    describe("Certificates", () => {
-      it("renders section", async () => {
-        const page = await renderExperiencePage();
-        // Certificates section exists - check for the header or any cert content
-        const certHeader = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2024"]`);
-        expect(certHeader).toBeInTheDocument();
-      });
-
-      it("shows timeline header 2024", async () => {
-        const page = await renderExperiencePage();
-        const timeline = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2024"]`);
-        expect(timeline).toBeInTheDocument();
       });
     });
   });

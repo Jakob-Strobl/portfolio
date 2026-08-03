@@ -66,7 +66,7 @@ describe("External Links", () => {
   describe("Contact Page Links", () => {
     it("renders at /contact route", async () => {
       const page = await renderContactPage();
-      expect(page.getByText("Connect with me:")).toBeInTheDocument();
+      expect(page.getByRole("heading", { name: "Let's connect" })).toBeInTheDocument();
     });
 
     it("GitHub profile link has correct URL", async () => {

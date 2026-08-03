@@ -71,56 +71,22 @@ export default function Experience() {
               {UpittTaSection()}
             </Shadow>
             {/* Education */}
-            <Shadow
-              warmupDelayMs={500}
-              contentFadeInDelayMs={500}
-              paddingOverride="p-0"
-              shadowOpacity={() => (isEducationExpanded() ? 0.3 : 0.6)}
-            >
-              <details
-                class="rounded-lg border border-white/10 px-2 py-3 lg:px-3 lg:py-4"
-                onToggle={(event) => setIsEducationExpanded(event.currentTarget.open)}
-              >
-                <CollapsibleSummary label="Show education and credentials">
-                  <h2 class="text-4xl text-white">Education & Credentials</h2>
-                  <p class="mt-1 text-sm text-white/60">Academic background and professional credentials</p>
-                </CollapsibleSummary>
-                <div class="mt-4 space-y-4 border-t border-white/10 pt-4">
-                  <Shadow
-                    warmupDelayMs={375}
-                    contentFadeInDelayMs={500}
-                    dataset={{
-                      [timelineTitleDatasetKey]: "2016",
-                    }}
-                  >
-                    {UpittEducationSection()}
-                  </Shadow>
-                  <Shadow
-                    warmupDelayMs={375}
-                    contentFadeInDelayMs={500}
-                    dataset={{
-                      [timelineTitleDatasetKey]: "2018",
-                    }}
-                  >
-                    {YonseiEducationSection()}
-                  </Shadow>
-                  {/* Certificates */}
-                  <Shadow
-                    warmupDelayMs={375}
-                    contentFadeInDelayMs={500}
-                    dataset={{
-                      [timelineTitleDatasetKey]: "2024",
-                    }}
-                  >
-                    {CertificatesSection()}
-                  </Shadow>
-                </div>
-              </details>
+            <div>
+              <h2 class="text-4xl text-white">Education</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            {EducationSection()}
+            <div>
+              <h2 class="text-4xl text-white">Technical Skills</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
+              {SkillsSection()}
             </Shadow>
             {/* Projects */}
             <div>
               <h2 class="text-4xl text-white">Projects</h2>
-              <hr class=" border-night-300 mt-2"></hr>
+              <hr class="mt-2 border-night-300" />
             </div>
             <Shadow
               warmupDelayMs={375}

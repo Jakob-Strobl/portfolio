@@ -7,10 +7,10 @@ export const WebcamSandboxSection = () => (
         <h3>3D Webcam Sandbox</h3>
         <h2 class="text-xl font-light">2023 - Present</h2>
       </div>
-      <p class="text-white/70">Godot, Rust with gdext, Nokhwa, OpenSeeFace</p>
+      <p class="text-white/70">Godot, GDScript, Rust with gdext, Nokhwa, OpenSeeFace (Python)</p>
       <p class="mt-2 text-base text-white/80">
-        A real-time 3D renderer that maps tracked facial movement onto 3D models and updates their textures from a live
-        video feed
+        A real-time 3D VTuber renderer that maps tracked facial movement onto 3D models and updates their textures from
+        a live video feed
       </p>
     </CollapsibleSummary>
 
@@ -20,6 +20,10 @@ export const WebcamSandboxSection = () => (
         Implemented virtual video splitting to provide separate feeds for face-tracker input and game-engine textures
       </li>
       <li>Used traits for dependency injection to enable mock-based system tests locally and on CI runners</li>
+      <li>
+        Kept the OpenSeeFace integration current by updating dependencies and adapting the surrounding plumbing to
+        breaking changes
+      </li>
     </ul>
   </details>
 );

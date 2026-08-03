@@ -5,7 +5,7 @@ export const LevelUpSection = () => (
         <h2>Level Up Software LLC</h2> <h3 class="font-light text-xl">2025 - Present</h3>
       </div>
       <p class="text-white/70 text-lg">
-        Co-founder, lead full-stack developer, and primary product designer · Remote (Arlington, VA)
+        Co-founder, full-stack developer, and UI/UX designer · Remote (Arlington, VA)
       </p>
       <p class="text-white/70 text-sm">Software consulting and product development</p>
     </div>

@@ -1,5 +1,8 @@
-export const UpittEducationSection = () => (
-  <div class="flex flex-col gap-2">
+import type { Accessor } from "solid-js";
+import { Show } from "solid-js";
+
+export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
+  <section class="flex flex-col gap-2" data-timeline-title="2016">
     <h3 class="text-2xl">University of Pittsburgh</h3>
     <div>
       <div class="text-lg mt-2 flex justify-between flex-wrap">
@@ -14,17 +17,21 @@ export const UpittEducationSection = () => (
       </div>
     </div>
 
-    <div class="mt-2">
-      <p class="text-white/70 text-base font-medium">Major Coursework:</p>
-      <p class="text-white/80 text-sm">
-        Computer Graphics, Data Science, High-Performance Computing, Compiler Design, Operating Systems, Formal Methods,
-        Algorithms, Data Structures
-      </p>
-    </div>
+    <Show when={isExpanded()}>
+      <div>
+        <div>
+          <p class="text-white/70 text-base font-medium">Major Coursework:</p>
+          <p class="text-white/80 text-sm">
+            Computer Graphics, Data Science, High-Performance Computing, Compiler Design, Operating Systems, Formal
+            Methods, Algorithms, Data Structures
+          </p>
+        </div>
 
-    <div class="mt-2">
-      <p class="text-white/70 text-base font-medium">Clubs:</p>
-      <p class="text-white/80 text-sm">Data Dojo (Business Manager), Korean Conversation Club</p>
-    </div>
-  </div>
+        <div class="mt-2">
+          <p class="text-white/70 text-base font-medium">Clubs:</p>
+          <p class="text-white/80 text-sm">Data Dojo (Business Manager), Korean Conversation Club</p>
+        </div>
+      </div>
+    </Show>
+  </section>
 );
