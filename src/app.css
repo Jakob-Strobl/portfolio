@@ -125,7 +125,7 @@
   }
 
   .experience-card-tech {
-    @apply text-sm leading-5 text-white/70;
+    @apply text-sm leading-5 text-night-300;
   }
 
   .experience-card-summary,
@@ -138,11 +138,15 @@
   }
 
   .experience-card-detail-label {
-    @apply text-sm leading-5 font-medium text-white/70;
+    @apply text-sm leading-5 font-medium text-night-300;
   }
 
   .experience-card-expanded {
     @apply border-t border-white/10 pt-4;
+  }
+
+  .experience-card-expanded .experience-card-meta {
+    @apply text-white/80;
   }
 
   .experience-card-expanded-standalone {

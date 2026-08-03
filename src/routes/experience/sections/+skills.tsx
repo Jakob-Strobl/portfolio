@@ -24,8 +24,11 @@ export const SkillsSection = () => (
       </div>
 
       <div>
-        <dt class="experience-card-subtitle">Systems & graphics</dt>
-        <dd class="experience-card-meta mt-1">Godot, WebAssembly, WebGL/GLSL, FFI, compiler design</dd>
+        <dt class="experience-card-subtitle">Systems, performance & graphics</dt>
+        <dd class="experience-card-meta mt-1">
+          High-performance computing (HPC), parallel programming, multiprocessing/multithreading, synchronization
+          primitives, cache locality, Godot, WebAssembly, WebGL/GLSL, FFI, compiler design
+        </dd>
       </div>
 
       <div>
