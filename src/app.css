@@ -191,7 +191,7 @@
   }
 
   img.github-normalized-size {
-    @apply w-24 sm:w-36 xl:w-48;
+    @apply w-24 sm:w-36 lg:w-48;
 
     /* 
      * Shadow may miscalculate the height on first load and first render of contact page when navigating
@@ -218,7 +218,7 @@
      * Github: 257/250 = 1.028 (width/height)
      * LinkedIn: 733/540 = 1.3574 (width/height)
      * 
-     * xl-w: 
+     * lg-w:
      *     192px / 1.028 (width/height) = 186.77px (height)
      *     186.77px (height) * 1.3574 (width/height) ~= 253px (width)
      *
@@ -234,7 +234,7 @@
      * TODO(refactor): to use vars so I can update all by just changing one value. Why do the math by hand every single time lmao
      * NOTE: widths are rounded to keep the responsive values readable
      */
-    @apply w-[127px] sm:w-[190px] xl:w-[253px];
+    @apply w-[127px] sm:w-[190px] lg:w-[253px];
 
     /* Same reason as rule above */
     @apply aspect-733/540;
