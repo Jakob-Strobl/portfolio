@@ -48,17 +48,17 @@ describe("Experience Page", () => {
 
     it("displays Projects header", async () => {
       const page = await renderExperiencePage();
-      const header = page.getByRole("heading", { name: "Selected Projects", level: 2 });
+      const header = page.getByRole("heading", { name: "Projects", level: 2 });
       expect(header).toBeInTheDocument();
     });
 
-    it("orders the main sections for hiring-focused scanning", async () => {
+    it("preserves the main section order", async () => {
       const page = await renderExperiencePage();
       const headers = Array.from(page.container.querySelectorAll(".experience-section-title")).map((header) =>
         header.textContent?.trim(),
       );
 
-      expect(headers).toEqual(["Experience", "Selected Projects", "Technical Skills", "Education"]);
+      expect(headers).toEqual(["Experience", "Education", "Technical Skills", "Projects"]);
     });
 
     it("does not render a scroll-linked year indicator", async () => {
@@ -181,6 +181,7 @@ describe("Experience Page", () => {
       const educationDetails = page.getByText("View education details").closest("details");
 
       expect(educationDetails).not.toHaveAttribute("open");
+      expect(educationDetails?.querySelectorAll("hr")).toHaveLength(0);
     });
 
     it("expands both schools with one control", async () => {
@@ -193,12 +194,20 @@ describe("Experience Page", () => {
       expect(educationDetails).toHaveAttribute("open");
       expect(page.getAllByText("Major Coursework:")).toHaveLength(2);
       expect(page.getByText("Clubs:")).toBeInTheDocument();
+      expect(educationDetails?.querySelector("h3")?.textContent).toBe("University of Pittsburgh");
     });
 
     it("renders certificates in their own shadow", async () => {
       const page = await renderExperiencePage();
 
       expect(page.getByRole("heading", { name: "Certificates" })).toBeInTheDocument();
+    });
+
+    it("describes timedat ownership and technology", async () => {
+      const page = await renderExperiencePage();
+
+      expect(page.getByText("Product lead · Product design & UX · Full-stack development")).toBeInTheDocument();
+      expect(page.getByText("Svelte 5, SvelteKit, Clerk, Tailwind CSS, Vitest, Convex")).toBeInTheDocument();
     });
 
     describe("University of Pittsburgh", () => {

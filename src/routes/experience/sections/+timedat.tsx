@@ -22,7 +22,7 @@ export const TimedatSection = () => (
         <h3 class="experience-card-title">timedat</h3>
         <h2 class="experience-card-date">2026 - Present</h2>
       </div>
-      <p class="experience-card-meta">Product design and full-stack development</p>
+      <p class="experience-card-meta">Product lead · Product design &amp; UX · Full-stack development</p>
       <p class="experience-card-tech">Svelte 5, SvelteKit, Clerk, Tailwind CSS, Vitest, Convex</p>
       <p class="experience-card-summary mt-2">
         A privacy-first time tracker for freelancers, teams, and founders to record billable work and sweat

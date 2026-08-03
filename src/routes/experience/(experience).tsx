@@ -46,36 +46,36 @@ export default function Experience() {
             <Shadow warmupDelayMs={375} contentFadeInDelayMs={500}>
               {UpittTaSection()}
             </Shadow>
-            {/* Projects */}
-            <div>
-              <h2 class="experience-section-title">Selected Projects</h2>
-              <hr class="mt-2 border-night-300" />
-            </div>
-            <Shadow warmupDelayMs={500} contentFadeInDelayMs={500}>
-              {TimedatSection()}
-            </Shadow>
-            <Shadow warmupDelayMs={625} contentFadeInDelayMs={500}>
-              {PolishPicSection()}
-            </Shadow>
-            <Shadow warmupDelayMs={750} contentFadeInDelayMs={500}>
-              {WebcamSandboxSection()}
-            </Shadow>
-            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
-              {ExclaimSection()}
-            </Shadow>
-            <div>
-              <h2 class="experience-section-title">Technical Skills</h2>
-              <hr class="mt-2 border-night-300" />
-            </div>
-            <Shadow warmupDelayMs={1000} contentFadeInDelayMs={500}>
-              {SkillsSection()}
-            </Shadow>
             {/* Education */}
             <div>
               <h2 class="experience-section-title">Education</h2>
               <hr class="mt-2 border-night-300" />
             </div>
             {EducationSection()}
+            <div>
+              <h2 class="experience-section-title">Technical Skills</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            <Shadow warmupDelayMs={750} contentFadeInDelayMs={500}>
+              {SkillsSection()}
+            </Shadow>
+            {/* Projects */}
+            <div>
+              <h2 class="experience-section-title">Projects</h2>
+              <hr class="mt-2 border-night-300" />
+            </div>
+            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
+              {TimedatSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={1000} contentFadeInDelayMs={500}>
+              {PolishPicSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={1125} contentFadeInDelayMs={500}>
+              {WebcamSandboxSection()}
+            </Shadow>
+            <Shadow warmupDelayMs={1250} contentFadeInDelayMs={500}>
+              {ExclaimSection()}
+            </Shadow>
           </>
         }
       ></TimelineLayout>
