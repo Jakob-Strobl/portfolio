@@ -1,5 +1,58 @@
 # Changelog
 
+## [0.11.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.1...v0.11.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* **build:** inject package version into bundles ([3b2afef](https://github.com/Jakob-Strobl/portfolio/commit/3b2afef278709b902a3ef0421af51ede2e5de471))
+* **experience:** align disclosure cards and entrance order ([f7812c5](https://github.com/Jakob-Strobl/portfolio/commit/f7812c538ff6d1f4e6d54af45ef2372f20eb579c))
+* **experience:** keep education highlights and disclosures stable ([6c0ae58](https://github.com/Jakob-Strobl/portfolio/commit/6c0ae58fd23b062c12efd2e8c8bd115d980e8491))
+* **experience:** match course disclosure spacing ([fa1864b](https://github.com/Jakob-Strobl/portfolio/commit/fa1864b88d96d9f8e0b376bf1eaad2b75cdb0b0e))
+* **experience:** preserve education structure and skills ([05372c5](https://github.com/Jakob-Strobl/portfolio/commit/05372c59c041447229d01c0793eca968425cfd04))
+* **experience:** remove stacked expansion spacing ([63688bf](https://github.com/Jakob-Strobl/portfolio/commit/63688bf5ef8cfb87035081d079f820a7e4cccd20))
+* **tessellation:** bound hue motion and tune visual accents ([2e21df2](https://github.com/Jakob-Strobl/portfolio/commit/2e21df2f29ea2d97a29303d821cda993180c11b5))
+* **ui:** align version label with baseline ([95df36f](https://github.com/Jakob-Strobl/portfolio/commit/95df36fd1f1693e60f911cdb4d5e8972c06aa487))
+* **ui:** center settings icon in hover target ([8166ebd](https://github.com/Jakob-Strobl/portfolio/commit/8166ebd331f5c6f3f91184c886ffc1a1b0098644))
+
+
+### Performance Improvements
+
+* **background:** add capped HiDPI rendering with logical viewport scaling ([c856992](https://github.com/Jakob-Strobl/portfolio/commit/c8569920248d91180ed6654a693e45ab4c20f50a))
+
+
+### Documentation
+
+* document project commit conventions ([3bfa429](https://github.com/Jakob-Strobl/portfolio/commit/3bfa429daa2432be45c16b2b753b248e46bcf7e3))
+
+
+### Styles
+
+* **contact:** accent privacy-first positioning ([3c4d0b2](https://github.com/Jakob-Strobl/portfolio/commit/3c4d0b2dcee5d24d18d6a2519eef1e238a99c41d))
+* **experience:** standardize experience typography ([f54c2ec](https://github.com/Jakob-Strobl/portfolio/commit/f54c2ecff924c5a8614ca0527b2a46acfba0a502))
+
+
+### Content
+
+* **contact:** clarify UI/UX positioning ([1f38668](https://github.com/Jakob-Strobl/portfolio/commit/1f38668daa91c92adbe78ae588ec35d6f1415cc7))
+* **contact:** refine initial contact positioning ([365d803](https://github.com/Jakob-Strobl/portfolio/commit/365d803652b73fc5a0198155bd8873ca56f40aba))
+* **contact:** refine positioning and call to action ([bae8472](https://github.com/Jakob-Strobl/portfolio/commit/bae8472d036b6c6e2a3b52f5e997c442701488ab))
+* **experience:** add Exclaim repository links and clarify role ([9b1070c](https://github.com/Jakob-Strobl/portfolio/commit/9b1070c6d3f7df44b3443ed823524809ffa5548f))
+* **experience:** align education GPA details ([521d1c4](https://github.com/Jakob-Strobl/portfolio/commit/521d1c43758dc73de31cb737e97bb48ce54f72b4))
+* **experience:** clarify Cox role scope ([bf06e99](https://github.com/Jakob-Strobl/portfolio/commit/bf06e99ff0b89acccf66fb324a473e46b966f429))
+* **experience:** clarify EMR platform listing ([3781c43](https://github.com/Jakob-Strobl/portfolio/commit/3781c43ce13ac8994120f10a911e10302255c0b6))
+* **experience:** clarify project ownership ([d9b1d84](https://github.com/Jakob-Strobl/portfolio/commit/d9b1d84759c97ebdb38c4c2f4e975bc482a774b4))
+* **experience:** move Cox technologies under role ([c9d177a](https://github.com/Jakob-Strobl/portfolio/commit/c9d177aa80a3166f6856a12cffe7f8c209ffa3b7))
+* **experience:** refine experience and project copy ([55aa411](https://github.com/Jakob-Strobl/portfolio/commit/55aa4113a03a5eb5ee28459ecb97019c355ab693))
+* **experience:** refine portfolio experience and skills ([55a5ad3](https://github.com/Jakob-Strobl/portfolio/commit/55a5ad31ce3a036bd9f17078c7b233e66c601a81))
+* **experience:** refine project and education details ([876a7da](https://github.com/Jakob-Strobl/portfolio/commit/876a7da8b4f9d73ae37e3e1a0e754e6d4d32aada))
+* **experience:** refine project and skills labels ([0f39244](https://github.com/Jakob-Strobl/portfolio/commit/0f3924425305c56145fbe0a484939777dd9982d8))
+* **experience:** refine systems skills and metadata ([be74bcb](https://github.com/Jakob-Strobl/portfolio/commit/be74bcb4f3f3158a23605f76133a1aa3a5c01e26))
+* **experience:** refine technical skills and timedat stack ([d624b59](https://github.com/Jakob-Strobl/portfolio/commit/d624b599a23aca4d93ab618058d8749e4e1425cf))
+* **experience:** refine technical skills order ([47c72ae](https://github.com/Jakob-Strobl/portfolio/commit/47c72ae33e12c1171549585a10005b8621d43819))
+* **experience:** reorganize and prioritize technical skills ([d5583a3](https://github.com/Jakob-Strobl/portfolio/commit/d5583a314281e23b53375caf5936ed2775224e44))
+* **experience:** streamline TA summary details ([2a3b7fa](https://github.com/Jakob-Strobl/portfolio/commit/2a3b7fae09d5f811039873c211fcb1fc218c4682))
+
 ## [0.11.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.0...v0.11.1) (2026-08-02)
 
 
