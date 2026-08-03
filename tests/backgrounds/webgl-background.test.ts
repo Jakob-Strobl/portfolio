@@ -56,6 +56,12 @@ describe("createWebGlBackgroundHost", () => {
     callback(timestamp);
   }
 
+  function runPendingFrames(timestamp: number) {
+    const callbacks = [...animationFrameCallbacks.values()];
+    animationFrameCallbacks.clear();
+    for (const callback of callbacks) callback(timestamp);
+  }
+
   beforeEach(() => {
     animationFrameCallbacks = new Map();
     nextAnimationFrameHandle = 0;
@@ -155,7 +161,7 @@ describe("createWebGlBackgroundHost", () => {
     host.dispose();
   });
 
-  test("uses the full canvas box instead of the transient visual viewport", () => {
+  test("ignores scrollbar-affected canvas geometry and deduplicates unchanged viewport events", () => {
     const visualViewportDescriptor = Object.getOwnPropertyDescriptor(window, "visualViewport");
     const visualViewport = new EventTarget();
     Object.defineProperty(window, "visualViewport", { configurable: true, value: visualViewport });
@@ -169,7 +175,26 @@ describe("createWebGlBackgroundHost", () => {
       const config = { kind: "waves", seed: 1, speed: 1, intensity: 1 } as const;
       const host = createWebGlBackgroundHost(canvas, () => effect, config)!;
 
-      expect(effect.resize).toHaveBeenCalledWith(390, 900, 390, 900);
+      expect(effect.resize).toHaveBeenCalledWith(1000, 500, 1000, 500);
+      vi.mocked(effect.resize).mockClear();
+      vi.mocked(gl.viewport).mockClear();
+
+      vi.mocked(canvas.getBoundingClientRect).mockReturnValue(new DOMRect(0, 0, 375, 900));
+      window.dispatchEvent(new Event("resize"));
+      visualViewport.dispatchEvent(new Event("resize"));
+      visualViewport.dispatchEvent(new Event("resize"));
+      expect(effect.resize).not.toHaveBeenCalled();
+      runPendingFrames(16);
+      expect(effect.resize).not.toHaveBeenCalled();
+      expect(gl.viewport).not.toHaveBeenCalled();
+
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 900 });
+      window.dispatchEvent(new Event("resize"));
+      visualViewport.dispatchEvent(new Event("resize"));
+      runPendingFrames(32);
+      expect(effect.resize).toHaveBeenCalledTimes(1);
+      expect(effect.resize).toHaveBeenLastCalledWith(900, 500, 900, 500);
+      expect(gl.viewport).toHaveBeenCalledTimes(1);
       host.dispose();
     } finally {
       if (visualViewportDescriptor == null) Reflect.deleteProperty(window, "visualViewport");

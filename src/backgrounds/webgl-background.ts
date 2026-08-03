@@ -30,12 +30,10 @@ export function normalizePointerPosition(clientX: number, clientY: number, width
   };
 }
 
-function getViewportDimensions(canvas: HTMLCanvasElement) {
-  const canvasRect = canvas.getBoundingClientRect();
-
+function getViewportDimensions() {
   return {
-    width: Math.max(1, Math.round(canvasRect.width || window.innerWidth)),
-    height: Math.max(1, Math.round(canvasRect.height || window.innerHeight)),
+    width: Math.max(1, Math.round(window.innerWidth)),
+    height: Math.max(1, Math.round(window.innerHeight)),
   };
 }
 
@@ -80,6 +78,9 @@ export function createWebGlBackgroundHost(
   let pointerY = 0.5;
   let pointerTargetX = 0.5;
   let pointerTargetY = 0.5;
+  let logicalWidth = 0;
+  let logicalHeight = 0;
+  let resizeFrame: number | undefined;
 
   const loop = createAnimationLoop((timestamp) => {
     const deltaSeconds =
@@ -96,9 +97,9 @@ export function createWebGlBackgroundHost(
     });
   });
 
-  function resize() {
+  function resize(force = false) {
     if (disposed) return;
-    const { width, height } = getViewportDimensions(canvas);
+    const { width, height } = getViewportDimensions();
     const coarsePointer = performanceObserver?.snapshot().coarsePointer ?? false;
     const nextResolutionScale = resolveBackgroundResolutionScale(
       preferences.quality,
@@ -108,6 +109,15 @@ export function createWebGlBackgroundHost(
     resolutionScale = nextResolutionScale;
     const renderWidth = Math.max(1, Math.round(width * resolutionScale));
     const renderHeight = Math.max(1, Math.round(height * resolutionScale));
+    const dimensionsChanged =
+      logicalWidth !== width ||
+      logicalHeight !== height ||
+      canvas.width !== renderWidth ||
+      canvas.height !== renderHeight;
+
+    if (!force && !dimensionsChanged) return;
+    logicalWidth = width;
+    logicalHeight = height;
 
     if (canvas.width !== renderWidth) canvas.width = renderWidth;
     if (canvas.height !== renderHeight) canvas.height = renderHeight;
@@ -118,9 +128,17 @@ export function createWebGlBackgroundHost(
     loop.invalidate();
   }
 
+  function scheduleResize() {
+    if (disposed || resizeFrame !== undefined) return;
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = undefined;
+      resize();
+    });
+  }
+
   function initializeEffect() {
     effect = factory(gl, config);
-    resize();
+    resize(true);
     elapsedSeconds = 0;
     previousTimestamp = undefined;
   }
@@ -158,7 +176,7 @@ export function createWebGlBackgroundHost(
   }
 
   function handlePointerMove(event: PointerEvent) {
-    const { width, height } = getViewportDimensions(canvas);
+    const { width, height } = getViewportDimensions();
     const pointer = normalizePointerPosition(event.clientX, event.clientY, width, height);
     pointerTargetX = pointer.x;
     pointerTargetY = pointer.y;
@@ -209,8 +227,8 @@ export function createWebGlBackgroundHost(
     return undefined;
   }
 
-  window.addEventListener("resize", resize, { passive: true });
-  window.visualViewport?.addEventListener("resize", resize, { passive: true });
+  window.addEventListener("resize", scheduleResize, { passive: true });
+  window.visualViewport?.addEventListener("resize", scheduleResize, { passive: true });
   window.addEventListener("pointermove", handlePointerMove, { passive: true });
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost);
@@ -249,8 +267,10 @@ export function createWebGlBackgroundHost(
       if (disposed) return;
       disposed = true;
       loop.stop();
-      window.removeEventListener("resize", resize);
-      window.visualViewport?.removeEventListener("resize", resize);
+      if (resizeFrame !== undefined) window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = undefined;
+      window.removeEventListener("resize", scheduleResize);
+      window.visualViewport?.removeEventListener("resize", scheduleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       canvas.removeEventListener("webglcontextlost", handleContextLost);

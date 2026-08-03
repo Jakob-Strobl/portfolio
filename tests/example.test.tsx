@@ -15,6 +15,7 @@ test("smoke test", async () => {
   ));
   expect(page.container.querySelector("div")).toBeVisible();
   expect(page.container.querySelector("div")).toHaveClass("fixed");
+  expect(page.container.querySelector("div")).toHaveClass("overflow-hidden");
 });
 
 test("app smoke test", async () => {

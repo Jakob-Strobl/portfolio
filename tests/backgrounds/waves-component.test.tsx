@@ -76,4 +76,12 @@ describe("WavesBackground", () => {
     page.unmount();
     expect(mocks.host.dispose).toHaveBeenCalledTimes(1);
   });
+
+  test("keeps the canvas on the stable viewport width", () => {
+    const page = render(() => <WavesBackground />);
+    const canvas = page.container.querySelector("canvas");
+
+    expect(canvas).toHaveClass("w-screen");
+    expect(canvas).not.toHaveClass("w-full");
+  });
 });
