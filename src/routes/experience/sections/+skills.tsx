@@ -11,15 +11,15 @@ export const SkillsSection = () => (
       <div>
         <dt class="experience-card-subtitle">Frontend</dt>
         <dd class="experience-card-meta mt-1">
-          React, Svelte/SvelteKit, SolidJS, Web Components, StencilJS, Tailwind CSS, SCSS
+          React, Svelte/SvelteKit, SolidJS, Web Components, StencilJS, Tailwind CSS, SCSS, React Native
         </dd>
       </div>
 
       <div>
         <dt class="experience-card-subtitle">Backend & infrastructure</dt>
         <dd class="experience-card-meta mt-1">
-          ElysiaJS, Better Auth, Convex, Clerk, Cloudflare (Pages, Workers, Durable Objects), Terraform, FHIR v4, AWS,
-          GitHub Actions
+          Terraform, GitHub Actions, ElysiaJS, Better Auth, Convex, Clerk, Cloudflare (Pages, Workers, Durable Objects),
+          Wrangler, FHIR v4, AWS
         </dd>
       </div>
 
@@ -33,16 +33,14 @@ export const SkillsSection = () => (
 
       <div>
         <dt class="experience-card-subtitle">AI & developer tooling</dt>
-        <dd class="experience-card-meta mt-1">
-          AI product integration, agent harnesses, computer-vision systems, New Relic, PostHog, Wrangler
-        </dd>
+        <dd class="experience-card-meta mt-1">AI product integration, agent harnesses, computer-vision systems</dd>
       </div>
 
       <div>
         <dt class="experience-card-subtitle">Engineering practice</dt>
         <dd class="experience-card-meta mt-1">
-          Product design, system architecture, workflow orchestration, SDLC automation, CI/CD, testing, observability,
-          analytics
+          Product design, system architecture, workflow orchestration, SDLC automation, CI/CD, testing, observability
+          (New Relic), analytics (PostHog)
         </dd>
       </div>
     </dl>
