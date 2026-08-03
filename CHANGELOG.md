@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.12.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.0...v0.12.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* **background:** stabilize full-viewport WebGL sizing ([f56f678](https://github.com/Jakob-Strobl/portfolio/commit/f56f6785d2c27c906b2d9037967a1878d3ad7598))
+* **cloudflare:** prevent HTML fallback for build assets ([58291c2](https://github.com/Jakob-Strobl/portfolio/commit/58291c2c96da3440cb7a5f049a9b0124af9fccf0))
+* **shadow:** keep fixed shadows synced on viewport scroll ([18722ad](https://github.com/Jakob-Strobl/portfolio/commit/18722ad75a3eee75158d5fdb3193a229965a0c53))
+
+
+### Documentation
+
+* **cloudflare:** explain asset routing exclusion ([00915fb](https://github.com/Jakob-Strobl/portfolio/commit/00915fbc24ac4724369f17a4916c71c95c95ac48))
+
 ## [0.12.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.2...v0.12.0) (2026-08-03)
 
 
