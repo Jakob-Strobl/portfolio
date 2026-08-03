@@ -79,7 +79,8 @@ A custom shadow management system that dynamically tracks DOM elements and rende
 
 - **Waves**: A redesigned, procedurally generated wave field driven by a custom WebGL 2 pipeline and custom GLSL vertex/fragment shaders. Multiple overlapping waves are seeded and animated without a third-party 3D engine.
 - **Tessellation**: A second living background effect model built from a changing triangulated mesh, with evolving topology, per-facet lighting, lifecycle pulses, and smooth transitions between mesh states.
-- Both effects expose controls for effect selection, seed regeneration, motion speed, visual intensity, quality, and frame rate. Preferences can be saved for future sessions.
+
+Both effects expose controls for effect selection, seed regeneration, motion speed, visual intensity, quality, and frame rate. Preferences can be saved for future sessions.
 
 ## Quick Start
 
