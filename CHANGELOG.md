@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.12.0](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.2...v0.12.0) (2026-08-03)
+
+
+### Features
+
+* **seo:** add branded Open Graph preview image ([d50b0ea](https://github.com/Jakob-Strobl/portfolio/commit/d50b0eaeb2c0c970129ec0b98c602e61b754b477))
+* **seo:** refine branded preview crop ([de3541f](https://github.com/Jakob-Strobl/portfolio/commit/de3541f0c4e3272470990e79f68f881a858bf9f2))
+
+
+### Bug Fixes
+
+* **background:** render WebGL canvas across full viewport ([b9740c9](https://github.com/Jakob-Strobl/portfolio/commit/b9740c961aad5ee4ddd565caca4a4c4af8a13671))
+* **shadow:** sync fixed shadows with mobile viewport changes ([43c58f2](https://github.com/Jakob-Strobl/portfolio/commit/43c58f29487404f2725a03e95f777227ce2632f3))
+
+
+### Documentation
+
+* align waves screenshot crop ([92b5bb9](https://github.com/Jakob-Strobl/portfolio/commit/92b5bb96b6a703b4a2c65cb67fe108093d84a2bf))
+* **readme:** cleanup custom backgrounds last bullet ([95eb2ef](https://github.com/Jakob-Strobl/portfolio/commit/95eb2ef80bf8ce157bcffabea8ee9ad6a46eb87d))
+* refresh background screenshots ([293e4c3](https://github.com/Jakob-Strobl/portfolio/commit/293e4c314dc620224a24c255f255dcc6e2a35363))
+
 ## [0.11.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.11.1...v0.11.2) (2026-08-03)
 
 
