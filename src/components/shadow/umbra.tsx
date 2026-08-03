@@ -3,7 +3,6 @@ import { createStore } from "solid-js/store";
 import ShadowEl from "./shadow-el";
 import { ShadowRect, UmbraState, ZERO_RECT } from "./types";
 import { clearRemovedShadows, synchronizeShadowClientRects } from "./actions";
-import { isMobile } from "~/actions/device-actions";
 
 const [state, setState] = createStore<UmbraState>({
   shadows: [],
@@ -54,18 +53,20 @@ export default function Umbra(props: UmbraProps) {
 
     document.addEventListener("toggle", scheduleSynchronization, true);
     window.addEventListener("resize", scheduleSynchronization, { passive: true });
+    window.addEventListener("scroll", scheduleSynchronization, { passive: true });
 
     // visualViewport covers browser chrome changes that do not resize the layout
     // viewport. The shared animation-frame scheduler deduplicates events when both
     // viewport APIs and ResizeObserver fire for the same layout change.
-    if (window.visualViewport && !isMobile()) {
-      window.visualViewport.addEventListener("resize", scheduleSynchronization, { passive: true });
-    }
+    window.visualViewport?.addEventListener("resize", scheduleSynchronization, { passive: true });
+    window.visualViewport?.addEventListener("scroll", scheduleSynchronization, { passive: true });
 
     onCleanup(() => {
       document.removeEventListener("toggle", scheduleSynchronization, true);
       window.removeEventListener("resize", scheduleSynchronization);
+      window.removeEventListener("scroll", scheduleSynchronization);
       window.visualViewport?.removeEventListener("resize", scheduleSynchronization);
+      window.visualViewport?.removeEventListener("scroll", scheduleSynchronization);
       if (synchronizationFrame !== undefined) window.cancelAnimationFrame(synchronizationFrame);
       resizeObserver?.disconnect();
       observedElements.clear();

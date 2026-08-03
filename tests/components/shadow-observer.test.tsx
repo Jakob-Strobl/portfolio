@@ -346,6 +346,43 @@ describe("Umbra shadow geometry observer", () => {
     element.remove();
   });
 
+  test("synchronizes fixed shadows when the visual viewport changes on mobile", async () => {
+    const visualViewportDescriptor = Object.getOwnPropertyDescriptor(window, "visualViewport");
+    const visualViewport = new EventTarget();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: visualViewport });
+
+    try {
+      const page = render(() => <Umbra />);
+      const element = document.body.appendChild(document.createElement("div"));
+      const layout = { x: 20, y: 20, width: 200, height: 60, visible: true };
+      mockLayout(element, layout);
+      const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
+
+      addShadow(element, "self", {
+        shadowState,
+        setShadowState,
+        warmupDelayMs: 0,
+        fixed: true,
+        backgroundOpacity: () => 0.6,
+      });
+      const shadow = state.shadows[0];
+
+      layout.y = 48;
+      visualViewport.dispatchEvent(new Event("resize"));
+      await flushSynchronizationFrame();
+
+      expect(shadow.position()).toEqual({ x: 20, y: 48 });
+      expect(shadow.activePosition()).toEqual({ x: 20, y: 48 });
+      expect(shadow.snapToSource()).toBe(true);
+
+      page.unmount();
+      element.remove();
+    } finally {
+      if (visualViewportDescriptor == null) Reflect.deleteProperty(window, "visualViewport");
+      else Object.defineProperty(window, "visualViewport", visualViewportDescriptor);
+    }
+  });
+
   test("keeps non-fixed shadows in document coordinates through scrolling and repeated layout toggles", () => {
     let scrollX = 25;
     let scrollY = 400;

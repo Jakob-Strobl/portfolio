@@ -1,4 +1,4 @@
-import { batch, createMemo, createRenderEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createMemo, createRenderEffect, onCleanup, onMount } from "solid-js";
 import { ShadowRect } from "./types";
 import { completeShadowTransition } from "./actions";
 
@@ -15,32 +15,6 @@ export default function ShadowEl({ rect }: ShadowRectProps) {
     rect.shadowState() === "ready" || rect.shadowState() === "fade-in" || rect.shadowState() === "settling";
   const isShadowWarm = (rect: ShadowRect) =>
     rect.shadowState() === "mounted" || rect.shadowState() === "moving" || rect.shadowState() === "warm";
-
-  // FIX(IOS): On iOS when bouncing at top, scrollY goes negative which misaligns fixed shadows
-  const [isElasticBouncing, setIsElasticBouncing] = createSignal(false);
-  onMount(() => {
-    if (rect.fixed) {
-      const handleScroll = () => {
-        const wasElastic = isElasticBouncing();
-        const isElastic = window.scrollY < 0;
-        if (isElastic !== wasElastic) setIsElasticBouncing(isElastic);
-
-        if (wasElastic && window.scrollY === 0) {
-          batch(() => {
-            setIsElasticBouncing(false);
-            const clientRect = rect.shadowedEl.getBoundingClientRect(); // force reflow
-            const clientY = Math.max(0, clientRect.y); // prevent negative y which causes issues with fixed shadows
-            rect.setPosition({ x: clientRect.x, y: clientY });
-            rect.setDimensions({ x: clientRect.width, y: clientRect.height });
-            rect.setSnapToSource(false);
-            rect.setShadowState("moving");
-          });
-        }
-      };
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      onCleanup(() => window.removeEventListener("scroll", handleScroll));
-    }
-  });
 
   createRenderEffect(() => {
     // Keep the source layout read tied to state changes so the browser commits the
