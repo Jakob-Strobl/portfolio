@@ -19,15 +19,21 @@ export interface UmbraProps {}
 export default function Umbra(props: UmbraProps) {
   let resizeObserver: ResizeObserver | undefined;
   let synchronizationFrame: number | undefined;
+  let pendingSynchronizationScope: "all" | "fixed" | undefined;
   const observedElements = new Set<Element>();
 
-  const scheduleSynchronization = () => {
+  const scheduleSynchronization = (scope: "all" | "fixed") => {
+    if (pendingSynchronizationScope !== "all") pendingSynchronizationScope = scope;
     if (synchronizationFrame !== undefined) return;
     synchronizationFrame = window.requestAnimationFrame(() => {
       synchronizationFrame = undefined;
-      synchronizeShadowClientRects("snap");
+      const nextScope = pendingSynchronizationScope ?? "all";
+      pendingSynchronizationScope = undefined;
+      synchronizeShadowClientRects("snap", nextScope);
     });
   };
+  const scheduleFullSynchronization = () => scheduleSynchronization("all");
+  const scheduleFixedSynchronization = () => scheduleSynchronization("fixed");
 
   const reconcileObservedElements = () => {
     if (resizeObserver == null) return;
@@ -47,27 +53,28 @@ export default function Umbra(props: UmbraProps) {
 
   onMount(() => {
     if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(scheduleSynchronization);
+      resizeObserver = new ResizeObserver(scheduleFullSynchronization);
       reconcileObservedElements();
     }
 
-    document.addEventListener("toggle", scheduleSynchronization, true);
-    window.addEventListener("resize", scheduleSynchronization, { passive: true });
-    window.addEventListener("scroll", scheduleSynchronization, { passive: true });
+    document.addEventListener("toggle", scheduleFullSynchronization, true);
+    window.addEventListener("resize", scheduleFullSynchronization, { passive: true });
+    window.addEventListener("scroll", scheduleFixedSynchronization, { passive: true });
 
     // visualViewport covers browser chrome changes that do not resize the layout
     // viewport. The shared animation-frame scheduler deduplicates events when both
     // viewport APIs and ResizeObserver fire for the same layout change.
-    window.visualViewport?.addEventListener("resize", scheduleSynchronization, { passive: true });
-    window.visualViewport?.addEventListener("scroll", scheduleSynchronization, { passive: true });
+    window.visualViewport?.addEventListener("resize", scheduleFullSynchronization, { passive: true });
+    window.visualViewport?.addEventListener("scroll", scheduleFixedSynchronization, { passive: true });
 
     onCleanup(() => {
-      document.removeEventListener("toggle", scheduleSynchronization, true);
-      window.removeEventListener("resize", scheduleSynchronization);
-      window.removeEventListener("scroll", scheduleSynchronization);
-      window.visualViewport?.removeEventListener("resize", scheduleSynchronization);
-      window.visualViewport?.removeEventListener("scroll", scheduleSynchronization);
+      document.removeEventListener("toggle", scheduleFullSynchronization, true);
+      window.removeEventListener("resize", scheduleFullSynchronization);
+      window.removeEventListener("scroll", scheduleFixedSynchronization);
+      window.visualViewport?.removeEventListener("resize", scheduleFullSynchronization);
+      window.visualViewport?.removeEventListener("scroll", scheduleFixedSynchronization);
       if (synchronizationFrame !== undefined) window.cancelAnimationFrame(synchronizationFrame);
+      pendingSynchronizationScope = undefined;
       resizeObserver?.disconnect();
       observedElements.clear();
     });

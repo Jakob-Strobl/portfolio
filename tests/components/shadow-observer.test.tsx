@@ -53,6 +53,21 @@ function mockLayout(element: HTMLElement, layout: MutableLayout, onRead?: () => 
   );
 }
 
+function createShadowOptions(initialState: ShadowStates, fixed: boolean) {
+  const [shadowState, setShadowState] = createSignal<ShadowStates>(initialState);
+  const [settlingEpoch, advanceSettlingEpoch] = createSignal(0);
+
+  return {
+    shadowState,
+    setShadowState,
+    settlingEpoch,
+    advanceSettlingEpoch,
+    warmupDelayMs: 0,
+    fixed,
+    backgroundOpacity: () => 0.6,
+  };
+}
+
 async function flushSynchronizationFrame() {
   await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 }
@@ -98,6 +113,7 @@ function createShadowRect(
     origin: { position: { x: layout.x, y: layout.y }, dimensions: { x: layout.width, y: layout.height } },
     warmupDelayMs: 0,
     fixed: false,
+    backgroundOpacity: () => 0.6,
   };
 }
 
@@ -356,15 +372,7 @@ describe("Umbra shadow geometry observer", () => {
       const element = document.body.appendChild(document.createElement("div"));
       const layout = { x: 20, y: 20, width: 200, height: 60, visible: true };
       mockLayout(element, layout);
-      const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
-
-      addShadow(element, "self", {
-        shadowState,
-        setShadowState,
-        warmupDelayMs: 0,
-        fixed: true,
-        backgroundOpacity: () => 0.6,
-      });
+      addShadow(element, "self", createShadowOptions("warm", true));
       const shadow = state.shadows[0];
 
       layout.y = 48;
@@ -383,6 +391,71 @@ describe("Umbra shadow geometry observer", () => {
     }
   });
 
+  test.each(["mounted", "moving"] as const)(
+    "snaps a %s fixed shadow to visual viewport scroll changes",
+    async (initialState) => {
+      const visualViewportDescriptor = Object.getOwnPropertyDescriptor(window, "visualViewport");
+      const visualViewport = new EventTarget();
+      Object.defineProperty(window, "visualViewport", { configurable: true, value: visualViewport });
+
+      try {
+        const page = render(() => <Umbra />);
+        const element = document.body.appendChild(document.createElement("div"));
+        const layout = { x: 20, y: 20, width: 200, height: 60, visible: true };
+        mockLayout(element, layout);
+        addShadow(element, "self", createShadowOptions(initialState, true));
+        const shadow = state.shadows[0];
+
+        layout.y = 48;
+        visualViewport.dispatchEvent(new Event("scroll"));
+        await flushSynchronizationFrame();
+
+        expect(shadow.position()).toEqual({ x: 20, y: 48 });
+        expect(shadow.activePosition()).toEqual({ x: 20, y: 48 });
+        expect(shadow.snapToSource()).toBe(true);
+        expect(shadow.shadowState()).toBe("warm");
+
+        page.unmount();
+        element.remove();
+      } finally {
+        if (visualViewportDescriptor == null) Reflect.deleteProperty(window, "visualViewport");
+        else Object.defineProperty(window, "visualViewport", visualViewportDescriptor);
+      }
+    },
+  );
+
+  test("measures only fixed shadows during scrolling but promotes a queued resize to a full scan", async () => {
+    const page = render(() => <Umbra />);
+    const fixedElement = document.body.appendChild(document.createElement("div"));
+    const documentElement = document.body.appendChild(document.createElement("div"));
+    const fixedLayout = { x: 20, y: 20, width: 200, height: 60, visible: true };
+    const documentLayout = { x: 20, y: 200, width: 200, height: 60, visible: true };
+    const fixedRead = vi.fn();
+    const documentRead = vi.fn();
+    mockLayout(fixedElement, fixedLayout, fixedRead);
+    mockLayout(documentElement, documentLayout, documentRead);
+    addShadow(fixedElement, "self", createShadowOptions("warm", true));
+    addShadow(documentElement, "self", createShadowOptions("warm", false));
+    fixedRead.mockClear();
+    documentRead.mockClear();
+
+    window.dispatchEvent(new Event("scroll"));
+    await flushSynchronizationFrame();
+    expect(fixedRead).toHaveBeenCalledTimes(1);
+    expect(documentRead).not.toHaveBeenCalled();
+
+    fixedRead.mockClear();
+    window.dispatchEvent(new Event("scroll"));
+    window.dispatchEvent(new Event("resize"));
+    await flushSynchronizationFrame();
+    expect(fixedRead).toHaveBeenCalledTimes(1);
+    expect(documentRead).toHaveBeenCalledTimes(1);
+
+    page.unmount();
+    fixedElement.remove();
+    documentElement.remove();
+  });
+
   test("keeps non-fixed shadows in document coordinates through scrolling and repeated layout toggles", () => {
     let scrollX = 25;
     let scrollY = 400;
@@ -392,16 +465,8 @@ describe("Umbra shadow geometry observer", () => {
     element.dataset.shadow = "scrolling-card";
     const layout = { x: -5, y: 600, width: 300, height: 120, visible: true };
     mockLayout(element, layout);
-    const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
 
-    expect(
-      addShadow(element, "self", {
-        shadowState,
-        setShadowState,
-        warmupDelayMs: 0,
-        fixed: false,
-      }),
-    ).toBe(true);
+    expect(addShadow(element, "self", createShadowOptions("warm", false))).toBe(true);
     const shadow = state.shadows[0];
     expect(shadow.position()).toEqual({ x: 20, y: 1000 });
 
@@ -439,15 +504,9 @@ describe("Umbra shadow geometry observer", () => {
     element.dataset.shadow = "fixed-card";
     const layout = { x: 20, y: -15, width: 200, height: 60, visible: true };
     mockLayout(element, layout);
-    const [shadowState, setShadowState] = createSignal<ShadowStates>("warm");
     const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    addShadow(element, "self", {
-      shadowState,
-      setShadowState,
-      warmupDelayMs: 0,
-      fixed: true,
-    });
+    addShadow(element, "self", createShadowOptions("warm", true));
     const shadow = state.shadows[0];
     expect(shadow.position()).toEqual({ x: 20, y: 0 });
 

@@ -26,6 +26,7 @@ export function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0):
 const MEANINGFUL_GEOMETRY_DELTA = 0.25;
 
 type ShadowSyncMode = "snap" | "transition";
+type ShadowSyncScope = "all" | "fixed";
 
 function hasMeaningfulDelta(first: number, second: number) {
   return Math.abs(first - second) >= MEANINGFUL_GEOMETRY_DELTA;
@@ -52,11 +53,12 @@ export function isShadowSourceVisible(shadowedEl: HTMLElement) {
  * Synchronizes every detached shadow after first measuring every source. A resize
  * in one source can move any following sibling without resizing that sibling.
  */
-export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition") {
+export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition", scope: ShadowSyncScope = "all") {
   if (typeof window === "undefined") return false;
   const scrollX = window.scrollX;
   const scrollY = window.scrollY;
-  const measurements = state.shadows.map((shadow) => {
+  const synchronizedShadows = scope === "fixed" ? state.shadows.filter((shadow) => shadow.fixed) : state.shadows;
+  const measurements = synchronizedShadows.map((shadow) => {
     const clientRect = shadow.shadowedEl.getBoundingClientRect();
     const position = shadow.position();
     const dimensions = shadow.dimensions();
@@ -93,9 +95,19 @@ export function synchronizeShadowClientRects(mode: ShadowSyncMode = "transition"
       }
       if (measurement.visibilityChanged) shadow.setVisible(measurement.visible);
 
-      // The active rectangle is immutable while a transition is running. New
-      // measurements stay in position/dimensions until transitionend flushes them.
+      // Full layout synchronization preserves an in-flight transition's active
+      // rectangle. Scroll-only fixed synchronization must instead correct the
+      // rendered position immediately because its coordinate space has moved.
       if (measurement.geometryChanged && (shadow.shadowState() === "mounted" || shadow.shadowState() === "moving")) {
+        if (scope === "all") continue;
+
+        // Viewport scrolling changes the coordinate space of fixed shadows. End
+        // an in-flight transition rather than leaving the detached shadow at a
+        // stale position until transitionend.
+        shadow.setActivePosition(measurement.nextPosition);
+        shadow.setActiveDimensions(measurement.nextDimensions);
+        shadow.setSnapToSource(true);
+        shadow.setShadowState("warm");
         continue;
       }
 

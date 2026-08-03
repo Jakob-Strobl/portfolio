@@ -1,5 +1,5 @@
 import { children, createEffect, createMemo, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
-import type { JSX, Signal } from "solid-js";
+import type { Accessor, JSX, Signal } from "solid-js";
 import { addShadow, beginShadowEntrance, removeShadow } from "./actions";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
 
