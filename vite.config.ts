@@ -17,9 +17,10 @@ export default defineConfig({
       nodeCompat: true,
       deployConfig: false,
       pages: {
-        // Keep missing hashed assets out of the SSR fallback. Otherwise an old
-        // document can request a removed bundle and receive cacheable HTML at
-        // a JavaScript URL.
+        // Exclude the complete static build directory from Pages Functions. This also
+        // prevents stale or missing bundle hashes from falling through to SSR and
+        // caching HTML at a JavaScript URL.
+        // https://developers.cloudflare.com/pages/functions/routing/
         routes: { exclude: ["/_build/*"] },
       },
     },
