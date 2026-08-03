@@ -40,10 +40,13 @@ export default function Contact() {
               <h1 class="text-3xl">Let's connect</h1>
             </div>
             <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
-              <span class="block">Building privacy-first web products with TypeScript, Rust, and Cloudflare.</span>
+              <span class="block">
+                Building privacy-first web products with TypeScript, Rust, and Cloudflare—while pushing back against
+                the dark patterns of the web.
+              </span>
               <span class="mt-2 block">
-                My wider toolkit includes React, SvelteKit, SolidJS, C#/.NET, AWS, Terraform, WebAssembly, WebGL, and
-                systems programming.
+                Fluent across high- and low-level programming languages, modern frameworks, and developer tools, with
+                roots in systems programming, game development, and compilers.
               </span>
             </p>
             <div class="mt-6 flex gap-8 sm:gap-12 xl:gap-16">
@@ -70,6 +73,11 @@ export default function Contact() {
                 </a>
               </div>
             </div>
+            <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
+              Looking for a versatile, product-minded developer with a sharp eye for design and UX who designs and builds
+              polished, intuitive interfaces?{" "}
+              <span class="font-medium text-night-300">Let's talk.</span>
+            </p>
             <p class="mt-8 text-xl">
               Contact me directly:
               <span class="flex sm:mt-0 sm:inline sm:justify-center">
