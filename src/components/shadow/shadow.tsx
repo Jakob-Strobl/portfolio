@@ -2,7 +2,6 @@ import { children, createEffect, createMemo, createSignal, createUniqueId, onCle
 import type { JSX, Signal } from "solid-js";
 import { addShadow, beginShadowEntrance, removeShadow } from "./actions";
 import { ShadowOriginOptions, ShadowStartingStates, ShadowStates } from "./types";
-import { DataAttributeKey } from "../../types/dom";
 
 interface ShadowProps {
   children: JSX.Element | JSX.ArrayElement;
@@ -34,10 +33,6 @@ interface ShadowProps {
    * TIP: Useful for pinning navigation elements
    */
   fixed?: boolean;
-
-  dataset?: {
-    [name: DataAttributeKey]: string | undefined;
-  };
 
   // TODO [ ]: Add optional title that goes above the shadow?
   // TODO [ ]: Parameterize the padding of a shadow?
@@ -136,7 +131,6 @@ export default function Shadow(props: ShadowProps) {
         if (nextFocusedElement instanceof Node && event.currentTarget.contains(nextFocusedElement)) return;
         setFocusWithin(false);
       }}
-      {...props.dataset}
     >
       <div
         class={`min-w-0 text-white ${props.paddingOverride !== undefined ? props.paddingOverride : "p-3 lg:p-4 2xl:p-5"} rounded-lg

@@ -1,72 +1,15 @@
-import { createEffect, createSignal, onMount } from "solid-js";
 import { LinearLayoutProps } from "./linear-layout";
 import Shadow from "../components/shadow/shadow";
-import { createIntersectionObserver } from "@solid-primitives/intersection-observer";
-import { DataAttributeKey } from "../types/dom";
 
 export type TimelineLayout = LinearLayoutProps & {
-  defaultTitle?: string;
   contentGap?: string;
 };
 
-export const timelineTitleDatasetKey: DataAttributeKey = "data-timeline-title";
-
 // TODO give this and linear a simimlar base layout if pattern sticks
 export default function TimelineLayout(props: TimelineLayout) {
-  const [title, setTitle] = createSignal(props.defaultTitle ?? "");
   const contentGap = props.contentGap ?? "gap-8";
-  const [isReady, setReady] = createSignal(false);
-  const allIntersections = new Map<Element, IntersectionObserverEntry>();
-  let contentContainerRef: HTMLDivElement | undefined;
   // Keep the top content margin in sync with the shared timeline gradient height.
   const topMargin = "lg:mt-80 md:mt-64 sm:mt-48 mt-32";
-
-  // Holds the actual DOM elements we want to observe.
-  // This will be populated once the contentContainerRef is available in the DOM. See createEffect below
-  const [elementsToObserve, setElementsToObserve] = createSignal<HTMLElement[]>([]);
-  createEffect(() => {
-    if (contentContainerRef) {
-      const shadowElements = Array.from(
-        contentContainerRef.querySelectorAll<HTMLElement>(`[${timelineTitleDatasetKey}]`),
-      );
-      setElementsToObserve(shadowElements);
-    }
-  });
-
-  createIntersectionObserver(
-    elementsToObserve,
-    (entries) => {
-      const intersecting = entries.filter((entry) => entry.isIntersecting);
-      if (intersecting.length === 0) {
-        return;
-      }
-
-      for (const entry of entries) {
-        allIntersections.set(entry.target, entry);
-      }
-
-      let bestEntry: IntersectionObserverEntry | null = null;
-      let highestRatio = -1;
-      // TODO  [ ]: We can breakup ties with their current positions via the client rects
-      //            and calculate distance to a special midpoint. It works good enough for now to skip that step
-      for (const entry of allIntersections.values()) {
-        if (entry.intersectionRatio > highestRatio) {
-          highestRatio = entry.intersectionRatio;
-          bestEntry = entry;
-        }
-      }
-
-      const year = bestEntry?.target.getAttribute(timelineTitleDatasetKey);
-      if (year) {
-        setTitle(year);
-      }
-    },
-    { threshold: [0.1, 0.25, 0.5, 0.75, 1.0] }, // Adjust as needed to define "center of the screen"
-  );
-
-  onMount(() => {
-    setTimeout(() => setReady(true), 0);
-  });
 
   return (
     <div class="min-w-0 w-full flex flex-row h-screen items-center xs:justify-center justify-start">
@@ -78,17 +21,11 @@ export default function TimelineLayout(props: TimelineLayout) {
               {props.navBack?.()}
             </div>
           </Shadow>
-          <p
-            class="text-white text-2xl/6 cursor-vertical-text w-[1ch] transition-opacity delay-1000 duration-1500 wrap-anywhere text-center mr-2 self-end float-right ease-[cubic-bezier(0.5, 1, 0.89, 1)]"
-            style={{ opacity: isReady() ? 0.7 : 0 }}
-          >
-            {title()}
-          </p>
         </div>
       </div>
       {/* CENTER Content */}
-      <div class={`min-w-0 w-10/12 md:w-3/5 h-full ${topMargin}`}>
-        <div ref={contentContainerRef} class={`min-w-0 w-full flex flex-col ${contentGap} mb-4`}>
+      <div class={`min-w-0 w-10/12 md:w-3/5 max-w-4xl h-full ${topMargin}`}>
+        <div class={`min-w-0 w-full flex flex-col ${contentGap} mb-4`}>
           {props.content}
           <div class="max-h-[48vh] min-h-[16vh] h-dvh"></div>
         </div>

@@ -2,7 +2,7 @@ import { render, fireEvent } from "@solidjs/testing-library";
 import { Route, MemoryRouter, createMemoryHistory } from "@solidjs/router";
 import Gallery from "../../src/routes/gallery/(gallery)";
 import { waitForShadowAnimations } from "../helpers/test-utils";
-import { GALLERY_COLLECTIONS, TIMELINE_TITLE_ATTR } from "../helpers/test-data";
+import { GALLERY_COLLECTIONS } from "../helpers/test-data";
 
 async function renderGalleryPage(route = "/gallery") {
   const history = createMemoryHistory();
@@ -39,16 +39,6 @@ describe("Gallery Routes", () => {
         const title = page.getByText(collection.title);
         expect(title).toBeInTheDocument();
       }
-    });
-
-    it("shows correct timeline headers", async () => {
-      const page = await renderGalleryPage();
-
-      const timeline2018 = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2018-2019"]`);
-      expect(timeline2018).toBeInTheDocument();
-
-      const timeline2019 = page.container.querySelector(`[${TIMELINE_TITLE_ATTR}="2019"]`);
-      expect(timeline2019).toBeInTheDocument();
     });
 
     it("renders at least one photo per collection", async () => {

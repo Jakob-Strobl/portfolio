@@ -12,7 +12,7 @@ import {
   getAllPhotos,
 } from "~/data/gallery/catalog";
 import { getCanonicalUrl, JsonLdNode, PERSON_ID } from "~/data/seo";
-import TimelineLayout, { timelineTitleDatasetKey } from "~/layouts/timeline-layout";
+import TimelineLayout from "~/layouts/timeline-layout";
 import { PhotoCollection as GangneungPhotoCollection } from "./collections/korea-pacific-coast/+photos";
 import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+photos";
 import { PhotoCollection as JejuPhotoCollection } from "./collections/korea-jeju/+photos";
@@ -96,7 +96,6 @@ export default function Gallery() {
         structuredData={galleryPhotoList}
       />
       <TimelineLayout
-        defaultTitle="2025"
         navBack={() => (
           <A href="/">
             <ArrowBigLeft size={20} />
@@ -111,11 +110,7 @@ export default function Gallery() {
                 const CollectionComponent =
                   collectionComponentByKey[collection.key as keyof typeof collectionComponentByKey];
                 return (
-                  <Shadow
-                    warmupDelayMs={Math.min(125 + idx() * 125, 500)}
-                    contentFadeInDelayMs={500}
-                    dataset={{ [timelineTitleDatasetKey]: collection.timelineTitle }}
-                  >
+                  <Shadow warmupDelayMs={Math.min(125 + idx() * 125, 500)} contentFadeInDelayMs={500}>
                     <CollectionComponent photos={collection.photos} />
                   </Shadow>
                 );

@@ -20,7 +20,6 @@
     "prettify": "bunx prettier . --write"
   },
   "dependencies": {
-    "@solid-primitives/intersection-observer": "^2.2.5",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^1.0.0",
     "@solidjs/start": "^2.0.0-rc.9",

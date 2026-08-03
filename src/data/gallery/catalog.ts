@@ -4,14 +4,13 @@ import { PhotoResource } from "~/types/photo-resource";
 export type GalleryCollection = {
   key: string;
   title: string;
-  timelineTitle: string;
 };
 
 export const GALLERY_COLLECTIONS: GalleryCollection[] = [
-  { key: "korea-seoul", title: "Korea - Seoul", timelineTitle: "2018-2019" },
-  { key: "korea-jeju", title: "Korea - Jeju", timelineTitle: "2019" },
-  { key: "himeji", title: "Japan - Himeji", timelineTitle: "2019" },
-  { key: "korea-pacific-coast", title: "Korea - Around Gangneung (강릉시)", timelineTitle: "2019" },
+  { key: "korea-seoul", title: "Korea - Seoul" },
+  { key: "korea-jeju", title: "Korea - Jeju" },
+  { key: "himeji", title: "Japan - Himeji" },
+  { key: "korea-pacific-coast", title: "Korea - Around Gangneung (강릉시)" },
 ];
 
 const typedCatalog = photoCatalog as PhotoResource[];
