@@ -155,6 +155,28 @@ describe("createWebGlBackgroundHost", () => {
     host.dispose();
   });
 
+  test("uses the full canvas box instead of the transient visual viewport", () => {
+    const visualViewportDescriptor = Object.getOwnPropertyDescriptor(window, "visualViewport");
+    const visualViewport = new EventTarget();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: visualViewport });
+
+    try {
+      const gl = createGl();
+      const canvas = document.createElement("canvas");
+      vi.spyOn(canvas, "getContext").mockReturnValue(gl);
+      vi.spyOn(canvas, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 0, 390, 900));
+      const effect = createEffect();
+      const config = { kind: "waves", seed: 1, speed: 1, intensity: 1 } as const;
+      const host = createWebGlBackgroundHost(canvas, () => effect, config)!;
+
+      expect(effect.resize).toHaveBeenCalledWith(390, 900, 390, 900);
+      host.dispose();
+    } finally {
+      if (visualViewportDescriptor == null) Reflect.deleteProperty(window, "visualViewport");
+      else Object.defineProperty(window, "visualViewport", visualViewportDescriptor);
+    }
+  });
+
   test("uses a capped HiDPI backing store while preserving the CSS viewport for effects", () => {
     Object.defineProperty(window, "devicePixelRatio", { configurable: true, value: 3 });
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });

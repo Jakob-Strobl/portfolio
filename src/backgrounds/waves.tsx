@@ -57,7 +57,7 @@ export default function WebGlBackground(props: WavesBackgroundProps) {
     <canvas
       ref={canvasEl}
       aria-hidden="true"
-      class="fade-in block h-[100dvh] w-screen pointer-events-none"
+      class="fade-in pointer-events-none absolute inset-0 block h-full w-full"
       style={{
         "background-color": "#130d20",
         opacity: isReady() ? "1" : "0",

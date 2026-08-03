@@ -30,12 +30,12 @@ export function normalizePointerPosition(clientX: number, clientY: number, width
   };
 }
 
-function getViewportDimensions() {
-  const viewport = window.visualViewport;
+function getViewportDimensions(canvas: HTMLCanvasElement) {
+  const canvasRect = canvas.getBoundingClientRect();
 
   return {
-    width: Math.max(1, Math.round(viewport?.width ?? window.innerWidth)),
-    height: Math.max(1, Math.round(viewport?.height ?? window.innerHeight)),
+    width: Math.max(1, Math.round(canvasRect.width || window.innerWidth)),
+    height: Math.max(1, Math.round(canvasRect.height || window.innerHeight)),
   };
 }
 
@@ -98,7 +98,7 @@ export function createWebGlBackgroundHost(
 
   function resize() {
     if (disposed) return;
-    const { width, height } = getViewportDimensions();
+    const { width, height } = getViewportDimensions(canvas);
     const coarsePointer = performanceObserver?.snapshot().coarsePointer ?? false;
     const nextResolutionScale = resolveBackgroundResolutionScale(
       preferences.quality,
@@ -158,7 +158,7 @@ export function createWebGlBackgroundHost(
   }
 
   function handlePointerMove(event: PointerEvent) {
-    const { width, height } = getViewportDimensions();
+    const { width, height } = getViewportDimensions(canvas);
     const pointer = normalizePointerPosition(event.clientX, event.clientY, width, height);
     pointerTargetX = pointer.x;
     pointerTargetY = pointer.y;
