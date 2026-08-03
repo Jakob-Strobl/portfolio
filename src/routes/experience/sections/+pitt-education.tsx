@@ -8,13 +8,13 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
       <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <div>
           <h2 class="experience-card-subtitle">
-            B.S. in Computer Science — <span class="font-medium">summa cum laude</span>
+            B.S. in Computer Science · <span class="font-medium">summa cum laude</span>
           </h2>
-          <p class="experience-card-meta">GPA: 3.79/4.00 · Major GPA: 3.81/4.00</p>
         </div>
         <h3 class="experience-card-date">2016 - 2020</h3>
       </div>
       <p class="experience-card-meta">Minor in Korean Language · Certificate in Asian Studies</p>
+      <p class="experience-card-meta">GPA: 3.79/4.00 · Major GPA: 3.81/4.00</p>
     </div>
 
     <Show when={isExpanded()}>

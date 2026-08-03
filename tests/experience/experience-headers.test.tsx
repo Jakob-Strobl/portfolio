@@ -189,6 +189,20 @@ describe("Experience Page", () => {
       expect(page.queryAllByText(/GPA.*3\.79/i).length).toBeGreaterThan(0);
     });
 
+    it("keeps each GPA beneath its corresponding study details", async () => {
+      const page = await renderExperiencePage();
+      const educationSections = page.container.querySelectorAll("#education-details > section");
+      const pittsburgh = educationSections[0];
+      const yonsei = educationSections[1];
+
+      expect(pittsburgh?.textContent?.indexOf("Minor in Korean Language")).toBeLessThan(
+        pittsburgh?.textContent?.indexOf("GPA: 3.79/4.00"),
+      );
+      expect(yonsei?.textContent?.indexOf("Areas of study")).toBeLessThan(
+        yonsei?.textContent?.indexOf("GPA: 4.00/4.30"),
+      );
+    });
+
     it("keeps detailed education content collapsed by default", async () => {
       const page = await renderExperiencePage();
       const educationDetails = page.getByText("View education details").closest("details");
