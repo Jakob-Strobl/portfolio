@@ -4,21 +4,21 @@ export const SkillsSection = () => (
       <div>
         <dt class="experience-card-subtitle">Languages & runtimes</dt>
         <dd class="experience-card-meta mt-1">
-          TypeScript, JavaScript, Rust, C#/.NET, GDScript, Python, C, C++, Assembly, Bun, Node.js, Deno
+          TypeScript, JavaScript, Rust, C, GDScript, Python, C#/.NET, C++, Assembly, Bun, Node.js, Deno
         </dd>
       </div>
 
       <div>
         <dt class="experience-card-subtitle">Frontend</dt>
         <dd class="experience-card-meta mt-1">
-          React, Svelte/SvelteKit, SolidJS, StencilJS, Web Components, Tailwind CSS, SCSS
+          React, Svelte/SvelteKit, SolidJS, Web Components, StencilJS, Tailwind CSS, SCSS
         </dd>
       </div>
 
       <div>
         <dt class="experience-card-subtitle">Backend & infrastructure</dt>
         <dd class="experience-card-meta mt-1">
-          ElysiaJS, Better Auth, Zod, FHIR v4, Convex, AWS, Cloudflare (Pages, Workers, Durable Objects), Terraform,
+          ElysiaJS, Better Auth, Convex, Clerk, Cloudflare (Pages, Workers, Durable Objects), Terraform, FHIR v4, AWS,
           GitHub Actions
         </dd>
       </div>
@@ -26,8 +26,8 @@ export const SkillsSection = () => (
       <div>
         <dt class="experience-card-subtitle">Systems, performance & graphics</dt>
         <dd class="experience-card-meta mt-1">
-          High-performance computing (HPC), parallel programming, multiprocessing/multithreading, synchronization
-          primitives, cache locality, Godot, WebAssembly, WebGL/GLSL, FFI, compiler design
+          Godot, WebAssembly, WebGL/GLSL, Parallel programming, synchronization primitives, cache locality, FFI,
+          compiler design
         </dd>
       </div>
 
