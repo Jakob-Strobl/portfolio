@@ -80,9 +80,14 @@ export function createWebGlBackgroundHost(
   let pointerTargetY = 0.5;
   let logicalWidth = 0;
   let logicalHeight = 0;
-  let resizeFrame: number | undefined;
+  let resizePending = false;
 
   const loop = createAnimationLoop((timestamp) => {
+    if (resizePending) {
+      resizePending = false;
+      resizeBackingStore();
+    }
+
     const deltaSeconds =
       frameMode === "static" || previousTimestamp == null ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.1);
     previousTimestamp = timestamp;
@@ -97,8 +102,8 @@ export function createWebGlBackgroundHost(
     });
   });
 
-  function resize(force = false) {
-    if (disposed) return;
+  function resizeBackingStore(force = false) {
+    if (disposed) return false;
     const { width, height } = getViewportDimensions();
     const coarsePointer = performanceObserver?.snapshot().coarsePointer ?? false;
     const nextResolutionScale = resolveBackgroundResolutionScale(
@@ -115,7 +120,7 @@ export function createWebGlBackgroundHost(
       canvas.width !== renderWidth ||
       canvas.height !== renderHeight;
 
-    if (!force && !dimensionsChanged) return;
+    if (!force && !dimensionsChanged) return false;
     logicalWidth = width;
     logicalHeight = height;
 
@@ -125,20 +130,24 @@ export function createWebGlBackgroundHost(
     // Effects receive both physical backing dimensions and the logical CSS
     // viewport. Tessellation uses the latter for its mobile anchor budget.
     effect?.resize(renderWidth, renderHeight, width, height);
+    return true;
+  }
+
+  function resize() {
+    if (!resizeBackingStore()) return;
     loop.invalidate();
   }
 
-  function scheduleResize() {
-    if (disposed || resizeFrame !== undefined) return;
-    resizeFrame = window.requestAnimationFrame(() => {
-      resizeFrame = undefined;
-      resize();
-    });
+  function queueResize() {
+    if (disposed || resizePending) return;
+    resizePending = true;
+    loop.invalidate();
   }
 
   function initializeEffect() {
     effect = factory(gl, config);
-    resize(true);
+    resizePending = false;
+    resizeBackingStore(true);
     elapsedSeconds = 0;
     previousTimestamp = undefined;
   }
@@ -227,8 +236,8 @@ export function createWebGlBackgroundHost(
     return undefined;
   }
 
-  window.addEventListener("resize", scheduleResize, { passive: true });
-  window.visualViewport?.addEventListener("resize", scheduleResize, { passive: true });
+  window.addEventListener("resize", queueResize, { passive: true });
+  window.visualViewport?.addEventListener("resize", queueResize, { passive: true });
   window.addEventListener("pointermove", handlePointerMove, { passive: true });
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost);
@@ -267,10 +276,9 @@ export function createWebGlBackgroundHost(
       if (disposed) return;
       disposed = true;
       loop.stop();
-      if (resizeFrame !== undefined) window.cancelAnimationFrame(resizeFrame);
-      resizeFrame = undefined;
-      window.removeEventListener("resize", scheduleResize);
-      window.visualViewport?.removeEventListener("resize", scheduleResize);
+      resizePending = false;
+      window.removeEventListener("resize", queueResize);
+      window.visualViewport?.removeEventListener("resize", queueResize);
       window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       canvas.removeEventListener("webglcontextlost", handleContextLost);

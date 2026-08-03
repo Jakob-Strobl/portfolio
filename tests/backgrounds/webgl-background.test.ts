@@ -202,6 +202,33 @@ describe("createWebGlBackgroundHost", () => {
     }
   });
 
+  test("resizes the backing store before rendering the next frame", () => {
+    const gl = createGl();
+    const canvas = document.createElement("canvas");
+    vi.spyOn(canvas, "getContext").mockReturnValue(gl);
+    const effect = createEffect();
+    const config = { kind: "waves", seed: 1, speed: 1, intensity: 1 } as const;
+    const host = createWebGlBackgroundHost(canvas, () => effect, config)!;
+
+    runNextFrame(0);
+    vi.mocked(effect.resize).mockClear();
+    vi.mocked(effect.render).mockClear();
+
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 900 });
+    window.dispatchEvent(new Event("resize"));
+
+    const pendingFrameCount = animationFrameCallbacks.size;
+    runPendingFrames(16);
+    const resizeCallOrder = vi.mocked(effect.resize).mock.invocationCallOrder[0];
+    const renderCallOrder = vi.mocked(effect.render).mock.invocationCallOrder[0];
+    host.dispose();
+
+    expect(pendingFrameCount).toBe(1);
+    expect(effect.resize).toHaveBeenCalledWith(900, 500, 900, 500);
+    expect(effect.render).toHaveBeenCalledTimes(1);
+    expect(resizeCallOrder).toBeLessThan(renderCallOrder);
+  });
+
   test("uses a capped HiDPI backing store while preserving the CSS viewport for effects", () => {
     Object.defineProperty(window, "devicePixelRatio", { configurable: true, value: 3 });
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
@@ -245,6 +272,29 @@ describe("createWebGlBackgroundHost", () => {
       deltaSeconds: 0,
       pointer: { x: 0.5, y: 0.5 },
     });
+    expect(animationFrameCallbacks.size).toBe(0);
+    host.dispose();
+  });
+
+  test("resizes and redraws reduced-motion mode in one frame", () => {
+    reducedMotion.setMatches(true);
+    const gl = createGl();
+    const canvas = document.createElement("canvas");
+    vi.spyOn(canvas, "getContext").mockReturnValue(gl);
+    const effect = createEffect();
+    const config = { kind: "waves", seed: 1, speed: 1, intensity: 1 } as const;
+    const host = createWebGlBackgroundHost(canvas, () => effect, config)!;
+
+    runNextFrame(0);
+    vi.mocked(effect.resize).mockClear();
+    vi.mocked(effect.render).mockClear();
+
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 600 });
+    window.dispatchEvent(new Event("resize"));
+    runNextFrame(16);
+
+    expect(effect.resize).toHaveBeenCalledWith(1000, 600, 1000, 600);
+    expect(effect.render).toHaveBeenCalledTimes(1);
     expect(animationFrameCallbacks.size).toBe(0);
     host.dispose();
   });
