@@ -42,36 +42,36 @@ export const UpittTaSection = () => {
               </div>
             </div>
           </div>
-
-          <Show when={isExpanded()}>
-            <div class="experience-card-expanded">
-              <div>
-                <p class="experience-card-detail-label">Undergraduate TA Courses:</p>
-                <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
-                  <li>CS0008 - Intro to Programming with Python</li>
-                  <li>CS0401 - Intermediate Programming in Java</li>
-                  <li>CS0447 — Computer Organization and Assembly</li>
-                  <li>
-                    CS0449 - Intro to Systems Programming with C
-                    <ul class="mt-1 ml-4 list-inside list-disc space-y-1">
-                      <li>
-                        <a
-                          class="text-night-400 hover:text-night-500"
-                          href="https://www.youtube.com/watch?v=_fTCMhaWsdk"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Attack Lab primer (YouTube, 2020)
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Show>
         </div>
       </CollapsibleSummary>
+
+      <Show when={isExpanded()}>
+        <div class="experience-card-expanded">
+          <div>
+            <p class="experience-card-detail-label">Undergraduate TA Courses:</p>
+            <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
+              <li>CS0008 - Intro to Programming with Python</li>
+              <li>CS0401 - Intermediate Programming in Java</li>
+              <li>CS0447 — Computer Organization and Assembly</li>
+              <li>
+                CS0449 - Intro to Systems Programming with C
+                <ul class="mt-1 ml-4 list-inside list-disc space-y-1">
+                  <li>
+                    <a
+                      class="text-night-400 hover:text-night-500"
+                      href="https://www.youtube.com/watch?v=_fTCMhaWsdk"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Attack Lab primer (YouTube, 2020)
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Show>
     </details>
   );
 };

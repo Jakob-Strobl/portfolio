@@ -163,7 +163,10 @@ describe("Experience Page", () => {
 
         expect(courseDetails).toHaveAttribute("open");
         expect(page.getByText("Undergraduate TA Courses:")).toBeInTheDocument();
+        const coursesLabel = page.getByText("Undergraduate TA Courses:");
         expect(page.getByText("CS0008 - Intro to Programming with Python")).toBeInTheDocument();
+        expect(courseDetailsSummary).not.toContainElement(coursesLabel);
+        expect(courseDetails?.querySelector(".experience-card-expanded")).toContainElement(coursesLabel);
       });
     });
   });
@@ -194,6 +197,7 @@ describe("Experience Page", () => {
       expect(educationDetails).toHaveAttribute("open");
       expect(page.getAllByText("Major Coursework:")).toHaveLength(2);
       expect(page.getByText("Clubs:")).toBeInTheDocument();
+      expect(page.getByText(/Korean Conversation Club \(Business Manager\)/)).toBeInTheDocument();
       expect(educationDetails?.querySelector("h3")?.textContent).toBe("University of Pittsburgh");
     });
 

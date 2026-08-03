@@ -6,15 +6,15 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
     <h3 class="experience-card-title">University of Pittsburgh</h3>
     <div>
       <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 class="experience-card-subtitle">
-          B.S. in Computer Science — <span class="font-medium">summa cum laude</span>
-        </h2>
+        <div>
+          <h2 class="experience-card-subtitle">
+            B.S. in Computer Science — <span class="font-medium">summa cum laude</span>
+          </h2>
+          <p class="experience-card-meta">GPA: 3.79/4.00 · Major GPA: 3.81/4.00</p>
+        </div>
         <h3 class="experience-card-date">2016 - 2020</h3>
       </div>
-      <div class="experience-card-meta flex flex-wrap justify-between">
-        <h2>Minor in Korean Language · Certificate in Asian Studies</h2>
-        <h3>GPA: 3.79/4.00 · Major GPA: 3.81/4.00</h3>
-      </div>
+      <p class="experience-card-meta">Minor in Korean Language · Certificate in Asian Studies</p>
     </div>
 
     <Show when={isExpanded()}>
@@ -30,7 +30,9 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
 
           <div>
             <p class="experience-card-detail-label">Clubs:</p>
-            <p class="experience-card-body">Data Dojo (Business Manager), Korean Conversation Club</p>
+            <p class="experience-card-body">
+              Data Dojo (Business Manager), Korean Conversation Club (Business Manager)
+            </p>
           </div>
         </div>
       </div>
