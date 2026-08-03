@@ -14,7 +14,7 @@ export const LevelUpSection = () => (
 
     <div>
       <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 class="experience-card-subtitle">EMR Platform (under NDA)</h2>
+        <h2 class="experience-card-subtitle">EMR Platform</h2>
         <h3 class="experience-card-date">Feb 2025 - Present</h3>
       </div>
       <p class="experience-card-tech">React, Better Auth, Zod, TypeScript</p>

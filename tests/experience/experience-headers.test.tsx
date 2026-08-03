@@ -81,6 +81,13 @@ describe("Experience Page", () => {
         const dateElements = page.queryAllByText(/2025.*Present/i);
         expect(dateElements.length).toBeGreaterThan(0);
       });
+
+      it("describes the EMR platform without an NDA qualifier", async () => {
+        const page = await renderExperiencePage();
+
+        expect(page.getByRole("heading", { name: "EMR Platform" })).toBeInTheDocument();
+        expect(page.queryByText(/under NDA/i)).not.toBeInTheDocument();
+      });
     });
 
     describe("Cox Automotive", () => {
