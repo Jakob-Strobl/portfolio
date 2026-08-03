@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.12.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.1...v0.12.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* **background:** prevent canvas flicker during resize ([134b354](https://github.com/Jakob-Strobl/portfolio/commit/134b3542c6e1f4b8041247a4e16349f0c9ed04af))
+
+
+### Documentation
+
+* **rca:** JavaScript asset cache poisoning and MIME mismatch ([504929a](https://github.com/Jakob-Strobl/portfolio/commit/504929ae01f9cc68a8464724650ab7c4f6e5b9a7))
+
+
+### Styles
+
+* **contact:** smooth responsive sizing ([e16cb7e](https://github.com/Jakob-Strobl/portfolio/commit/e16cb7ee82b43d3f8fd162033c45460d62461d0b))
+* **contact:** tune responsive contact layout ([7c7295c](https://github.com/Jakob-Strobl/portfolio/commit/7c7295cba073fdf8351296b0b16bb96fe14b2695))
+* **contact:** widen intermediate responsive layout ([05c2a14](https://github.com/Jakob-Strobl/portfolio/commit/05c2a141f854d134a3d3b1dc45feea9cbdbb958f))
+* **experience:** italicize academic honor ([7bb425c](https://github.com/Jakob-Strobl/portfolio/commit/7bb425cf2bce25df390886817b7231a4990e5e70))
+
 ## [0.12.1](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.0...v0.12.1) (2026-08-03)
 
 
