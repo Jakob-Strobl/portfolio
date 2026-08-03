@@ -191,14 +191,14 @@
   }
 
   img.github-normalized-size {
-    @apply w-[116px] sm:w-[171.5px] xl:w-[257px];
+    @apply w-24 sm:w-36 xl:w-48;
 
     /* 
      * Shadow may miscalculate the height on first load and first render of contact page when navigating
      *
      * This is because the resulting height of the image is unknown until the asset is loaded
      * We need to set the height in some fashion; using aspect so height is handled for any width values
-     * Avoids having to do this: `@apply h-[83px] md:h-[166.5px] lg:h-[250px];` and manually maintain
+     * Avoids having to manually maintain a height for each responsive width.
      * 
      * WARN(Hardcoding):
      *   The ratio is the ratio of the image the browser will load so the correct height is used before image loads
@@ -208,33 +208,33 @@
   }
 
   img.linkedin-normalized-size {
-    /* These widths match the height of LinkedIn image to the github octocat image 
-     * Github Octacat Dimensions - 257x250
+    /* These widths match the height of the LinkedIn image to the GitHub Octocat image
+     * GitHub Octocat Dimensions - 257x250
      * LinkedIn Bug Dimensions - 733x540
      *
-     * Width/Height := LinkedIn bug aspect ratio 
-     * Aspect Ratio * github image's height = Desired max height of LinkedIn Image
+     * Width/Height := LinkedIn bug aspect ratio
+     * Aspect Ratio * GitHub image's height = Desired max height of LinkedIn Image
      *
      * Github: 257/250 = 1.028 (width/height)
      * LinkedIn: 733/540 = 1.3574 (width/height)
      * 
      * xl-w: 
-     *     height of github image * LinkedIn ratio (width/height) = width
-     *     250px (height) * 1.3574 (width/height) ~= 339.35px (width)
+     *     192px / 1.028 (width/height) = 186.77px (height)
+     *     186.77px (height) * 1.3574 (width/height) ~= 253px (width)
      *
      * sm-w:
-     *     171.5pxx (width) / 1.028 (width/height) = 166.83px (height)
-     *     166.83px (height) * 1.3574 (width/height) ~= 226.45px (width)
+     *     144px (width) / 1.028 (width/height) = 140.08px (height)
+     *     140.08px (height) * 1.3574 (width/height) ~= 190px (width)
      * 
      * w:
-     *     116px (width) / 1.028 (width/height) = 112.84px (height)
-     *     112.84px (height) * 1.3574 (width/height) ~= ~153.17px (width)
+     *     96px (width) / 1.028 (width/height) = 93.39px (height)
+     *     93.39px (height) * 1.3574 (width/height) ~= 127px (width)
      *
      * TODO(refactor): change to rems or is it better if this is pure static pixels?
      * TODO(refactor): to use vars so I can update all by just changing one value. Why do the math by hand every single time lmao
-     * NOTE: width defined used more significant digits than explanation above
+     * NOTE: widths are rounded to keep the responsive values readable
      */
-    @apply w-[153.17px] sm:w-[226.45px] xl:w-[339.35px];
+    @apply w-[127px] sm:w-[190px] xl:w-[253px];
 
     /* Same reason as rule above */
     @apply aspect-733/540;

@@ -35,11 +35,11 @@ export default function Contact() {
         )}
       >
         <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
-          <div class="flex w-full flex-col">
+          <div class="flex w-full flex-col text-base md:text-lg">
             <div>
               <h1 class="text-3xl">Let's connect</h1>
             </div>
-            <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
+            <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:text-lg xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
               <span class="block">
                 Building <span class="font-medium text-night-300">privacy-first</span> web products with TypeScript,
                 Rust, and Cloudflare—while pushing back against the dark patterns of the web.
@@ -49,7 +49,7 @@ export default function Contact() {
                 roots in systems programming, game development, and compilers.
               </span>
             </p>
-            <div class="mt-6 flex gap-8 sm:gap-12 xl:gap-16">
+            <div class="mx-4 mt-6 flex justify-center gap-6 sm:mx-8 sm:gap-8 xl:mx-12 xl:gap-10">
               <div id="github">
                 <a
                   class="group flex flex-col items-center gap-8"
@@ -73,7 +73,7 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-            <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
+            <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:text-lg xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
               Looking for a versatile, product-minded developer with a sharp eye for UI/UX who designs and builds
               polished, intuitive interfaces? <span class="font-medium text-night-300">Let's talk.</span>
             </p>
