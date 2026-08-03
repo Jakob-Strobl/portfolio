@@ -23,7 +23,7 @@ export default function Contact() {
     <>
       <Seo
         title="Contact Jakob Strobl | Full-stack Developer & Indie Builder"
-        description="Contact Jakob Strobl, a full-stack developer and indie builder. Find his GitHub, LinkedIn, and email."
+        description="Connect with Jakob Strobl, a full-stack developer and indie builder, via GitHub, LinkedIn, or email."
         path="/contact"
       />
       <CenteredLayout
@@ -37,12 +37,14 @@ export default function Contact() {
         <Shadow warmupDelayMs={0} contentFadeInDelayMs={400}>
           <div class="flex w-full flex-col">
             <div>
-              <h1 class="text-3xl">Contact Jakob Strobl</h1>
-              <h2 class="mt-1 text-xl text-white/80">Connect with me:</h2>
+              <h1 class="text-3xl">Let's connect</h1>
             </div>
             <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
-              Building privacy-first web products in TypeScript, Rust, and Cloudflare—fluent across modern frontend
-              frameworks, with roots in compilers, game dev, and systems programming.
+              <span class="block">Building privacy-first web products with TypeScript, Rust, and Cloudflare.</span>
+              <span class="mt-2 block">
+                My wider toolkit includes React, SvelteKit, SolidJS, C#/.NET, AWS, Terraform, WebAssembly, WebGL, and
+                systems programming.
+              </span>
             </p>
             <div class="mt-6 flex gap-8 sm:gap-12 xl:gap-16">
               <div id="github">
