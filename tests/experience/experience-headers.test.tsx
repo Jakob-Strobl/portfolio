@@ -167,6 +167,9 @@ describe("Experience Page", () => {
         expect(page.getByText("CS0008 - Intro to Programming with Python")).toBeInTheDocument();
         expect(courseDetailsSummary).not.toContainElement(coursesLabel);
         expect(courseDetails?.querySelector(".experience-card-expanded")).toContainElement(coursesLabel);
+        expect(courseDetails?.querySelector(".experience-card-expanded")).toHaveClass(
+          "experience-card-expanded-standalone",
+        );
       });
     });
   });
