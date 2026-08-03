@@ -74,7 +74,7 @@ export default function Contact() {
               </div>
             </div>
             <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
-              Looking for a versatile, product-minded developer with a sharp eye for design and UX who designs and builds
+              Looking for a versatile, product-minded developer with a sharp eye for UI/UX who designs and builds
               polished, intuitive interfaces?{" "}
               <span class="font-medium text-night-300">Let's talk.</span>
             </p>
