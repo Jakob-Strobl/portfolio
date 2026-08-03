@@ -13,6 +13,15 @@ export default defineConfig({
   },
   nitro: {
     preset: "cloudflare_pages",
-    cloudflare: { nodeCompat: true, deployConfig: false },
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: false,
+      pages: {
+        // Keep missing hashed assets out of the SSR fallback. Otherwise an old
+        // document can request a removed bundle and receive cacheable HTML at
+        // a JavaScript URL.
+        routes: { exclude: ["/_build/*"] },
+      },
+    },
   },
 });
