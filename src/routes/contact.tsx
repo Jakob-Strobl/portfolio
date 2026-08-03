@@ -41,8 +41,8 @@ export default function Contact() {
             </div>
             <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
               <span class="block">
-                Building privacy-first web products with TypeScript, Rust, and Cloudflare—while pushing back against
-                the dark patterns of the web.
+                Building <span class="font-medium text-night-300">privacy-first</span> web products with TypeScript,
+                Rust, and Cloudflare—while pushing back against the dark patterns of the web.
               </span>
               <span class="mt-2 block">
                 Fluent across high- and low-level programming languages, modern frameworks, and developer tools, with
@@ -75,8 +75,7 @@ export default function Contact() {
             </div>
             <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-md text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] xl:max-w-[calc(257px_+_339.35px_+_4rem)]">
               Looking for a versatile, product-minded developer with a sharp eye for UI/UX who designs and builds
-              polished, intuitive interfaces?{" "}
-              <span class="font-medium text-night-300">Let's talk.</span>
+              polished, intuitive interfaces? <span class="font-medium text-night-300">Let's talk.</span>
             </p>
             <p class="mt-8 text-xl">
               Contact me directly:
