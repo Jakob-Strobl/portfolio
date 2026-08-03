@@ -46,9 +46,9 @@ describe("Experience Page", () => {
       expect(header).toBeInTheDocument();
     });
 
-    it("displays Projects header", async () => {
+    it("displays Project Highlights header", async () => {
       const page = await renderExperiencePage();
-      const header = page.getByRole("heading", { name: "Projects", level: 2 });
+      const header = page.getByRole("heading", { name: "Project Highlights", level: 2 });
       expect(header).toBeInTheDocument();
     });
 
@@ -58,7 +58,7 @@ describe("Experience Page", () => {
         header.textContent?.trim(),
       );
 
-      expect(headers).toEqual(["Experience", "Education", "Technical Skills", "Projects"]);
+      expect(headers).toEqual(["Experience", "Education", "Technical Skills", "Project Highlights"]);
     });
 
     it("does not render a scroll-linked year indicator", async () => {

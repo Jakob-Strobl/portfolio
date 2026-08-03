@@ -4,7 +4,7 @@ export const SkillsSection = () => (
       <div>
         <dt class="experience-card-subtitle">Languages & runtimes</dt>
         <dd class="experience-card-meta mt-1">
-          TypeScript, JavaScript, Rust, C#/.NET, GDScript, Python, C, C++, Java, Assembly, Bun, Node.js, Deno
+          TypeScript, JavaScript, Rust, C#/.NET, GDScript, Python, C, C++, Assembly, Bun, Node.js, Deno
         </dd>
       </div>
 
@@ -25,9 +25,7 @@ export const SkillsSection = () => (
 
       <div>
         <dt class="experience-card-subtitle">Systems & graphics</dt>
-        <dd class="experience-card-meta mt-1">
-          Godot, WebAssembly, WebGL/GLSL, vertex and fragment shaders, FFI, compiler design
-        </dd>
+        <dd class="experience-card-meta mt-1">Godot, WebAssembly, WebGL/GLSL, FFI, compiler design</dd>
       </div>
 
       <div>

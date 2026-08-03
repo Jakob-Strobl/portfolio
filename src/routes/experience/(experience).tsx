@@ -61,7 +61,7 @@ export default function Experience() {
             </Shadow>
             {/* Projects */}
             <div>
-              <h2 class="experience-section-title">Projects</h2>
+              <h2 class="experience-section-title">Project Highlights</h2>
               <hr class="mt-2 border-night-300" />
             </div>
             <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
