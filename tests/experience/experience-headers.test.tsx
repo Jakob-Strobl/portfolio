@@ -213,7 +213,8 @@ describe("Experience Page", () => {
     it("describes timedat ownership and technology", async () => {
       const page = await renderExperiencePage();
 
-      expect(page.getByText("Product lead · Product design & UX · Full-stack development")).toBeInTheDocument();
+      expect(page.getAllByText("Product lead · Product design & UX · Full-stack development")).toHaveLength(3);
+      expect(page.getByText("Private project · Sole developer")).toBeInTheDocument();
       expect(page.getByText("Svelte 5, SvelteKit, Clerk, Tailwind CSS, Vitest, Convex")).toBeInTheDocument();
     });
 

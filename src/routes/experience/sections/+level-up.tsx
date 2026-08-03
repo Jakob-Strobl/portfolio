@@ -5,7 +5,10 @@ export const LevelUpSection = () => (
         <h2 class="experience-card-title">Level Up Software LLC</h2>
         <h3 class="experience-card-date">2025 - Present</h3>
       </div>
-      <p class="experience-card-meta">Co-founder, full-stack developer, and UI/UX designer · Remote (Arlington, VA)</p>
+      <p class="experience-card-meta">
+        <strong class="font-medium text-white">Co-founder</strong>, full-stack developer, and UI/UX designer · Remote
+        (Arlington, VA)
+      </p>
       <p class="experience-card-muted">Software consulting and product development</p>
     </div>
 

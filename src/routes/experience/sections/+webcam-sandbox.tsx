@@ -7,6 +7,7 @@ export const WebcamSandboxSection = () => (
         <h3 class="experience-card-title">3D Webcam Sandbox</h3>
         <h2 class="experience-card-date">2023 - Present</h2>
       </div>
+      <p class="experience-card-meta">Private project · Sole developer</p>
       <p class="experience-card-tech">Godot, GDScript, Rust with gdext, Nokhwa, OpenSeeFace (Python)</p>
       <p class="experience-card-summary mt-2">
         A real-time 3D VTuber renderer that maps tracked facial movement onto 3D models and updates their textures from

@@ -22,6 +22,7 @@ export const PolishPicSection = () => (
         <h3 class="experience-card-title">Polish Pic</h3>
         <h2 class="experience-card-date">Oct 2025 - Present</h2>
       </div>
+      <p class="experience-card-meta">Product lead · Product design &amp; UX · Full-stack development</p>
       <p class="experience-card-tech">
         Svelte 5, SvelteKit, Rust/WebAssembly, Tailwind CSS v4, Cloudflare Durable Objects
       </p>
