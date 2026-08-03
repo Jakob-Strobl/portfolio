@@ -17,6 +17,7 @@ export const EducationSection = () => {
           <CollapsibleSummary label="View education details">
             <div id="education-details" class="space-y-4">
               {UpittEducationSection(isEducationExpanded)}
+              <hr class="border-white/10" />
               {YonseiEducationSection(isEducationExpanded)}
             </div>
           </CollapsibleSummary>

@@ -187,7 +187,8 @@ describe("Experience Page", () => {
       const educationDetails = page.getByText("View education details").closest("details");
 
       expect(educationDetails).not.toHaveAttribute("open");
-      expect(educationDetails?.querySelectorAll("hr")).toHaveLength(0);
+      expect(educationDetails?.querySelectorAll("hr")).toHaveLength(1);
+      expect(educationDetails?.querySelector("hr")).toHaveClass("border-white/10");
     });
 
     it("expands both schools with one control", async () => {
@@ -213,7 +214,7 @@ describe("Experience Page", () => {
     it("describes timedat ownership and technology", async () => {
       const page = await renderExperiencePage();
 
-      expect(page.getAllByText("Product lead · Product design & UX · Full-stack development")).toHaveLength(3);
+      expect(page.getAllByText("Product lead · Product design & UX · Full-stack development")).toHaveLength(2);
       expect(page.getByText("Private project · Sole developer")).toBeInTheDocument();
       expect(page.getByText("Svelte 5, SvelteKit, Clerk, Tailwind CSS, Vitest, Convex")).toBeInTheDocument();
     });
@@ -276,6 +277,8 @@ describe("Experience Page", () => {
         // Exclaim is an h1, look for it specifically
         const exclaimHeader = page.getByRole("heading", { name: /Exclaim/i });
         expect(exclaimHeader).toBeInTheDocument();
+        expect(page.getByText(/COVID-era project.*Deprecated/)).toBeInTheDocument();
+        expect(page.getByText(/Designed an LL\(1\) grammar that enabled implementation/i)).toBeInTheDocument();
       });
     });
   });

@@ -7,7 +7,10 @@ export const ExclaimSection = () => (
         <h3 class="experience-card-title">Exclaim</h3>
         <h2 class="experience-card-date">2021</h2>
       </div>
-      <p class="experience-card-meta">Product lead · Product design &amp; UX · Full-stack development</p>
+      <p class="experience-card-meta">
+        COVID-era project · Deprecated · Designed the grammar; built the tokenizer, parser, generator, and templating
+        system
+      </p>
       <p class="experience-card-tech">Rust</p>
       <p class="experience-card-summary mt-2">
         A template language (exclaim-grammar) and compiler for static-site generation
