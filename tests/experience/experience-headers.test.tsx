@@ -277,8 +277,22 @@ describe("Experience Page", () => {
         // Exclaim is an h1, look for it specifically
         const exclaimHeader = page.getByRole("heading", { name: /Exclaim/i });
         expect(exclaimHeader).toBeInTheDocument();
-        expect(page.getByText(/COVID-era project.*Deprecated/)).toBeInTheDocument();
+        expect(
+          page.getByText(/COVID-era project.*Language designer & Compiler engineer.*Deprecated/),
+        ).toBeInTheDocument();
         expect(page.getByText(/Designed an LL\(1\) grammar that enabled implementation/i)).toBeInTheDocument();
+      });
+
+      it("links to both GitHub repositories", async () => {
+        const page = await renderExperiencePage();
+
+        const exclaimLink = page.getByRole("link", { name: "github/exclaim" });
+        const grammarLink = page.getByRole("link", { name: "github/exclaim-grammar" });
+
+        expect(exclaimLink).toHaveAttribute("href", "https://github.com/Jakob-Strobl/exclaim");
+        expect(grammarLink).toHaveAttribute("href", "https://github.com/Jakob-Strobl/exclaim-grammar");
+        expect(exclaimLink).toHaveAttribute("target", "_blank");
+        expect(grammarLink).toHaveAttribute("target", "_blank");
       });
     });
   });
