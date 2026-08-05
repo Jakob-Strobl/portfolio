@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.2...v0.12.3) (2026-08-05)
+
+
+### Dependencies
+
+* upgrade SolidStart and remediate audit findings ([fe07dc1](https://github.com/Jakob-Strobl/portfolio/commit/fe07dc1526925c2e38e993b9f7276f5eef084204))
+
 ## [0.12.2](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.1...v0.12.2) (2026-08-03)
 
 
