@@ -22,7 +22,7 @@
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^1.0.0",
-    "@solidjs/start": "^2.0.0-rc.9",
+    "@solidjs/start": "^2.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "lucide-solid": "^1.28.0",
@@ -53,5 +53,13 @@
     "vite-plugin-solid": "2.11.14",
     "vitest": "^4.1.10",
     "wrangler": "^4.118.0"
+  },
+  "overrides": {
+    "@babel/core": "7.29.7",
+    "defu": "6.1.7",
+    "dompurify": "3.4.12",
+    "mdast-util-to-hast": "13.2.1",
+    "rollup": "4.61.1",
+    "undici": "8.9.0"
   }
 }
