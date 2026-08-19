@@ -110,7 +110,7 @@
   }
 
   .experience-card-meta {
-    @apply text-base leading-6 text-white/70;
+    @apply text-base leading-5 text-white/70;
   }
 
   .experience-card-tech {
@@ -119,7 +119,7 @@
 
   .experience-card-summary,
   .experience-card-body {
-    @apply text-base leading-6 text-white/80;
+    @apply text-base leading-5 text-white/80;
   }
 
   .experience-card-muted {
