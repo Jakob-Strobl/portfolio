@@ -19,7 +19,7 @@ export const LevelUpSection = () => (
       </div>
       <p class="experience-card-tech">React, Better Auth, Zod, TypeScript</p>
     </div>
-    <ul class="experience-card-body list-inside list-disc space-y-1">
+    <ul class="experience-card-body leading-5 list-inside list-disc space-y-1">
       <li>
         Architected a containerized backend-for-frontend (BFF) microservice using ElysiaJS and Better Auth to centralize
         API calls and handle authentication and authorization
