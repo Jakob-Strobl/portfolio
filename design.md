@@ -10,6 +10,56 @@ tessellation. Deep violet-black backgrounds, luminous purple accents, translucen
 provide depth without competing with the writing or photography. The overall feel should remain polished, atmospheric,
 and technically expressive rather than dashboard-like.
 
+## Umbra shadow system
+
+Umbra is the shared manager for detached shadow overlays. Each [`Shadow`](src/components/shadow/shadow.tsx) wrapper
+registers a source with the global [`Umbra`](src/components/shadow/umbra.tsx), which renders an empty
+[`ShadowEl`](src/components/shadow/shadow-el.tsx). Shadow paint stays out of flow; the source owns
+content and interaction. See the [README Umbra overview](README.md#umbra-shadow-system).
+
+### Role and philosophy
+
+Treat the shadow as an underlay behind text and images, not a competing panel. Its stable dark reading surface separates
+foreground content from the calm animated background, improving legibility and depth while keeping writing and
+photography primary.
+
+### Layering and geometry contract
+
+The intended stack is a fixed, pointer-inert, `aria-hidden` WebGL canvas behind the application; source content in the
+normal layout; and an empty Umbra overlay behind that source. Overlays are absolute by default or fixed for pinned
+sources such as the timeline back link
+([`background.tsx`](src/components/background.tsx), [`base-layout.tsx`](src/layouts/base-layout.tsx),
+[`shadow-el.tsx`](src/components/shadow/shadow-el.tsx), [`timeline-layout.tsx`](src/layouts/timeline-layout.tsx)).
+
+Umbra measures each source with `getBoundingClientRect` and uses document coordinates for relative shadows or viewport
+coordinates for fixed shadows
+([`actions.ts`](src/components/shadow/actions.ts), [`types.ts`](src/components/shadow/types.ts)). ResizeObserver plus
+viewport, scroll, and disclosure events are deduplicated in one animation frame. Umbra measures all sources first because
+one item can move later content without resizing it. Visibility checks hide empty sources, preventing
+stale overlays ([`umbra.tsx`](src/components/shadow/umbra.tsx), [`actions.ts`](src/components/shadow/actions.ts)).
+
+### Lifecycle and motion
+
+Entrances and movement use a FLIP-like lifecycle: a cold shadow may start from its source, a removed shadow, or a warm
+neighbor; Umbra freezes the destination, then animates translation and scale. Removed positions support re-entry, while
+observer updates move warm shadows or snap them back after resize
+([`actions.ts`](src/components/shadow/actions.ts), [`types.ts`](src/components/shadow/types.ts)). Warmup waits for initial
+paint frames, then fades in the detached surface and source content. Use `Shadow` options for origin, warmup, content
+fade, opacity, or fixed positioning
+([`shadow.tsx`](src/components/shadow/shadow.tsx)).
+
+### Relationship to the calm VFX
+
+Waves provide atmospheric motion and tessellation provides a changing triangulated field. Umbra keeps
+text, controls, and photography legible above that motion without flattening it into a static card
+([`waves-effect.ts`](src/backgrounds/waves-effect.ts), [`tessellation-effect.ts`](src/backgrounds/tessellation-effect.ts)).
+Settings persist effect selection, seed, speed, intensity, quality, and frame rate; automatic performance policy and
+reduced motion can lower or stop animation
+([`background-settings.tsx`](src/components/background-settings.tsx), [`providers/background.tsx`](src/providers/background.tsx),
+[`webgl-background.ts`](src/backgrounds/webgl-background.ts)). The [README background overview](README.md#custom-webgl-backgrounds)
+describes the two effects, while the [WebGL resize RCA](docs/rca/2026-08-03-webgl-resize-flicker.md) documents why
+resize synchronization must remain paint-safe.
+
 ## Color and surfaces
 
 - The canonical `night` scale lives in `src/app.css`: `night-black` is `#0b0712`, `night-900` is `#13051f`, and the
