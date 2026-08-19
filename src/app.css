@@ -114,7 +114,7 @@
   }
 
   .experience-card-tech {
-    @apply text-sm leading-5 text-night-300;
+    @apply text-sm leading-6 text-night-300;
   }
 
   .experience-card-summary,
