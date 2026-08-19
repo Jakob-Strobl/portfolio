@@ -5,7 +5,7 @@ export const UpittEducationSection = (isExpanded: Accessor<boolean>) => (
   <section class="flex min-w-0 flex-col gap-2">
     <h3 class="experience-card-title">University of Pittsburgh</h3>
     <div>
-      <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+      <div class="mt-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <div>
           <h2 class="experience-card-subtitle">
             B.S. in Computer Science · <em class="font-medium">summa cum laude</em>
