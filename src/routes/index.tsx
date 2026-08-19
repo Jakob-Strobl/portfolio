@@ -132,14 +132,14 @@ export default function Home() {
           }}
         >
           <h1 class="font-medium text-white text-5xl">Jakob Strobl</h1>
-          <p class="text-center text-base text-gray-300">Full-stack developer &amp; indie builder</p>
+          <p class="text-center text-base font-light text-gray-300">Full-stack developer &amp; indie builder</p>
           <div class="w-full">
             <Show when={isSettingsOpen()} fallback={<Menu />}>
               <BackgroundSettingsPanel id={settingsPanelId} onClose={closeSettings} />
             </Show>
           </div>
           <div class="flex items-center gap-2 text-gray-300">
-            <p class="group flex h-8 items-baseline rounded-md py-1 pr-1 pl-1.5 transition-colors duration-200 hover:bg-white/10 focus-within:bg-white/10">
+            <p class="group flex h-8 items-baseline rounded-md py-1 pr-1 pl-1.5 text-sm transition-colors duration-200 hover:bg-white/10 focus-within:bg-white/10">
               <span class="text-xs">v</span>
               <a
                 class="inline-flex items-center transition-colors duration-200 group-hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
