@@ -11,7 +11,7 @@
     "dev": "vite dev",
     "prebuild": "bun scripts/clear-nitro-deploy-config.ts",
     "build": "vite build",
-    "cloudflare-step-deploy": "vitest run && bun run build",
+    "cloudflare-step-deploy": "bun install --frozen-lockfile && bun run test && bun run build",
     "cloudflare-deploy-local": "bun run build && bunx wrangler pages deploy dist --project-name=portfolio",
     "start": "vite preview",
     "test": "vitest run",
