@@ -48,26 +48,18 @@ This portfolio site showcases professional experience through an interactive tim
 - **Testing**: Vitest + SolidJS Testing Library
 - **Language**: TypeScript (strict mode)
 
-### Background Payload
+### Bundle Size Reductions
 
-The background rewrite removes the old Three.js dependency and substantially reduces the effect payload. These figures compare the old production `waves` chunk with the current Vite build; gzip is recompressed from the decoded JavaScript for an apples-to-apples comparison.
+The background rewrite and font migration both substantially reduce the site payload. These figures summarize the two comparisons; values are shown as raw / gzip.
 
-| Background payload              | Uncompressed | Gzip     | Source                            |
-| ------------------------------- | ------------ | -------- | --------------------------------- |
-| Old production waves + Three.js | 490.7 KB     | 124.9 KB | Live `waves-CqeVZqS3.js` asset    |
-| Current custom effect models    | 29.4 KB      | 10.5 KB  | Current Vite `waves` client chunk |
-| Reduction                       | 16.7×        | 11.9×    | Old payload ÷ current payload     |
+| Payload                               | Before             | After            | Reduction     |
+| ------------------------------------- | ------------------ | ---------------- | ------------- |
+| Background effect (Three.js → custom) | 490.7 / 124.9 KB   | 29.4 / 10.5 KB   | 16.7× / 11.9× |
+| Local fonts (Raleway → Figtree)       | 492.1 / 255.2 KB   | 124.7 / 70.7 KB  | 74.7% / 72.3% |
+| Initial client + background           | 712.5 / 196.2 KB   | 324.3 / 101.9 KB | 2.2× / 1.9×   |
+| Initial client + background + fonts   | 1,204.6 / 451.4 KB | 449.0 / 172.6 KB | 2.7× / 2.6×   |
 
-### Initial Payload Including Background
-
-| Initial client + background | Uncompressed | Gzip     |
-| --------------------------- | ------------ | -------- |
-| Old production              | 712.5 KB     | 196.2 KB |
-| Current build               | 324.3 KB     | 101.9 KB |
-
-Including the background payload, the current build is approximately **2.2× smaller raw** and **1.9× smaller gzip** than the old production payload.
-
-The first table isolates the background payload; the second includes the initial client assets plus the background payload.
+Adding the separately loaded font files to the initial client + background comparison brings the combined total from **1,204.6 KB to 449.0 KB raw** and **451.4 KB to 172.6 KB gzip**—a **62.7% raw** and **61.8% gzip** reduction.
 
 ## Custom Design Features
 
