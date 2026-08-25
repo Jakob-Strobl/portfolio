@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.12.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.3...v0.12.4) (2026-08-25)
+
+
+### Bug Fixes
+
+* **ci:** make Cloudflare deployment dependency-safe ([92f0608](https://github.com/Jakob-Strobl/portfolio/commit/92f0608e48fe60b4a553c67a9119d4729d35185e))
+* **home:** align version indicator ([e47cc3c](https://github.com/Jakob-Strobl/portfolio/commit/e47cc3c65e69cb6ebf1afe7c6b9bd0297c41237b))
+* **test:** provide browser storage for Vitest ([21f7a8b](https://github.com/Jakob-Strobl/portfolio/commit/21f7a8b1361af6fc2c5510639f74e64d2a4f3f7e))
+
+
+### Documentation
+
+* add portfolio design system ([ba14483](https://github.com/Jakob-Strobl/portfolio/commit/ba1448382d61874ca2b968b5cfa513b4818774df))
+* document umbra shadow system ([9b2e930](https://github.com/Jakob-Strobl/portfolio/commit/9b2e930a5997a063d6ccdb204683246c93166d91))
+* **readme:** clarify payload units and composition ([45d16bd](https://github.com/Jakob-Strobl/portfolio/commit/45d16bd7f52e2de5ba9128d1a0cd86b3bfdf2e29))
+* **readme:** verify bundle size summary ([e90c213](https://github.com/Jakob-Strobl/portfolio/commit/e90c21377a872e34b80318e0282fb2e4309bc572))
+
+
+### Styles
+
+* **contact:** align body leading ([a840d75](https://github.com/Jakob-Strobl/portfolio/commit/a840d752eaf92714b9d22be68bd2405da05edede))
+* **experience:** normalize content rhythm ([9435b22](https://github.com/Jakob-Strobl/portfolio/commit/9435b2208416c20d4a4df1bae3745bf0b5b852a3))
+* **experience:** tighten education card spacing ([aa8c161](https://github.com/Jakob-Strobl/portfolio/commit/aa8c1616549f3b12f2d1c9a2f53b574fae363728))
+* **typography:** migrate portfolio font from Raleway to Figtree ([2d5b8bb](https://github.com/Jakob-Strobl/portfolio/commit/2d5b8bb37225a03ae44760a04079afcae14a0ed0))
+* **typography:** migrate to Figtree ([89eaaa2](https://github.com/Jakob-Strobl/portfolio/commit/89eaaa2d875f1735d04f4ae667fef0937d607cc7))
+* **typography:** refine Figtree page sizing ([ef9008c](https://github.com/Jakob-Strobl/portfolio/commit/ef9008c5a45f0b34ab55fa6f0dee0d304e93d528))
+* **typography:** scope compact experience bullets ([c061727](https://github.com/Jakob-Strobl/portfolio/commit/c06172751ff0067be84e4f8b28bbc7d8b5cdbf10))
+* **typography:** tighten experience prose ([7f6c981](https://github.com/Jakob-Strobl/portfolio/commit/7f6c981ef247e5fe111b67e4f4b372bb90454f80))
+
 ## [0.12.3](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.2...v0.12.3) (2026-08-05)
 
 
