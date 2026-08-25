@@ -16,7 +16,7 @@ export const CoxAutomotiveSection = () => (
         </p>
       </div>
 
-      <div class="mt-3 space-y-3 text-base">
+      <div class="mt-3 space-y-2 text-base">
         <div>
           <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <h3 class="experience-card-subtitle">Software Engineer II</h3>

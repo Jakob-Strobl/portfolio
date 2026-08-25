@@ -54,11 +54,7 @@ function renderSettings() {
 
 describe("BackgroundSettings", () => {
   beforeEach(() => {
-    window.localStorage.removeItem(BACKGROUND_PREFERENCES_STORAGE_KEY);
-  });
-
-  afterEach(() => {
-    window.localStorage.removeItem(BACKGROUND_PREFERENCES_STORAGE_KEY);
+    window.localStorage.clear();
   });
 
   test("opens an accessible dialog and exposes the staged effect choices", async () => {

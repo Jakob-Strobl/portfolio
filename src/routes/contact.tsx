@@ -39,7 +39,7 @@ export default function Contact() {
             <div>
               <h1 class="text-3xl">Let's connect</h1>
             </div>
-            <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:max-w-[550px] md:text-lg lg:max-w-[calc(257px_+_339.35px_+_4rem)]">
+            <p class="mt-4 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base leading-6 text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:max-w-[550px] md:text-lg md:leading-6 lg:max-w-[calc(257px_+_339.35px_+_4rem)]">
               <span class="block">
                 Building <span class="font-medium text-night-300">privacy-first</span> web products with TypeScript,
                 Rust, and Cloudflare—while pushing back against the dark patterns of the web.
@@ -73,7 +73,7 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-            <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:max-w-[550px] md:text-lg lg:max-w-[calc(257px_+_339.35px_+_4rem)]">
+            <p class="mt-6 w-full max-w-[calc(116px_+_153.17px_+_2rem)] text-base leading-6 text-white/80 sm:max-w-[calc(171.5px_+_226.45px_+_3rem)] md:max-w-[550px] md:text-lg md:leading-6 lg:max-w-[calc(257px_+_339.35px_+_4rem)]">
               Looking for a versatile, product-minded developer with a sharp eye for UI/UX who designs and builds
               polished, intuitive interfaces? <span class="font-medium text-night-300">Let's talk.</span>
             </p>

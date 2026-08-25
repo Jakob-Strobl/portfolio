@@ -6,7 +6,7 @@ export const YonseiEducationSection = (isExpanded: Accessor<boolean>) => (
     <h3 class="experience-card-title">Yonsei University</h3>
 
     <div>
-      <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+      <div class="mt-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 class="experience-card-subtitle">Study Abroad Program · Seoul, South Korea</h2>
         <h3 class="experience-card-date">Fall 2018 - Spring 2019</h3>
       </div>

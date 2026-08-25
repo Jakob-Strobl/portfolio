@@ -19,7 +19,7 @@ export const UpittTaSection = () => {
                   <span class="experience-card-date">Spring 2018, Fall 2019, Spring 2020</span>
                 </div>
                 <p class="experience-card-meta">Computer Science Department</p>
-                <ul class="experience-card-body list-inside list-disc space-y-1">
+                <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
                   <li>Led weekly lab sessions where students applied core concepts from lectures</li>
                 </ul>
               </div>
@@ -33,7 +33,7 @@ export const UpittTaSection = () => {
                   <p>Tech Divaz & High School Academy Summer Camp</p>
                   <p>Grades 6-12</p>
                 </div>
-                <ul class="experience-card-body list-inside list-disc space-y-1">
+                <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
                   <li>Taught computer science and web-development fundamentals in HTML5 and JavaScript</li>
                   <li>Expanded on HTML5 concepts through a follow-along canvas game: a Space Invaders clone</li>
                 </ul>
