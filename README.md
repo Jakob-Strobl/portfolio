@@ -52,14 +52,22 @@ This portfolio site showcases professional experience through an interactive tim
 
 The background rewrite and font migration both substantially reduce the site payload. These figures summarize the two comparisons; values are shown as raw / gzip.
 
-| Payload                               | Before             | After            | Reduction     |
-| ------------------------------------- | ------------------ | ---------------- | ------------- |
-| Background effect (Three.js → custom) | 490.7 / 124.9 KB   | 29.4 / 10.5 KB   | 16.7× / 11.9× |
-| Local fonts (Raleway → Figtree)       | 492.1 / 255.2 KB   | 124.7 / 70.7 KB  | 74.7% / 72.3% |
-| Initial client + background           | 712.5 / 196.2 KB   | 324.3 / 101.9 KB | 2.2× / 1.9×   |
-| Initial client + background + fonts   | 1,204.6 / 451.4 KB | 449.0 / 172.6 KB | 2.7× / 2.6×   |
+| Payload                               | Before (raw / gzip) | After (raw / gzip) | Reduction (raw / gzip) |
+| ------------------------------------- | ------------------- | ------------------ | ---------------------- |
+| Background effect (Three.js → custom) | 490.7 / 124.9 KB    | 29.4 / 10.5 KB     | 16.7× / 11.9×          |
+| Local fonts (Raleway → Figtree)       | 492.1 / 255.2 KB    | 124.7 / 70.7 KB    | 3.9× / 3.6×            |
+| Initial client + background           | 712.5 / 196.2 KB    | 324.3 / 101.9 KB   | 2.2× / 1.9×            |
+| Initial client + background + fonts   | 1,204.6 / 451.4 KB  | 449.0 / 172.6 KB   | 2.7× / 2.6×            |
 
-Adding the separately loaded font files to the initial client + background comparison brings the combined total from **1,204.6 KB to 449.0 KB raw** and **451.4 KB to 172.6 KB gzip**—a **62.7% raw** and **61.8% gzip** reduction.
+Within the measured initial payload (client + background + fonts), the size share shifts as follows:
+
+| Component  | Before (raw / gzip) | After (raw / gzip) |
+| ---------- | ------------------- | ------------------ |
+| Client     | 18.4% / 15.8%       | 65.7% / 53.0%      |
+| Fonts      | 40.8% / 56.5%       | 27.8% / 41.0%      |
+| Background | 40.7% / 27.7%       | 6.5% / 6.1%        |
+
+The client is now the dominant remaining cost, while the background falls to roughly 6% of the combined payload and the fonts account for 27.8% raw or 41.0% gzip.
 
 ## Custom Design Features
 
