@@ -35,15 +35,12 @@
     "node": ">=24"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^20.11.1",
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/user-event": "^14.6.1",
     "autoprefixer": "^10.5.4",
     "baseline-browser-mapping": "^2.11.9",
-    "git-format-staged": "^4.0.1",
     "happy-dom": "^20.11.1",
-    "jsdom": "^30.0.1",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
