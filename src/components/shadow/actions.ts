@@ -1,18 +1,8 @@
-import { Accessor, batch, createEffect, createSignal } from "solid-js";
+import { batch, createSignal } from "solid-js";
 import { ShadowOriginOptions, ShadowRect } from "./types";
 import { scaleAndCenterVec } from "../../actions/vector-actions";
 import { Rect } from "../../types/rect";
 import { setState, state } from "./umbra";
-
-export function createRecalculateShadowClientRectsOn(...signals: Accessor<any>[]) {
-  createEffect(() => {
-    // "listen" to all passed signals
-    signals.forEach((signal) => signal());
-    queueMicrotask(() => {
-      forceRecalculateShadowClientRects();
-    });
-  });
-}
 
 /**
  *
@@ -293,20 +283,6 @@ export const removeShadow = (shadowToRemoveId: string) => {
     shadows: filteredShadows,
     removedShadows: [...state.removedShadows, removedShadow],
   });
-  return true;
-};
-
-export const hardRemoveShadow = (shadowToRemoveId: string | undefined) => {
-  if (typeof window === "undefined" || shadowToRemoveId == undefined) return false;
-
-  const hasShadow = state.removedShadows.some((shadow) => shadow.shadowedEl.dataset["shadow"] === shadowToRemoveId);
-  if (!hasShadow) return false;
-
-  const filteredRemovedShadows = state.removedShadows.filter(
-    (shadow) => shadow.shadowedEl.dataset["shadow"] !== shadowToRemoveId,
-  );
-
-  setState({ removedShadows: filteredRemovedShadows });
   return true;
 };
 
