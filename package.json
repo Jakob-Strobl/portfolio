@@ -43,15 +43,18 @@
     "vite": "^8.2.0",
     "vite-plugin-glsl": "^1.6.1",
     "vite-plugin-solid": "2.11.14",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "wrangler": "^4.118.0"
   },
   "overrides": {
     "@babel/core": "7.29.7",
     "defu": "6.1.7",
-    "dompurify": "3.4.12",
+    "dompurify": "3.4.15",
     "mdast-util-to-hast": "13.2.1",
     "rollup": "4.61.1",
-    "undici": "8.9.0"
+    "undici": "8.9.0",
+    "fflate": "0.4.9",
+    "nanoid": "3.3.18",
+    "sharp": "0.35.4"
   }
 }
