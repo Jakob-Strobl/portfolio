@@ -170,15 +170,6 @@
     @apply transition-opacity ease-out duration-500;
   }
 
-  .fade-in-colors {
-    @apply transition-colors ease-out duration-500;
-  }
-
-  .fade-in-bg {
-    /* I like the -bg alias since plain css makes a background distinction */
-    @apply transition-colors ease-out duration-500;
-  }
-
   img.github-normalized-size {
     @apply w-24 sm:w-36 md:w-42 lg:w-48;
 
