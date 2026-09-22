@@ -75,4 +75,3 @@ test("background settings replace the home menu and restore it when closed", asy
   await fireEvent.click(page.getByRole("button", { name: "Close background settings" }));
   expect(page.getByRole("link", { name: "Experience" })).toBeInTheDocument();
 });
-
