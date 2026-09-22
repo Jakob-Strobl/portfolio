@@ -1,4 +1,3 @@
-import { LinearLayoutProps } from "./linear-layout";
 import Shadow from "../components/shadow/shadow";
 import { children, JSX } from "solid-js";
 
