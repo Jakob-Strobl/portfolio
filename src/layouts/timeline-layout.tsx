@@ -1,11 +1,13 @@
-import { LinearLayoutProps } from "./linear-layout";
+import { JSX } from "solid-js";
 import Shadow from "../components/shadow/shadow";
 
-export type TimelineLayout = LinearLayoutProps & {
+export type TimelineLayout = {
+  navBack?: () => JSX.Element;
+  content: JSX.Element;
+  focus?: JSX.Element;
   contentGap?: string;
 };
 
-// TODO give this and linear a simimlar base layout if pattern sticks
 export default function TimelineLayout(props: TimelineLayout) {
   const contentGap = props.contentGap ?? "gap-8";
   // Keep the top content margin in sync with the shared timeline gradient height.
