@@ -2,7 +2,6 @@ import { fireEvent, render } from "@solidjs/testing-library";
 import { Route, Router } from "@solidjs/router";
 
 import { version } from "../package.json";
-import { isTest } from "../src/actions/test-actions";
 import IsomorphicBackground from "../src/components/background";
 import { BackgroundProvider } from "../src/providers/background";
 import Home from "../src/routes";
@@ -77,7 +76,3 @@ test("background settings replace the home menu and restore it when closed", asy
   expect(page.getByRole("link", { name: "Experience" })).toBeInTheDocument();
 });
 
-test("Test action: isTest returns true", () => {
-  const result = isTest();
-  expect(result).toBeTruthy();
-});
