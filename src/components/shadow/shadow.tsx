@@ -12,7 +12,7 @@ interface ShadowProps {
   origin?: ShadowOriginOptions;
 
   /**
-   * Delay on the shadow's intial warmup transition - i.e., delays the isCold signal flip to warm
+   * Delay on the shadow's initial warmup transition before content fade-in begins
    * @default undefined := Do not transition the content's text opacity
    * @example Set prop to 0 or greater if you want the content to fade-in
    *

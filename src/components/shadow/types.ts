@@ -88,8 +88,10 @@ export const ZERO_RECT: ShadowRect = {
   // @ts-expect-error This is a special case constant where the value of shadowedEl never matters (any field really)
   shadowedEl: null,
   backgroundOpacity: () => 0,
-  isCold: () => true,
-  setIsCold: () => {},
+  shadowState: () => "warm",
+  setShadowState: () => {},
+  warmupDelayMs: 0,
+  fixed: false,
   // @ts-expect-error This is a special case constant where the value of origin never matters (any field really)
   origin: null,
 };
