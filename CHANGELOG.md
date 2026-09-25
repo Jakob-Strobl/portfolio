@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.12.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.4...v0.12.5) (2026-09-25)
+
+
+### Dependencies
+
+* patch vitest and pin transitive security overrides ([#87](https://github.com/Jakob-Strobl/portfolio/issues/87)) ([062fec8](https://github.com/Jakob-Strobl/portfolio/commit/062fec88806704c11989477e4046d8453c3c0084))
+* remove unused jsdom, git-format-staged, and happy-dom registrator ([#83](https://github.com/Jakob-Strobl/portfolio/issues/83)) ([8c97571](https://github.com/Jakob-Strobl/portfolio/commit/8c97571df25a5f0b876145d875506fe0d39ab34b))
+* remove unused postcss stack, posthog-node, and dead getAspectRatio ([#85](https://github.com/Jakob-Strobl/portfolio/issues/85)) ([eaf14de](https://github.com/Jakob-Strobl/portfolio/commit/eaf14de93e787306f34540757a008c1b1c309a91))
+
 ## [0.12.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.3...v0.12.4) (2026-08-25)
 
 
