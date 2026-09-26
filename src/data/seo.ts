@@ -4,7 +4,7 @@ export const SITE_DESCRIPTION =
   "Building privacy-first web products in TypeScript, Rust, and Cloudflare—fluent across modern frontend frameworks, with roots in compilers, game dev, and systems programming.";
 export const PERSON_ID = `${SITE_URL}/#person`;
 
-export const SOCIAL_PROFILES = ["https://github.com/Jakob-Strobl", "https://www.linkedin.com/in/jakob-strobl"] as const;
+const SOCIAL_PROFILES = ["https://github.com/Jakob-Strobl", "https://www.linkedin.com/in/jakob-strobl"] as const;
 
 export type JsonLdNode = Record<string, unknown>;
 

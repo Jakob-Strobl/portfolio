@@ -235,5 +235,3 @@ export function BackgroundSettingsPanel(props: BackgroundSettingsPanelProps) {
     </div>
   );
 }
-
-export default BackgroundSettingsTrigger;
