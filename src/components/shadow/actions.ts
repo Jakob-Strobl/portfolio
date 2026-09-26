@@ -4,12 +4,7 @@ import { scaleAndCenterVec } from "../../actions/vector-actions";
 import { Rect } from "../../types/rect";
 import { setState, state } from "./umbra";
 
-/**
- *
- * @param shadowRect
- * @param scale numbers > 1 will scale larger. For smaller use < 1 values; 0.1 equals scaling down 1 to 10
- */
-export function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0): Rect {
+function scaleAndCenterRect(shadowRect: ShadowRect, scale: number = 1.0): Rect {
   return scaleAndCenterVec(shadowRect.dimensions, shadowRect.position, scale);
 }
 
@@ -28,7 +23,7 @@ function getShadowPosition(clientRect: DOMRect, fixed: boolean, scrollX: number,
     : { x: clientRect.x + scrollX, y: clientRect.y + scrollY };
 }
 
-export function isShadowSourceVisible(shadowedEl: HTMLElement) {
+function isShadowSourceVisible(shadowedEl: HTMLElement) {
   if (!shadowedEl.isConnected) return false;
   if (
     typeof shadowedEl.checkVisibility === "function" &&

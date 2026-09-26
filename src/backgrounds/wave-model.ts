@@ -1,5 +1,3 @@
-import type { WavesBackgroundConfig } from "./types";
-
 const GRAVITY = 9.81;
 const TAU = Math.PI * 2;
 const WAVE_COUNT = 4;
@@ -86,13 +84,4 @@ export function createWaveParameters(seed: number): WaveParameters[] {
   }
 
   return waves;
-}
-
-export function createDefaultWavesConfig(seed = createBackgroundSeed()): WavesBackgroundConfig {
-  return {
-    kind: "waves",
-    seed: normalizeSeed(seed),
-    speed: 1,
-    intensity: 1,
-  };
 }
