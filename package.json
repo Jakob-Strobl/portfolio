@@ -44,7 +44,7 @@
     "vite-plugin-glsl": "^1.6.1",
     "vite-plugin-solid": "2.11.14",
     "vitest": "^4.1.11",
-    "wrangler": "^4.118.0"
+    "wrangler": "^4.135.0"
   },
   "overrides": {
     "@babel/core": "7.29.7",
