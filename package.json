@@ -35,7 +35,6 @@
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^7.0.0",
-    "@testing-library/user-event": "^14.6.1",
     "happy-dom": "^20.11.1",
     "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
