@@ -6,7 +6,7 @@ export type GalleryCollection = {
   title: string;
 };
 
-export const GALLERY_COLLECTIONS: GalleryCollection[] = [
+const GALLERY_COLLECTIONS: GalleryCollection[] = [
   { key: "korea-seoul", title: "Korea - Seoul" },
   { key: "korea-jeju", title: "Korea - Jeju" },
   { key: "himeji", title: "Japan - Himeji" },
