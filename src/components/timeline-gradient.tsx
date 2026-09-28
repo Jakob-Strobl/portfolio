@@ -1,7 +1,7 @@
 import { useLocation } from "@solidjs/router";
 import { createSignal, onMount } from "solid-js";
 
-export function isTimelineRoute(pathname: string) {
+function isTimelineRoute(pathname: string) {
   return pathname === "/experience" || pathname === "/gallery";
 }
 

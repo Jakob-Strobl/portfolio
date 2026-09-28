@@ -18,7 +18,7 @@ import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+
 import { PhotoCollection as JejuPhotoCollection } from "./collections/korea-jeju/+photos";
 import { PhotoCollection as SeoulPhotoCollection } from "./collections/korea-seoul/+photos";
 
-export const PAGE_SIZE = 24;
+const PAGE_SIZE = 24;
 
 const galleryPhotoList: JsonLdNode = {
   "@type": "ItemList",
