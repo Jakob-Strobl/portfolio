@@ -12,7 +12,7 @@ recommended below; application source remains unchanged.
 
 - [`vitest.config.ts`](../../vitest.config.ts) uses Vitest's `happy-dom` environment with
   `globals: true` and registers a shared browser-storage setup file.
-- The project pins Vitest `4.1.10`, happy-dom `20.11.1`, Bun `1.3.14`, and requires Node 24+
+- The project pins Vitest `4.1.11`, happy-dom `20.14.5`, Bun `1.3.14`, and requires Node 24+
   in [`package.json`](../../package.json).
 - [`background.tsx`](../../src/providers/background.tsx) correctly uses the browser-owned
   `window.localStorage` API. The application should not grow a test-only fallback.
