@@ -36,19 +36,19 @@
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^7.0.1",
     "happy-dom": "^20.14.5",
-    "prettier": "^3.9.8",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vite-plugin-glsl": "^1.6.1",
     "vite-plugin-solid": "2.11.14",
     "vitest": "^4.1.11",
-    "wrangler": "^4.136.1"
+    "wrangler": "^4.137.0"
   },
   "overrides": {
     "@babel/core": "7.29.7",
     "defu": "6.1.7",
-    "dompurify": "3.4.15",
+    "dompurify": "3.4.16",
     "mdast-util-to-hast": "13.2.1",
     "rollup": "4.61.1",
     "undici": "8.10.2",
