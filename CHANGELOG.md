@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.12.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.4...v0.12.5) (2026-10-01)
+
+
+### Dependencies
+
+* bump @solidjs/start to 2.0.5 ([#101](https://github.com/Jakob-Strobl/portfolio/issues/101)) ([1edd488](https://github.com/Jakob-Strobl/portfolio/commit/1edd4887e0090a6444728271226ec704b7a17502))
+* bump happy-dom to 20.14.5 ([#96](https://github.com/Jakob-Strobl/portfolio/issues/96)) ([38af822](https://github.com/Jakob-Strobl/portfolio/commit/38af822d0a519a60174e53a9008e0d1cfa6334f7))
+* bump prettier 3.9.9, wrangler 4.137.0, dompurify 3.4.16 ([#102](https://github.com/Jakob-Strobl/portfolio/issues/102)) ([ef615c0](https://github.com/Jakob-Strobl/portfolio/commit/ef615c06c84706c1e7184eeac2770b571c434006))
+* bump undici override to 8.10.2 for GHSA-3wwx-pv8p-q78v ([#99](https://github.com/Jakob-Strobl/portfolio/issues/99)) ([861cfb5](https://github.com/Jakob-Strobl/portfolio/commit/861cfb57a3dddb906300fbf14ab314206598d77b))
+* bump vite to 8.3.0 ([#97](https://github.com/Jakob-Strobl/portfolio/issues/97)) ([103dbcc](https://github.com/Jakob-Strobl/portfolio/commit/103dbcc6dfea9818b3c6afa49a97dfe2088280bd))
+* bump wrangler to 4.135.0 ([#98](https://github.com/Jakob-Strobl/portfolio/issues/98)) ([49ca0c5](https://github.com/Jakob-Strobl/portfolio/commit/49ca0c578ca78136f57cf3f50c3b76b8b27b62f2))
+* bump wrangler to 4.136.1 ([#100](https://github.com/Jakob-Strobl/portfolio/issues/100)) ([607a726](https://github.com/Jakob-Strobl/portfolio/commit/607a726e5137874ba1e12eb8019710d030e6d5c1))
+* patch solid-js, prettier, and jest-dom ([#95](https://github.com/Jakob-Strobl/portfolio/issues/95)) ([dce48d0](https://github.com/Jakob-Strobl/portfolio/commit/dce48d0ef19301a6ba40229940d5a134734d0730))
+* patch vitest and pin transitive security overrides ([#87](https://github.com/Jakob-Strobl/portfolio/issues/87)) ([062fec8](https://github.com/Jakob-Strobl/portfolio/commit/062fec88806704c11989477e4046d8453c3c0084))
+* remove unused jsdom, git-format-staged, and happy-dom registrator ([#83](https://github.com/Jakob-Strobl/portfolio/issues/83)) ([8c97571](https://github.com/Jakob-Strobl/portfolio/commit/8c97571df25a5f0b876145d875506fe0d39ab34b))
+* remove unused postcss stack, posthog-node, and dead getAspectRatio ([#85](https://github.com/Jakob-Strobl/portfolio/issues/85)) ([eaf14de](https://github.com/Jakob-Strobl/portfolio/commit/eaf14de93e787306f34540757a008c1b1c309a91))
+
 ## [0.12.4](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.3...v0.12.4) (2026-08-25)
 
 
