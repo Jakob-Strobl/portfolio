@@ -69,4 +69,4 @@ jobs:
           command: pages deploy ${{ vars.OUTPUT_DIRECTORY }} --project-name=${{ vars.PAGES_PROJECT_NAME }} --branch=${{ inputs.branch }} --commit-hash=${{ github.sha }}
           gitHubToken: ${{ github.token }}
           packageManager: bun
-          wranglerVersion: "4.143.0"
+          wranglerVersion: "4.145.0"
