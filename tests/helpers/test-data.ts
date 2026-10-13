@@ -1,9 +1,3 @@
-// Photo Collections (re-exported from source)
-export { photoCollection as himejiPhotos } from "../../src/routes/gallery/collections/himeji/+photos";
-export { photoCollection as seoulPhotos } from "../../src/routes/gallery/collections/korea-seoul/+photos";
-export { photoCollection as jejuPhotos } from "../../src/routes/gallery/collections/korea-jeju/+photos";
-export { photoCollection as gangneungPhotos } from "../../src/routes/gallery/collections/korea-pacific-coast/+photos";
-
 import { photoCollection as himejiPhotos } from "../../src/routes/gallery/collections/himeji/+photos";
 import { photoCollection as seoulPhotos } from "../../src/routes/gallery/collections/korea-seoul/+photos";
 import { photoCollection as jejuPhotos } from "../../src/routes/gallery/collections/korea-jeju/+photos";
