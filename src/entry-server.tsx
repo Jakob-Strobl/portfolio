@@ -1,6 +1,5 @@
 // @refresh reload
 import { createHandler, StartServer } from "@solidjs/start/server";
-import { createSignal, onMount } from "solid-js";
 
 export default createHandler(() => (
   <StartServer
