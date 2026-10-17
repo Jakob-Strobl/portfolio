@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.12.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.5...v0.12.6) (2026-10-17)
+
+
+### Dependencies
+
+* bump @solidjs/start 2.0.6, solid-js 1.9.17, wrangler 4.148.0 ([#110](https://github.com/Jakob-Strobl/portfolio/issues/110)) ([d645247](https://github.com/Jakob-Strobl/portfolio/commit/d645247a350989a301b80f42d0f4a2c651751ba7))
+* bump undici 8.11.2, vite 8.3.1, wrangler 4.141.0 ([#103](https://github.com/Jakob-Strobl/portfolio/issues/103)) ([6142520](https://github.com/Jakob-Strobl/portfolio/commit/61425205e0804b6e1a78fb64c749c0f353db68e3))
+* bump vite 8.3.3, vite-plugin-glsl 1.6.2, wrangler 4.147.0 ([#109](https://github.com/Jakob-Strobl/portfolio/issues/109)) ([2a093bd](https://github.com/Jakob-Strobl/portfolio/commit/2a093bd8eb0eabfece77539c871aae641a450d3c))
+* override seroval 1.6.8, bump wrangler 4.143.0 ([#105](https://github.com/Jakob-Strobl/portfolio/issues/105)) ([a9923ec](https://github.com/Jakob-Strobl/portfolio/commit/a9923ec3600c19936a847059202d0c67885d639b))
+* override sharp 0.35.5 and source-map-js 1.2.2, bump wrangler 4.145.0 ([#107](https://github.com/Jakob-Strobl/portfolio/issues/107)) ([0001fb3](https://github.com/Jakob-Strobl/portfolio/commit/0001fb31e1aaaea406b563d693e13224569f6e16))
+
 ## [0.12.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.4...v0.12.5) (2026-10-01)
 
 
