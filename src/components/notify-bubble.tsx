@@ -17,7 +17,6 @@ interface NotifyBubbleProps {
 }
 
 export default function NotifyBubble(props: NotifyBubbleProps) {
-  // Defaults for Props
   const offsetX = props.offset?.x ?? 0;
   const offsetY = props.offset?.y ?? 0;
 

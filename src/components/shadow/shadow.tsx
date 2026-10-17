@@ -45,15 +45,9 @@ interface ShadowProps {
   shadowOpacity?: Accessor<number>;
 }
 
-/**
- * This component wraps any content that should have a shadow applied to it
- * @param props
- * @returns
- */
 export default function Shadow(props: ShadowProps) {
   const resolved = children(() => props.children);
   const shadowId = createUniqueId();
-  // If warmupDelayMs is defined, fade-in content
   const [shadowState, setShadowState] = createSignal<ShadowStartingStates>(
     props.warmupDelayMs === undefined ? "ready" : "fade-in",
   ) as Signal<ShadowStates>;
@@ -137,7 +131,6 @@ export default function Shadow(props: ShadowProps) {
           transition-opacity duration-750 ease-[cubic-bezier(0.5, 1, 0.89, 1)] h-[inherit] text-sm md:text-md xl:text-lg 
         `}
         style={{
-          // Start with 0 opacity so we can "fade-in"
           opacity: shadowState() === "fade-in" || shadowState() === "settling" ? 0 : 100,
           "transition-delay": `${props.contentFadeInDelayMs ?? 250}ms`,
         }}

@@ -195,7 +195,6 @@ export const addShadow = (
   const complimentShadowIndex = currentNumOfRemovedShadows - currentNumShadows - 1;
 
   let relativeStartingShadow;
-  // Keep same scale by default
   let scale = 1.0;
 
   switch (origin) {
@@ -204,8 +203,7 @@ export const addShadow = (
       relativeStartingShadow = state.removedShadows[complimentShadowIndex];
       break;
     case "first":
-      // Always select first warmShadow (what about first removed?)
-      relativeStartingShadow = state.removedShadows[0]; //state.shadows[0];
+      relativeStartingShadow = state.removedShadows[0];
       scale = 0.1;
       break;
     case "warmest":
