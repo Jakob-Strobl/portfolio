@@ -25,6 +25,7 @@ The `full` variant skips transforms entirely and serves the original from R2.
 ### Runtime (Cloudflare Pages)
 
 - `VITE_PUBLIC_R2_IMAGES_DOMAIN` — R2 custom domain (default: `images.jstrobl.dev`)
+- `VITE_PUBLIC_ZONE_DOMAIN` — zone that serves `/cdn-cgi/image/` transforms (default: `jstrobl.dev`)
 
 ## R2 object key structure
 
