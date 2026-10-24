@@ -2,6 +2,7 @@ import { A, useLocation } from "@solidjs/router";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import { getImageUrl } from "~/actions/photo-actions";
+import PhotoCollection from "~/components/photo-collection";
 import Shadow from "~/components/shadow/shadow";
 import Seo from "~/components/seo";
 import {
@@ -13,10 +14,6 @@ import {
 } from "~/data/gallery/catalog";
 import { getCanonicalUrl, JsonLdNode, PERSON_ID } from "~/data/seo";
 import TimelineLayout from "~/layouts/timeline-layout";
-import { PhotoCollection as GangneungPhotoCollection } from "./collections/korea-pacific-coast/+photos";
-import { PhotoCollection as HimejiPhotoCollection } from "./collections/himeji/+photos";
-import { PhotoCollection as JejuPhotoCollection } from "./collections/korea-jeju/+photos";
-import { PhotoCollection as SeoulPhotoCollection } from "./collections/korea-seoul/+photos";
 
 const PAGE_SIZE = 24;
 
@@ -45,13 +42,6 @@ const galleryPhotoList: JsonLdNode = {
   }),
 };
 
-const collectionComponentByKey = {
-  "korea-seoul": SeoulPhotoCollection,
-  "korea-jeju": JejuPhotoCollection,
-  himeji: HimejiPhotoCollection,
-  "korea-pacific-coast": GangneungPhotoCollection,
-} as const;
-
 export default function Gallery() {
   const location = useLocation();
   const pageSize = createMemo(() => {
@@ -71,17 +61,13 @@ export default function Gallery() {
     return paginated;
   });
 
-  const visibleIds = createMemo(() => new Set(visiblePhotos().map((photo) => photo.id)));
   const collections = createMemo(() =>
     getCollections()
-      .map((collection) => {
-        const photos = visiblePhotos().filter(
-          (photo) => photo.collection === collection.key && visibleIds().has(photo.id),
-        );
-
-        return { ...collection, photos };
-      })
-      .filter((collection) => collection.photos.length > 0),
+      .map((collection) => ({
+        collection,
+        photos: visiblePhotos().filter((photo) => photo.collection === collection.key),
+      }))
+      .filter(({ photos }) => photos.length > 0),
   );
 
   const hasMorePhotos = createMemo(() => getPaginatedPhotos(currentPage() + 1, pageSize()).length > 0);
@@ -106,15 +92,11 @@ export default function Gallery() {
           <>
             <h1 class="sr-only">Travel Photography</h1>
             <For each={collections()}>
-              {(collection, idx) => {
-                const CollectionComponent =
-                  collectionComponentByKey[collection.key as keyof typeof collectionComponentByKey];
-                return (
-                  <Shadow warmupDelayMs={Math.min(125 + idx() * 125, 500)} contentFadeInDelayMs={500}>
-                    <CollectionComponent photos={collection.photos} />
-                  </Shadow>
-                );
-              }}
+              {(group, idx) => (
+                <Shadow warmupDelayMs={Math.min(125 + idx() * 125, 500)} contentFadeInDelayMs={500}>
+                  <PhotoCollection collection={group.collection} photos={group.photos} />
+                </Shadow>
+              )}
             </For>
             <Show when={hasMorePhotos()}>
               <div class="w-full flex justify-center">

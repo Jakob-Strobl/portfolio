@@ -1,7 +1,9 @@
-import { photoCollection as himejiPhotos } from "../../src/routes/gallery/collections/himeji/+photos";
-import { photoCollection as seoulPhotos } from "../../src/routes/gallery/collections/korea-seoul/+photos";
-import { photoCollection as jejuPhotos } from "../../src/routes/gallery/collections/korea-jeju/+photos";
-import { photoCollection as gangneungPhotos } from "../../src/routes/gallery/collections/korea-pacific-coast/+photos";
+import { getPhotosByCollection } from "../../src/data/gallery/catalog";
+
+const himejiPhotos = getPhotosByCollection("himeji");
+const seoulPhotos = getPhotosByCollection("korea-seoul");
+const jejuPhotos = getPhotosByCollection("korea-jeju");
+const gangneungPhotos = getPhotosByCollection("korea-pacific-coast");
 
 // Collection Metadata
 export const GALLERY_COLLECTIONS = [
