@@ -1,8 +1,9 @@
 import { A, useParams } from "@solidjs/router";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
 import FullPhotoLayout from "~/layouts/full-photo-layout";
-import { getPhotoBySlug } from "~/data/gallery/catalog";
-import { photoCollection } from "./+photos";
+import { getPhotoBySlug, getPhotosByCollection } from "~/data/gallery/catalog";
+
+const photoCollection = getPhotosByCollection("korea-seoul");
 
 export default function FullPhoto() {
   const params = useParams();
