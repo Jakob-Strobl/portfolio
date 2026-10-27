@@ -9,7 +9,7 @@
         "@solidjs/router": "^1.0.0",
         "@solidjs/start": "2.0.6",
         "@tailwindcss/vite": "^4.3.3",
-        "lucide-solid": "^1.59.0",
+        "lucide-solid": "1.60.0",
         "nitro": "^3.0.260610-beta",
         "posthog-js": "^1.438.12",
         "solid-js": "1.9.17",
@@ -642,7 +642,7 @@
 
     "lru-cache": ["lru-cache@5.1.1", "", { "dependencies": { "yallist": "^3.0.2" } }, "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w=="],
 
-    "lucide-solid": ["lucide-solid@1.59.0", "", { "peerDependencies": { "solid-js": "^1.4.7" } }, "sha512-Ai36BaNmgt9Mladwz6PqFP8KbqRooZ0LK0RPmJEy+jkwSjrZjzWnXlrkSAehEcfVWPcayMNFAyoQMWZYUEdATg=="],
+    "lucide-solid": ["lucide-solid@1.60.0", "", { "peerDependencies": { "solid-js": "^1.4.7" } }, "sha512-NA9D6z5B7MsKgAtJrzgaQ6pJPM+HU+S3yscS3pl4C5SEA76LOQKZIQ24dHpJKmtrZWZ/NOvDpcjA0J//aqrPYQ=="],
 
     "lz-string": ["lz-string@1.5.0", "", { "bin": { "lz-string": "bin/bin.js" } }, "sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ=="],
 
