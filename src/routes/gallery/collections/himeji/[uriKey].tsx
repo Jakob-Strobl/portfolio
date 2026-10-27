@@ -1,25 +1,5 @@
-import { A, useParams } from "@solidjs/router";
-import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
-import FullPhotoLayout from "~/layouts/full-photo-layout";
-import { getPhotoBySlug, getPhotosByCollection } from "~/data/gallery/catalog";
-
-const photoCollection = getPhotosByCollection("himeji");
+import CollectionFullPhoto from "~/components/collection-full-photo";
 
 export default function FullPhoto() {
-  const params = useParams();
-  const photoResource = () =>
-    params.uriKey == null ? photoCollection[0] : (getPhotoBySlug("himeji", params.uriKey) ?? photoCollection[0]);
-
-  return (
-    <FullPhotoLayout
-      resource={photoResource()}
-      navBack={
-        <A href="/gallery">
-          <ArrowBigLeft size={20} />
-          <span class="hidden sm:inline">Gallery</span>
-        </A>
-      }
-      photoCollection={photoCollection}
-    ></FullPhotoLayout>
-  );
+  return <CollectionFullPhoto collection="himeji" />;
 }
