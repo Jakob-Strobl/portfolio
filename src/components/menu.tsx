@@ -38,8 +38,8 @@ export default function Menu() {
             </A>
           </li>
           <li class="fade-in delay-500" style={{ opacity: !isReady() ? "0" : "100" }}>
-            <A href="/" class="hover:text-shadow-lg duration-300 transition-text text-xl">
-              TBD
+            <A href="/projects/fogline" class="hover:text-shadow-lg duration-300 transition-text text-xl">
+              Fogline
             </A>
           </li>
         </ul>

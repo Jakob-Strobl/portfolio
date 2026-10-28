@@ -28,12 +28,15 @@ test("app smoke test", async () => {
   page.getByText("Jakob Strobl");
 
   const links = page.getAllByRole("link");
-  expect(links.length).toEqual(5);
+  expect(links.length).toEqual(6);
   expect(links[0]).toHaveTextContent("Experience");
   expect(links[1]).toHaveTextContent("Contact");
   expect(links[2]).toHaveTextContent("Photography");
-  expect(links[3]).toHaveTextContent("TBD");
+  expect(links[3]).toHaveTextContent("Fogline");
+  expect(links[3]).toHaveAttribute("href", "/projects/fogline");
   expect(links[4]).toHaveAttribute("href", "https://github.com/Jakob-Strobl/portfolio/releases");
+  expect(page.container.querySelector("video")).not.toHaveAttribute("autoplay");
+  expect(links[5]).toHaveAttribute("href", "/projects/fogline");
 });
 
 test("version number from package.json renders in page", async () => {
