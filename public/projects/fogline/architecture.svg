@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 384" role="img" aria-labelledby="fl-t fl-d" class="fl-diagram">
+<title id="fl-t">Fogline architecture</title><desc id="fl-d">Left-to-right flow: seeded adversarial sim core, agent observation layer, agent protocols v1 to v6, agent runtime boundary, controllers, replay and diagnostics, results. In-progress and planned pieces are dashed and attached below their related stage.</desc>
+<defs><marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="rgba(253,251,254,.6)"/></marker></defs>
+<rect width="1400" height="384" fill="#0b0712"/>
+<text x="24" y="56" fill="rgba(253,251,254,.56)" font-size="9" font-family="ui-monospace, monospace" letter-spacing="0.14em">SHIPPED PIPELINE  →</text>
+<text x="24" y="260" fill="rgba(253,251,254,.56)" font-size="9" font-family="ui-monospace, monospace" letter-spacing="0.14em">IN PROGRESS / PLANNED  ·  ATTACHED TO RELATED STAGE</text>
+<line x1="196" y1="148" x2="218" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="392" y1="148" x2="414" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="588" y1="148" x2="610" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="784" y1="148" x2="806" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="980" y1="148" x2="1002" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="1176" y1="148" x2="1198" y2="148" stroke="rgba(253,251,254,.6)" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="110" y1="200" x2="110" y2="278" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+<line x1="698" y1="200" x2="698" y2="278" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+<line x1="1090" y1="200" x2="1090" y2="278" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+<line x1="1286" y1="200" x2="1286" y2="278" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+<rect x="24" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="24" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="36" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">01 · SIM</text>
+<text x="36" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Seeded adversarial</text>
+<text x="36" y="152" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">sim core</text>
+<text x="36" y="171" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">deterministic seeds</text>
+<rect x="220" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="220" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="232" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">02 · OBS</text>
+<text x="232" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Agent observation</text>
+<text x="232" y="152" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">layer</text>
+<text x="232" y="171" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">partial, stale intel</text>
+<rect x="416" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="416" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="428" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">03 · SCHEMA</text>
+<text x="428" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Agent protocols</text>
+<text x="428" y="152" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">v1–v6</text>
+<text x="428" y="171" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">79 JSON schemas</text>
+<rect x="612" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="612" y="96" width="172" height="104" rx="6" fill="rgba(202,156,242,.10)" stroke="#ca9cf2" stroke-width="1.4"/>
+<text x="624" y="116" fill="#ca9cf2" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">04 · BOUNDARY</text>
+<text x="624" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Agent runtime</text>
+<text x="624" y="152" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">boundary</text>
+<text x="624" y="171" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">agent ↔ sim edge</text>
+<rect x="808" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="808" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="820" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">05 · CTRL</text>
+<text x="820" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Controllers</text>
+<text x="820" y="155" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">Codex subprocess</text>
+<text x="820" y="166" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">time budgets</text>
+<text x="820" y="181" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">controller recovery</text>
+<rect x="1004" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="1004" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="1016" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">06 · REPLAY</text>
+<text x="1016" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Replay & diagnostics</text>
+<text x="1016" y="155" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">C2-style console</text>
+<text x="1016" y="166" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">replay viewer</text>
+<rect x="1200" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="1200" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
+<text x="1212" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">07 · OUT</text>
+<text x="1212" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Results</text>
+<text x="1212" y="155" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">per-run records</text>
+<rect x="24" y="280" width="172" height="72" rx="6" fill="#0b0712"/><rect x="24" y="280" width="172" height="72" rx="6" fill="rgba(253,251,254,.02)" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="36" y="298" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">IN PROGRESS</text>
+<text x="36" y="318" fill="#fdfbfe" font-size="12" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Headless Docker</text>
+<text x="36" y="336" fill="rgba(253,251,254,.72)" font-size="9" font-family="ui-monospace, monospace">sim container</text>
+<rect x="612" y="280" width="172" height="72" rx="6" fill="#0b0712"/><rect x="612" y="280" width="172" height="72" rx="6" fill="rgba(253,251,254,.02)" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="624" y="298" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">PLANNED</text>
+<text x="624" y="318" fill="#fdfbfe" font-size="12" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">SITL fault injection</text>
+<text x="624" y="336" fill="rgba(253,251,254,.72)" font-size="9" font-family="ui-monospace, monospace">gRPC · per-call traces</text>
+<rect x="1004" y="280" width="172" height="72" rx="6" fill="#0b0712"/><rect x="1004" y="280" width="172" height="72" rx="6" fill="rgba(253,251,254,.02)" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="1016" y="298" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">PLANNED</text>
+<text x="1016" y="318" fill="#fdfbfe" font-size="12" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">RL / SFT episode</text>
+<text x="1016" y="336" fill="rgba(253,251,254,.72)" font-size="9" font-family="ui-monospace, monospace">export · optional</text>
+<rect x="1200" y="280" width="172" height="72" rx="6" fill="#0b0712"/><rect x="1200" y="280" width="172" height="72" rx="6" fill="rgba(253,251,254,.02)" stroke="rgba(253,251,254,.56)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="1212" y="298" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">IN PROGRESS</text>
+<text x="1212" y="318" fill="#fdfbfe" font-size="12" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Results database</text>
+<text x="1212" y="336" fill="rgba(253,251,254,.72)" font-size="9" font-family="ui-monospace, monospace">SQLite · Parquet export</text>
+</svg>
