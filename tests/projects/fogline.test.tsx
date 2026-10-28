@@ -23,13 +23,13 @@ describe("Fogline case study", () => {
     const page = await renderAt("/projects/fogline");
     expect(page.getByRole("heading", { name: "Fogline", level: 1 })).toBeInTheDocument();
     const headings = page.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
-    expect(headings).toEqual(["Problem", "Architecture", "Evaluation method", "Roadmap", "Results"]);
+    expect(headings).toEqual(["Problem", "Architecture", "Evaluation method", "Roadmap"]);
   });
 
   it("uses click-to-play clips without autoplay", async () => {
     const page = await renderAt("/projects/fogline");
     const videos = page.container.querySelectorAll("video");
-    expect(videos).toHaveLength(2);
+    expect(videos).toHaveLength(1);
     videos.forEach((video) => {
       expect(video).toHaveAttribute("controls");
       expect(video).not.toHaveAttribute("autoplay");
@@ -38,9 +38,11 @@ describe("Fogline case study", () => {
     expect(page.getByText("C2 console replaying a seeded run (scripted baseline controller).")).toBeInTheDocument();
   });
 
-  it("publishes no results and no excluded roadmap items", async () => {
+  it("shows the report card as coming soon and no excluded roadmap items", async () => {
     const page = await renderAt("/projects/fogline");
-    expect(page.getByText("Benchmark results will be published once reviewed.")).toBeInTheDocument();
+    expect(page.getByText("Full interactive report")).toBeInTheDocument();
+    expect(page.getByText("Coming soon")).toBeInTheDocument();
+    expect(page.queryByRole("link", { name: /Full interactive report/ })).not.toBeInTheDocument();
     expect(page.getByText("In progress")).toBeInTheDocument();
     const visibleText = [...page.container.querySelectorAll("p, li, h1, h2, h3, figcaption")]
       .map((element) => element.textContent)

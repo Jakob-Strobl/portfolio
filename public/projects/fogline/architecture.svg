@@ -42,7 +42,7 @@
 <text x="820" y="181" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">controller recovery</text>
 <rect x="1004" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="1004" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>
 <text x="1016" y="116" fill="rgba(253,251,254,.56)" font-size="8" font-family="ui-monospace, monospace" letter-spacing="0.12em">06 · REPLAY</text>
-<text x="1016" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Replay & diagnostics</text>
+<text x="1016" y="136" fill="#fdfbfe" font-size="13" font-weight="600" font-family="Figtree, Geist, system-ui, sans-serif">Replay &amp; diagnostics</text>
 <text x="1016" y="155" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">C2-style console</text>
 <text x="1016" y="166" fill="rgba(253,251,254,.72)" font-size="9.5" font-family="ui-monospace, monospace">replay viewer</text>
 <rect x="1200" y="96" width="172" height="104" rx="6" fill="#0b0712"/><rect x="1200" y="96" width="172" height="104" rx="6" fill="#13051f" stroke="rgba(253,251,254,.7)" stroke-width="1"/>

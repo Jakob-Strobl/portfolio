@@ -1,12 +1,17 @@
 import { A } from "@solidjs/router";
 import ArrowBigLeft from "lucide-solid/icons/arrow-big-left";
-import { For, JSX } from "solid-js";
+import ExternalLink from "lucide-solid/icons/external-link";
+import { For, JSX, Show } from "solid-js";
 
 import Seo from "~/components/seo";
 import Shadow from "~/components/shadow/shadow";
+import FoglineClip from "~/components/fogline-clip";
 import TimelineLayout from "~/layouts/timeline-layout";
 
 const ASSET_DIR = "/projects/fogline";
+
+// Set once foglinesim.com serves the report; until then the card renders "Coming soon" with no link.
+const REPORT_URL: string | null = null;
 
 const EVALUATION_METHOD = [
   ["Seeded runs.", "Every run starts from a recorded seed, so a result can be replayed."],
@@ -41,34 +46,6 @@ const ROADMAP = [
     items: ["SITL fault injection at a gRPC runtime boundary with per-call traces", "Optional RL/SFT episode export"],
   },
 ] as const;
-
-interface ClipProps {
-  name: string;
-  label: string;
-  caption: string;
-}
-
-// Muted, user-started clips: no autoplay, so reduced-motion users never get unrequested motion.
-function Clip(props: ClipProps) {
-  return (
-    <figure class="mt-4">
-      <video
-        class="w-full rounded-sm border border-white/10 bg-night-black"
-        controls
-        muted
-        playsinline
-        preload="none"
-        width="960"
-        height="540"
-        poster={`${ASSET_DIR}/${props.name}-poster.jpg`}
-        aria-label={props.label}
-      >
-        <source src={`${ASSET_DIR}/${props.name}.mp4`} type="video/mp4" />
-      </video>
-      <figcaption class="experience-card-muted mt-2">{props.caption}</figcaption>
-    </figure>
-  );
-}
 
 function Section(props: { title: string; delay: number; children: JSX.Element }) {
   return (
@@ -110,11 +87,37 @@ export default function Fogline() {
                   A seeded adversarial simulation for testing how AI agents make command decisions when what they can
                   see is partial and out of date.
                 </p>
-                <Clip
-                  name="c2-console"
+                <FoglineClip
+                  class="mt-4"
                   label="C2 console replaying a seeded run"
                   caption="C2 console replaying a seeded run (scripted baseline controller)."
                 />
+              </div>
+            </Shadow>
+            <Shadow warmupDelayMs={750} contentFadeInDelayMs={500}>
+              <div class="min-w-0 w-full">
+                <Show
+                  when={REPORT_URL}
+                  fallback={
+                    <div>
+                      <p class="experience-card-title">Full interactive report</p>
+                      <p class="experience-card-muted mt-1">Coming soon</p>
+                    </div>
+                  }
+                >
+                  {(url) => (
+                    <a
+                      class="group block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+                      href={url()}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <span class="experience-card-title inline-flex items-center gap-2 transition-colors duration-200 group-hover:text-night-300">
+                        Full interactive report <ExternalLink aria-hidden="true" size={18} />
+                      </span>
+                    </a>
+                  )}
+                </Show>
               </div>
             </Shadow>
             <Section title="Problem" delay={250}>
@@ -139,12 +142,6 @@ export default function Fogline() {
                 />
               </div>
               <p class="experience-card-muted mt-2 md:hidden">Scroll sideways to see all seven stages.</p>
-              <h3 class="experience-card-detail-label mt-4">Replay &amp; diagnostics</h3>
-              <Clip
-                name="replay-scrub"
-                label="Replay viewer scrubbing a seeded run"
-                caption="Replay viewer scrubbing the same seeded run's timeline (truth view)."
-              />
             </Section>
             <Section title="Evaluation method" delay={500}>
               <ul class="experience-card-body mt-1 list-inside list-disc space-y-1">
@@ -171,9 +168,7 @@ export default function Fogline() {
                 </For>
               </div>
             </Section>
-            <Section title="Results" delay={750}>
-              <p class="experience-card-body mt-2">Benchmark results will be published once reviewed.</p>
-            </Section>
+
             <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
               <div class="min-w-0 w-full space-y-2">
                 <p class="experience-card-body">
