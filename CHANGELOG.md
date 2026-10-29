@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.5...v0.12.6) (2026-10-29)
+
+
+### Dependencies
+
+* bump @solidjs/start 2.0.6, solid-js 1.9.17, wrangler 4.148.0 ([#110](https://github.com/Jakob-Strobl/portfolio/issues/110)) ([d645247](https://github.com/Jakob-Strobl/portfolio/commit/d645247a350989a301b80f42d0f4a2c651751ba7))
+* bump @solidjs/start 2.1.0, vite 8.3.5, wrangler 4.151.3; patch seroval ([#120](https://github.com/Jakob-Strobl/portfolio/issues/120)) ([4e57581](https://github.com/Jakob-Strobl/portfolio/commit/4e57581fa9977b7d99da5a57bc0f632fbbe5ed14))
+* bump lucide-solid 1.60.0 ([#118](https://github.com/Jakob-Strobl/portfolio/issues/118)) ([6138c7f](https://github.com/Jakob-Strobl/portfolio/commit/6138c7f9a23ebf0bb469bc71d36120f8661ee4d8))
+* bump undici 8.11.2, vite 8.3.1, wrangler 4.141.0 ([#103](https://github.com/Jakob-Strobl/portfolio/issues/103)) ([6142520](https://github.com/Jakob-Strobl/portfolio/commit/61425205e0804b6e1a78fb64c749c0f353db68e3))
+* bump vite 8.3.3, vite-plugin-glsl 1.6.2, wrangler 4.147.0 ([#109](https://github.com/Jakob-Strobl/portfolio/issues/109)) ([2a093bd](https://github.com/Jakob-Strobl/portfolio/commit/2a093bd8eb0eabfece77539c871aae641a450d3c))
+* bump vite 8.3.4, wrangler 4.149.0, lucide-solid 1.55.0, posthog-js 1.438.7 ([#113](https://github.com/Jakob-Strobl/portfolio/issues/113)) ([e50523f](https://github.com/Jakob-Strobl/portfolio/commit/e50523f4c7e24c7cf436a33eee46f40bb28f3808))
+* bump wrangler 4.151.0 ([#116](https://github.com/Jakob-Strobl/portfolio/issues/116)) ([13d3b23](https://github.com/Jakob-Strobl/portfolio/commit/13d3b238d6865561c7f796dd50bbde5ffeb42b16))
+* override seroval 1.6.8, bump wrangler 4.143.0 ([#105](https://github.com/Jakob-Strobl/portfolio/issues/105)) ([a9923ec](https://github.com/Jakob-Strobl/portfolio/commit/a9923ec3600c19936a847059202d0c67885d639b))
+* override sharp 0.35.5 and source-map-js 1.2.2, bump wrangler 4.145.0 ([#107](https://github.com/Jakob-Strobl/portfolio/issues/107)) ([0001fb3](https://github.com/Jakob-Strobl/portfolio/commit/0001fb31e1aaaea406b563d693e13224569f6e16))
+* patch vitest, dompurify, undici; bump lucide-solid and posthog-js ([#114](https://github.com/Jakob-Strobl/portfolio/issues/114)) ([a857250](https://github.com/Jakob-Strobl/portfolio/commit/a857250b518e62f44cf07ccab53f2f71396982fb))
+
 ## [0.12.5](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.4...v0.12.5) (2026-10-01)
 
 
