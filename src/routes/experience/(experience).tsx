@@ -11,6 +11,7 @@ import { WebcamSandboxSection } from "./sections/+webcam-sandbox";
 import { ExclaimSection } from "./sections/+exclaim";
 import { TimedatSection } from "./sections/+timedat";
 import { SkillsSection } from "./sections/+skills";
+import { FoglineSection } from "./sections/+fogline";
 import Seo from "~/components/seo";
 import { PRODUCT_ENTITIES } from "~/data/seo";
 
@@ -64,6 +65,9 @@ export default function Experience() {
               <h2 class="experience-section-title">Project Highlights</h2>
               <hr class="mt-2 border-night-300" />
             </div>
+            <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
+              {FoglineSection()}
+            </Shadow>
             <Shadow warmupDelayMs={875} contentFadeInDelayMs={500}>
               {TimedatSection()}
             </Shadow>
