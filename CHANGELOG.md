@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.7](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.6...v0.12.7) (2026-11-13)
+
+
+### Dependencies
+
+* bump lucide-solid 1.64.0, posthog-js 1.441.2, wrangler 4.155.0; undici override 8.12.3 ([#122](https://github.com/Jakob-Strobl/portfolio/issues/122)) ([3953c53](https://github.com/Jakob-Strobl/portfolio/commit/3953c53cbce43ca27247bfb2121291c2eddb7c41))
+
 ## [0.12.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.5...v0.12.6) (2026-11-01)
 
 
