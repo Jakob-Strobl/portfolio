@@ -20,10 +20,10 @@
     "prettify": "bunx prettier . --write"
   },
   "dependencies": {
-    "@solidjs/meta": "^0.29.4",
+    "@solidjs/meta": "^0.29.8",
     "@solidjs/router": "^1.0.0",
     "@solidjs/start": "2.1.0",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.5",
     "lucide-solid": "^1.64.0",
     "nitro": "^3.0.260610-beta",
     "posthog-js": "^1.441.2",
@@ -37,7 +37,7 @@
     "@testing-library/jest-dom": "^7.0.1",
     "happy-dom": "^20.14.6",
     "prettier": "^3.9.10",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "vite-plugin-glsl": "^1.6.2",
