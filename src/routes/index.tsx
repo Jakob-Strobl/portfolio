@@ -1,8 +1,10 @@
 import ExternalLink from "lucide-solid/icons/external-link";
 import X from "lucide-solid/icons/x";
+import { A } from "@solidjs/router";
 import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 import { BackgroundSettingsPanel, BackgroundSettingsTrigger } from "~/components/background-settings";
+import FoglineClip from "~/components/fogline-clip";
 import Seo from "~/components/seo";
 
 import Menu from "../components/menu";
@@ -194,6 +196,18 @@ export default function Home() {
               </Show>
             </div>
           </div>
+          <section aria-label="Fogline showcase" class="mt-4 w-full">
+            <FoglineClip label="Fogline C2 console replaying a seeded run" />
+            <p class="mt-2 text-center text-sm text-gray-300">
+              <A
+                class="text-night-300 transition-colors duration-200 hover:text-night-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-300"
+                href="/projects/fogline"
+              >
+                Fogline
+              </A>
+              : how AI agents decide on partial, stale intel.
+            </p>
+          </section>
         </div>
       </div>
     </>
