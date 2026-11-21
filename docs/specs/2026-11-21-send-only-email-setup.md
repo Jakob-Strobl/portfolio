@@ -1,6 +1,6 @@
 # Send-Only Email Setup Plan
 
-This slice documents a future rollout. The documentation change requires no live setup.
+Use this plan to set up and verify a send-only subdomain. Keep the configuration and verification evidence in the private change record.
 
 ## Design & Rationale
 
@@ -21,7 +21,7 @@ If setup or verification fails, pause the new sender and restore only the affect
 ### Commit plan
 
 - `docs(security): plan send-only email setup` adds this plan on top of the email maintenance checklist.
-- The later provider setup and DNS edits are live operations. Commit application wiring separately when a real sender needs it.
+- Keep the provider setup and DNS changes in the private change record. Commit application wiring separately when a real sender needs it.
 
 ### Task 001: Verify the sending subdomain
 
@@ -30,6 +30,10 @@ If setup or verification fails, pause the new sender and restore only the affect
 **Risk Tier:** high
 
 Check the provider's domain allowance and confirm the sending and return-path names are available. Privately snapshot the DNS names this change will touch, plus existing MX, DKIM, DMARC, and forwarding rules. Register with receiving disabled. Add the provider's signing records under the sending domain and keep bounce records on a separate return-path host. Check all authoritative nameservers and a public resolver. Confirm the new From domain's effective DMARC policy and compare existing DNS and forwarding with the baseline. If any change fails, apply the rollback in DR-3 before retrying. [DMARC policy discovery](https://www.rfc-editor.org/rfc/rfc9989.html#section-4.10.1)
+
+- Use the signing and return-path records issued for the new domain. A provider can use DNS-only CNAMEs for the return path or supply explicit SPF TXT and MX records. At each CNAME name, verify the expected target and let the target supply the records required by the provider.
+- Check which DMARC policy the From subdomain inherits. With strict alignment, a bounce hostname beneath the From domain can pass SPF while exact DKIM alignment supplies the DMARC pass. Leave the published DMARC policies in place. [DMARC alignment](https://www.rfc-editor.org/rfc/rfc9989.html#section-4.4)
+- Record each newly created DNS record so rollback can remove those exact records and preserve the baseline.
 
 ### Task 002: Verify a real message and reply
 
