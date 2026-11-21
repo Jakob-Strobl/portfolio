@@ -43,6 +43,10 @@ Check the provider's domain allowance and confirm the sending and return-path na
 
 After Task 001 passes, send one authorized test. Check receipt, the configured `Reply-To`, the authentication results, and the reply's arrival. Check that the receiving server's trusted `smtp.mailfrom` result or delivered `Return-Path` uses the configured bounce domain. Verify existing legacy forwarding with post-change delivery evidence or a separately authorized test. Keep production sending on hold until these checks pass. If they fail, apply the rollback in DR-3. [DMARC alignment](https://www.rfc-editor.org/rfc/rfc9989.html#section-4.4)
 
+1. Send a plain-text fixture to a controlled mailbox at a separate provider. Use the new subdomain in `From`, set `Reply-To` to the existing mailbox, and use a unique subject for the verification run.
+2. In the received message, compare `From` and `Reply-To` with the intended addresses. Use the receiving service's original-message view to inspect its own authentication results. Confirm SPF passes for the expected envelope domain, DKIM passes for the exact visible From domain, and DMARC passes for that From domain. [Viewing original headers](https://support.google.com/mail/answer/29436)
+3. Use Reply on the received message and confirm the reply arrives in the existing mailbox. Record the test outcome privately and preserve only the header lines needed to verify it.
+
 ### Task 003: Decide whether to retire the previous setup
 
 **Implements:** DR-3
