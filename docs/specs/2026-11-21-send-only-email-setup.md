@@ -37,7 +37,7 @@ Check the provider's domain allowance and confirm the sending and return-path na
 
 **Risk Tier:** high
 
-After Task 001 passes, send one authorized test. Check receipt, the configured `Reply-To`, the authentication results, and the reply's arrival. Verify existing legacy forwarding with post-change delivery evidence or a separately authorized test. Keep production sending on hold until these checks pass. If they fail, apply the rollback in DR-3. [DMARC alignment](https://www.rfc-editor.org/rfc/rfc9989.html#section-4.4)
+After Task 001 passes, send one authorized test. Check receipt, the configured `Reply-To`, the authentication results, and the reply's arrival. Check that the receiving server's trusted `smtp.mailfrom` result or delivered `Return-Path` uses the configured bounce domain. Verify existing legacy forwarding with post-change delivery evidence or a separately authorized test. Keep production sending on hold until these checks pass. If they fail, apply the rollback in DR-3. [DMARC alignment](https://www.rfc-editor.org/rfc/rfc9989.html#section-4.4)
 
 ### Task 003: Decide whether to retire the previous setup
 
