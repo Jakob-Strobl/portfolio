@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.7](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.6...v0.12.7) (2026-11-26)
+
+
+### Dependencies
+
+* batch safe patch/minor bumps (solid-js, vite, wrangler, lucide, posthog, router, prettier) ([#126](https://github.com/Jakob-Strobl/portfolio/issues/126)) ([b88af1a](https://github.com/Jakob-Strobl/portfolio/commit/b88af1a5c6aa6c32f7c4da3594e9eec791cf6cae))
+* bump @solidjs/meta 0.29.8, tailwindcss + @tailwindcss/vite 4.3.5 ([#125](https://github.com/Jakob-Strobl/portfolio/issues/125)) ([14bb01b](https://github.com/Jakob-Strobl/portfolio/commit/14bb01b0604ccdb3462a9196f17ebaef9501bd2e))
+* bump lucide-solid 1.64.0, posthog-js 1.441.2, wrangler 4.155.0; undici override 8.12.3 ([#122](https://github.com/Jakob-Strobl/portfolio/issues/122)) ([3953c53](https://github.com/Jakob-Strobl/portfolio/commit/3953c53cbce43ca27247bfb2121291c2eddb7c41))
+* bump lucide-solid 1.73.0, posthog-js 1.449.2, wrangler 4.162.0, vite-plugin-glsl 1.6.3 ([#130](https://github.com/Jakob-Strobl/portfolio/issues/130)) ([891e6fd](https://github.com/Jakob-Strobl/portfolio/commit/891e6fd425ef259d702494c85bc2c525a16bfdf8))
+
+
+### Documentation
+
+* **security:** document email configuration maintenance ([#127](https://github.com/Jakob-Strobl/portfolio/issues/127)) ([6d30751](https://github.com/Jakob-Strobl/portfolio/commit/6d307510e0720d45de2e28f8151bf559a96e2cd6))
+* **security:** document send-only email setup and verification ([#128](https://github.com/Jakob-Strobl/portfolio/issues/128)) ([d400665](https://github.com/Jakob-Strobl/portfolio/commit/d400665484973caf6a7d455e360e365f4afd2588))
+
 ## [0.12.6](https://github.com/Jakob-Strobl/portfolio/compare/v0.12.5...v0.12.6) (2026-11-01)
 
 
