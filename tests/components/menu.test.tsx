@@ -16,12 +16,12 @@ describe("Menu Component", () => {
     const experienceLink = page.getByRole("link", { name: "Experience" });
     const contactLink = page.getByRole("link", { name: "Contact" });
     const photographyLink = page.getByRole("link", { name: "Photography" });
-    const tbdLink = page.getByRole("link", { name: "TBD" });
+    const foglineLink = page.getByRole("link", { name: "Fogline" });
 
     expect(experienceLink).toBeInTheDocument();
     expect(contactLink).toBeInTheDocument();
     expect(photographyLink).toBeInTheDocument();
-    expect(tbdLink).toBeInTheDocument();
+    expect(foglineLink).toBeInTheDocument();
   });
 
   it("Experience link points to /experience", async () => {
@@ -60,7 +60,7 @@ describe("Menu Component", () => {
     expect(photographyLink).toHaveAttribute("href", NAV_LINKS.gallery);
   });
 
-  it("TBD link is present", async () => {
+  it("Fogline link points to the case study", async () => {
     const page = render(() => (
       <Router>
         <Route path="/" component={() => <Menu />} />
@@ -68,8 +68,8 @@ describe("Menu Component", () => {
     ));
     await waitForShadowAnimations();
 
-    const tbdLink = page.getByRole("link", { name: "TBD" });
-    expect(tbdLink).toBeInTheDocument();
-    expect(tbdLink).toHaveAttribute("href", NAV_LINKS.home);
+    const foglineLink = page.getByRole("link", { name: "Fogline" });
+    expect(foglineLink).toBeInTheDocument();
+    expect(foglineLink).toHaveAttribute("href", "/projects/fogline");
   });
 });
